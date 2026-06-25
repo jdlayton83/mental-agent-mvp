@@ -4,3 +4,6 @@ out/
 build/
 coverage/
 src/db/migrations/
+docs/
+AGENTS.md
+README.md

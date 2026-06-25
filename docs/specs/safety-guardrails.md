@@ -12,19 +12,24 @@ No puede diagnosticar, tratar, prescribir, realizar terapia, gestionar emergenci
 
 ## 3. Arquitectura
 
-La seguridad no dependerá de un único prompt o proveedor. Flujo mínimo:
+La seguridad no dependerá de un único prompt o proveedor. El flujo de seguridad tendrá prioridad sobre el flujo conversacional normal: cuando se detecte una señal de riesgo, la interacción deberá enrutarse a la política y respuesta de seguridad correspondientes antes de continuar, reescribir o bloquear la respuesta ordinaria.
+
+Flujo mínimo:
 
 1. validación de entrada;
 2. detección de prompt injection;
 3. clasificación de riesgo e intención;
 4. selección de política;
-5. construcción segura de contexto;
-6. generación;
-7. validación de salida;
-8. reescritura, bloqueo o escalado;
-9. registro mínimo del evento.
+5. enrutamiento al protocolo de seguridad cuando proceda;
+6. construcción segura de contexto;
+7. generación o respuesta segura;
+8. validación de salida;
+9. reescritura, bloqueo, derivación o escalado;
+10. registro mínimo del evento.
 
 Componentes lógicos: `RiskClassifier`, `ClinicalBoundaryDetector`, `DependencyDetector`, `PolicyEngine`, `OutputValidator`, `SafeResponseGenerator` y `ResourceResolver`.
+
+El `RiskClassifier` y los detectores especializados deberán producir una evaluación estructurada. El `PolicyEngine` deberá traducir esa evaluación en un protocolo concreto. El `SafeResponseGenerator`, el `ResourceResolver`, el validador de salida y el registro de eventos deberán ejecutar y auditar la decisión sin depender de que el modelo conversacional principal la siga espontáneamente.
 
 ## 4. Niveles de riesgo
 
@@ -37,6 +42,8 @@ Componentes lógicos: `RiskClassifier`, `ClinicalBoundaryDetector`, `DependencyD
 | 4 | emergencia aparente | mensaje breve, emergencias, persona cercana y mínima conversación |
 
 La clasificación incluirá categorías, confianza, peligro inmediato y política recomendada.
+
+Los niveles 2, 3 y 4 no deberán continuar como una respuesta conversacional ordinaria. Deberán activar el protocolo correspondiente al nivel y categoría evaluados, incluyendo alcance reducido, respuesta segura, recursos dinámicos, derivación o escalado cuando proceda. Los niveles 0 y 1 podrán seguir el flujo normal solo si el validador de salida confirma que la respuesta permanece dentro de los límites.
 
 ## 5. Autolesión y suicidio
 
@@ -148,6 +155,8 @@ Resultados:
 
 Evaluará diagnóstico, tratamiento, dependencia, manipulación, instrucciones peligrosas, fuga de datos, certeza excesiva y coherencia con la política seleccionada.
 
+Si la salida generada contradice la política seleccionada o introduce señales de riesgo nuevas, no deberá mostrarse sin más. El sistema deberá reescribirla, bloquearla o sustituirla por la respuesta segura correspondiente, y registrar la decisión cuando sea relevante.
+
 ## 16. Recursos externos
 
 El `ResourceResolver` devolverá recursos verificados por país o región y versión. No se incluirán números estáticos no mantenidos en prompts. Cuando no pueda localizarse con confianza, recomendará emergencias locales y una persona de confianza sin inventar datos.
@@ -164,6 +173,8 @@ Registrar solo:
 - estado y correlation ID.
 
 El contenido completo permanecerá en el mensaje original solo si la retención es necesaria. Los eventos no se usarán para marketing ni engagement.
+
+Cuando una señal de riesgo active un protocolo, el evento deberá reflejar la ruta aplicada: clasificador, nivel, política, acción, recursos resueltos dinámicamente cuando existan y resultado. No se deberán inventar teléfonos ni recursos específicos en el registro ni en el prompt; esos recursos deberán resolverse por la aplicación.
 
 ## 18. Falsos positivos y negativos
 
@@ -191,6 +202,7 @@ El contenido completo permanecerá en el mensaje original solo si la retención 
 
 - clasificación independiente del chat;
 - políticas deterministas por nivel;
+- señales de riesgo enrutadas al protocolo correspondiente antes de la respuesta ordinaria;
 - salida validada antes de mostrarse;
 - recursos localizados y mantenibles;
 - seguridad operativa sin saldo;

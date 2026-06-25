@@ -119,7 +119,11 @@ La prioridad inicial será: seguridad pertinente, preferencias activas, objetivo
 
 El agente usará recuerdos solo cuando reduzcan repetición o mejoren una decisión. No enumerará memoria innecesariamente ni recuperará contenido íntimo por simple similitud vectorial.
 
+Las preferencias, objetivos activos e historia relevante podrán utilizarse para adaptar tono, estructura, longitud, directividad y estilo de preguntas. Este uso deberá ser proporcional al contexto y no deberá convertir la memoria en una fuente de autoridad sobre el estado psicológico del usuario.
+
 Cuando un recuerdo sea incierto, antiguo o contradictorio deberá pedir confirmación o formularlo como posibilidad.
+
+La memoria no deberá usarse para realizar inferencias psicológicas no respaldadas, justificar suposiciones sobre causas emocionales ni reducir restricciones de seguridad. Los guardrails de seguridad tendrán prioridad sobre cualquier preferencia o recuerdo.
 
 ## 10. Edición, corrección y versiones
 
