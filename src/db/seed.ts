@@ -111,9 +111,18 @@ const guidedModeSeeds: GuidedModeSeed[] = [
     includedUserMessages: 12,
     flowDefinition: {
       result: "accion_minima_y_revision",
-      stages: ["situacion", "disparador", "accion_minima", "revision"],
+      stages: [
+        "crear_o_revisar",
+        "resultado",
+        "accion_minima",
+        "contexto",
+        "barrera",
+        "ajuste",
+        "revision",
+        "resumen",
+      ],
     },
-    isActive: false,
+    isActive: true,
     sortOrder: 30,
   },
   {

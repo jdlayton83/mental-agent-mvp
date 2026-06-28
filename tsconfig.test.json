@@ -10,6 +10,7 @@
   },
   "include": [
     "src/tests/**/*.ts",
+    "src/modules/guided-modes/*-flow.ts",
     "src/modules/memory/extractor.ts",
     "src/modules/safety/**/*.ts"
   ]

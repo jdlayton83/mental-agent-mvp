@@ -1,5 +1,11 @@
 import assert from "node:assert/strict";
 
+import {
+  buildCreateOrReviewHabitSystemInstructions,
+  createInitialCreateOrReviewHabitProgress,
+  createOrReviewHabitStages,
+  recordCreateOrReviewHabitAnswer,
+} from "../modules/guided-modes/create-or-review-habit-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
 import { buildSafeResponse } from "../modules/safety/safe-response";
 import { validateAssistantOutput } from "../modules/safety/output-validator";
@@ -294,6 +300,56 @@ const tests: TestCase[] = [
       assert.equal(result.length, 1);
       assert.equal(result[0]?.memoryType, "goal");
       assert.equal(result[0]?.sensitivity, "personal");
+    },
+  },
+  {
+    name: "habit guided mode starts with eight stages",
+    run: () => {
+      const progress = createInitialCreateOrReviewHabitProgress();
+
+      assert.equal(createOrReviewHabitStages.length, 8);
+      assert.equal(progress.modeCode, "create_or_review_habit");
+      assert.equal(progress.currentStageIndex, 0);
+      assert.equal(progress.completed, false);
+    },
+  },
+  {
+    name: "habit guided mode completes after review answer",
+    run: () => {
+      let progress = createInitialCreateOrReviewHabitProgress();
+
+      for (const answer of [
+        "Crear uno nuevo.",
+        "Dormir con más regularidad.",
+        "Apagar pantallas cinco minutos antes.",
+        "Después de cenar.",
+        "Me distraigo con el móvil.",
+        "Dejar el móvil lejos un minuto.",
+        "Revisarlo el domingo por la tarde.",
+      ]) {
+        progress = recordCreateOrReviewHabitAnswer(progress, answer);
+      }
+
+      assert.equal(progress.completed, true);
+      assert.equal(
+        progress.currentStageIndex,
+        createOrReviewHabitStages.length - 1,
+      );
+      assert.match(progress.summary ?? "", /Acción mínima/i);
+      assert.match(progress.summary ?? "", /Revisión/i);
+    },
+  },
+  {
+    name: "habit guided mode instructions avoid guilt and clinical framing",
+    run: () => {
+      const instructions = buildCreateOrReviewHabitSystemInstructions({
+        agentName: "Nora",
+        progress: createInitialCreateOrReviewHabitProgress(),
+      });
+
+      assert.match(instructions, /No uses culpa/i);
+      assert.match(instructions, /No diagnostiques/i);
+      assert.match(instructions, /una sola pregunta principal/i);
     },
   },
 ];
