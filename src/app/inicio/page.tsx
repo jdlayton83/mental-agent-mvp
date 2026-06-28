@@ -397,6 +397,11 @@ export default async function InicioPage() {
               Crear o revisar un hábito
             </Link>
           ) : null}
+          {userContext.profile?.onboardingCompleted ? (
+            <Link className="secondary-link" href="/modos/diario-guiado">
+              Diario guiado
+            </Link>
+          ) : null}
           <Link className="secondary-link" href="/privacidad">
             Privacidad
           </Link>
@@ -430,6 +435,7 @@ function formatUsageOperation(operationType: string) {
   const labels: Record<string, string> = {
     "conversation.reply": "Respuesta de conversación",
     "guided.create_or_review_habit.reply": "Modo hábito",
+    "guided.journaling.reply": "Diario guiado",
     "guided.make_decision.reply": "Modo decisión",
     "guided.organize_thoughts.reply": "Modo ordenar cabeza",
   };

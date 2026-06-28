@@ -135,9 +135,18 @@ const guidedModeSeeds: GuidedModeSeed[] = [
     includedUserMessages: 12,
     flowDefinition: {
       result: "sintesis_de_aprendizajes",
-      stages: ["entrada", "exploracion", "aprendizaje", "cierre"],
+      stages: [
+        "foco_actual",
+        "situacion",
+        "hechos_e_interpretaciones",
+        "importante_ahora",
+        "valor_necesidad_prioridad",
+        "aprendizaje",
+        "cierre_o_siguiente_paso",
+        "resumen",
+      ],
     },
-    isActive: false,
+    isActive: true,
     sortOrder: 40,
   },
   {

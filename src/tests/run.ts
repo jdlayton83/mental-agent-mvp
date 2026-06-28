@@ -6,6 +6,12 @@ import {
   createOrReviewHabitStages,
   recordCreateOrReviewHabitAnswer,
 } from "../modules/guided-modes/create-or-review-habit-flow";
+import {
+  buildGuidedJournalingSystemInstructions,
+  createInitialGuidedJournalingProgress,
+  guidedJournalingStages,
+  recordGuidedJournalingAnswer,
+} from "../modules/guided-modes/guided-journaling-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
 import { buildSafeResponse } from "../modules/safety/safe-response";
 import { validateAssistantOutput } from "../modules/safety/output-validator";
@@ -350,6 +356,56 @@ const tests: TestCase[] = [
       assert.match(instructions, /No uses culpa/i);
       assert.match(instructions, /No diagnostiques/i);
       assert.match(instructions, /una sola pregunta principal/i);
+    },
+  },
+  {
+    name: "guided journaling starts with eight stages",
+    run: () => {
+      const progress = createInitialGuidedJournalingProgress();
+
+      assert.equal(guidedJournalingStages.length, 8);
+      assert.equal(progress.modeCode, "guided_journaling");
+      assert.equal(progress.currentStageIndex, 0);
+      assert.equal(progress.completed, false);
+    },
+  },
+  {
+    name: "guided journaling completes after closing answer",
+    run: () => {
+      let progress = createInitialGuidedJournalingProgress();
+
+      for (const answer of [
+        "Una conversación pendiente con mi equipo.",
+        "Me preocupa no explicarme bien.",
+        "El hecho es que la reunión será el martes; la interpretación es que puede salir mal.",
+        "Me importa ser claro sin sonar duro.",
+        "La prioridad es honestidad con cuidado.",
+        "Puedo preparar dos ideas antes.",
+        "Cierro con: puedo hacerlo simple.",
+      ]) {
+        progress = recordGuidedJournalingAnswer(progress, answer);
+      }
+
+      assert.equal(progress.completed, true);
+      assert.equal(
+        progress.currentStageIndex,
+        guidedJournalingStages.length - 1,
+      );
+      assert.match(progress.summary ?? "", /Síntesis/i);
+      assert.match(progress.summary ?? "", /Aprendizaje/i);
+    },
+  },
+  {
+    name: "guided journaling instructions avoid trauma and recovered-memory framing",
+    run: () => {
+      const instructions = buildGuidedJournalingSystemInstructions({
+        agentName: "Nora",
+        progress: createInitialGuidedJournalingProgress(),
+      });
+
+      assert.match(instructions, /mínima interpretación/i);
+      assert.match(instructions, /No explores trauma/i);
+      assert.match(instructions, /recuerdos reprimidos/i);
     },
   },
 ];
