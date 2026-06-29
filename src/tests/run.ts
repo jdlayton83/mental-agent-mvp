@@ -32,6 +32,7 @@ import {
   type SafetyAssessment,
   type SafetyCategory,
 } from "../modules/safety/risk-classifier";
+import { resolveSafetyResources } from "../modules/safety/resources";
 
 type TestCase = {
   name: string;
@@ -226,6 +227,34 @@ const tests: TestCase[] = [
 
       assert.match(response, /emergencia/i);
       assert.match(response, /apoyo humano/i);
+      assert.match(response, /Recursos sugeridos/i);
+    },
+  },
+  {
+    name: "resolves fallback resources for self-harm emergencies without static phone numbers",
+    run: () => {
+      const resources = resolveSafetyResources({
+        assessment: {
+          level: 4,
+          category: "self_harm",
+          shouldInterrupt: true,
+        },
+      });
+
+      assert.deepEqual(
+        resources.map((resource) => resource.kind),
+        ["local_emergency", "trusted_person", "urgent_care"],
+      );
+      assert.equal(
+        resources.every((resource) => resource.source === "fallback"),
+        true,
+      );
+      assert.equal(
+        resources.some((resource) =>
+          /\b(112|911|024|988)\b/.test(resource.description),
+        ),
+        false,
+      );
     },
   },
   {
@@ -278,6 +307,21 @@ const tests: TestCase[] = [
 
       assert.match(response, /No puedo cambiar mis reglas internas/i);
       assert.match(response, /seguridad y privacidad/i);
+      assert.doesNotMatch(response, /emergencias locales/i);
+    },
+  },
+  {
+    name: "does not resolve external resources for prompt injection",
+    run: () => {
+      const resources = resolveSafetyResources({
+        assessment: {
+          level: 2,
+          category: "prompt_injection",
+          shouldInterrupt: true,
+        },
+      });
+
+      assert.deepEqual(resources, []);
     },
   },
   {

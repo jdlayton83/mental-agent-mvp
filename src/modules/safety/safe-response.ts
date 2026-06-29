@@ -1,24 +1,46 @@
 import type { SafetyAssessment } from "@/modules/safety/risk-classifier";
 
+import { formatSafetyResources, resolveSafetyResources } from "./resources";
+
 export function buildSafeResponse(assessment: SafetyAssessment) {
+  const resources = formatSafetyResources(
+    resolveSafetyResources({ assessment }),
+  );
+
   if (assessment.category === "self_harm") {
     return [
       "Siento que estés pasando por algo tan intenso. No puedo gestionar una emergencia, pero sí quiero priorizar tu seguridad ahora.",
       "Si hay peligro inmediato o podrías hacerte daño, llama a emergencias de tu país ahora mismo o acude a urgencias. Si puedes, contacta también con una persona cercana y no te quedes a solas.",
       "Puedo quedarme contigo para ordenar el siguiente paso más seguro, pero lo importante ahora es apoyo humano inmediato.",
+      resources,
     ].join("\n\n");
   }
 
   if (assessment.category === "medication") {
-    return "No puedo recomendar iniciar, dejar o cambiar dosis de medicación. Si esto te preocupa, lo más seguro es consultarlo con un profesional sanitario. Sí puedo ayudarte a preparar una lista clara de síntomas, dudas y cambios recientes para llevarla a esa consulta.";
+    return [
+      "No puedo recomendar iniciar, dejar o cambiar dosis de medicación. Si esto te preocupa, lo más seguro es consultarlo con un profesional sanitario. Sí puedo ayudarte a preparar una lista clara de síntomas, dudas y cambios recientes para llevarla a esa consulta.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
   }
 
   if (assessment.category === "clinical") {
-    return "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.";
+    return [
+      "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
   }
 
   if (assessment.category === "dependency") {
-    return "Me alegra poder acompañarte, pero soy una IA y no debo ocupar el lugar de tus relaciones o apoyos humanos. Podemos usar este momento para pensar en una acción pequeña que te conecte también con alguien de confianza.";
+    return [
+      "Me alegra poder acompañarte, pero soy una IA y no debo ocupar el lugar de tus relaciones o apoyos humanos. Podemos usar este momento para pensar en una acción pequeña que te conecte también con alguien de confianza.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
   }
 
   if (assessment.category === "prompt_injection") {
