@@ -1,4 +1,4 @@
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 
 import { db } from "@/db";
 import { memories } from "@/db/schema";
@@ -65,4 +65,28 @@ export async function getMemoriesForManagement(userId: string) {
     .from(memories)
     .where(eq(memories.userId, userId))
     .orderBy(desc(memories.updatedAt));
+}
+
+export async function getConfirmedMemoriesForContext(userId: string) {
+  return db
+    .select({
+      id: memories.id,
+      title: memories.title,
+      content: memories.content,
+      memoryType: memories.memoryType,
+      sensitivity: memories.sensitivity,
+      updatedAt: memories.updatedAt,
+    })
+    .from(memories)
+    .where(
+      and(
+        eq(memories.userId, userId),
+        eq(memories.status, "confirmed"),
+        eq(memories.isAvailableForRetrieval, true),
+        inArray(memories.sensitivity, ["general", "personal"]),
+        isNull(memories.deletedAt),
+      ),
+    )
+    .orderBy(desc(memories.updatedAt))
+    .limit(3);
 }

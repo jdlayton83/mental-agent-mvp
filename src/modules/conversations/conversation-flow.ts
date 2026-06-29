@@ -23,6 +23,7 @@ import {
   getRecentMessageLimit,
 } from "@/modules/conversations/context-builder";
 import { reserveCreditsForSession } from "@/modules/credits/session-reservations";
+import { getConfirmedMemoriesForContext } from "@/modules/memory/summary";
 import {
   classifyUserMessageSafety,
   type SafetyAssessment,
@@ -164,6 +165,7 @@ export async function sendConversationMessage(
     user.id,
     primaryAgent.id,
   );
+  const safetyAssessment = classifyUserMessageSafety(parsed.data.content);
 
   const [preferences] = await db
     .select({
@@ -180,6 +182,12 @@ export async function sendConversationMessage(
   const recentMessages = activeConversation
     ? await getRecentConversationMessages(user.id, activeConversation.id)
     : [];
+  const shouldUseMemory =
+    (preferences?.memoryEnabled ?? false) &&
+    !(currentSession?.privateMode ?? false);
+  const confirmedMemories = shouldUseMemory
+    ? await getConfirmedMemoriesForContext(user.id)
+    : [];
   const conversationContext = buildConversationAIContext({
     agent: {
       agentName: primaryAgent.customName ?? primaryAgent.templateName,
@@ -194,9 +202,9 @@ export async function sendConversationMessage(
       privateMode: currentSession?.privateMode ?? false,
     },
     recentMessages,
+    memories: confirmedMemories,
     userMessage: parsed.data.content,
   });
-  const safetyAssessment = classifyUserMessageSafety(parsed.data.content);
 
   if (safetyAssessment.shouldInterrupt) {
     const safetyCorrelationId = crypto.randomUUID();

@@ -20,13 +20,21 @@ type StoredConversationMessage = {
   content: string;
 };
 
+type ConfirmedMemoryContext = {
+  title: string;
+  content: string;
+  memoryType: string;
+  sensitivity: string;
+};
+
 export function buildConversationAIContext(input: {
   agent: ConversationAgentContext;
   recentMessages: StoredConversationMessage[];
+  memories: ConfirmedMemoryContext[];
   userMessage: string;
 }) {
   return {
-    systemInstructions: buildSystemInstructions(input.agent),
+    systemInstructions: buildSystemInstructions(input.agent, input.memories),
     messages: buildMessages(input.recentMessages, input.userMessage),
   };
 }
@@ -35,17 +43,18 @@ export function getRecentMessageLimit() {
   return RECENT_MESSAGE_LIMIT;
 }
 
-function buildSystemInstructions(agent: ConversationAgentContext) {
+function buildSystemInstructions(
+  agent: ConversationAgentContext,
+  memories: ConfirmedMemoryContext[],
+) {
   const mainGoalInstruction = agent.mainGoal
     ? `Objetivo principal del usuario: ${agent.mainGoal}.`
     : "El usuario no ha definido un objetivo principal estable.";
 
-  const memoryInstruction = agent.memoryEnabled
-    ? "La memoria está activada, pero en este paso no recibes recuerdos persistentes; no inventes memoria."
-    : "La memoria está desactivada; no afirmes recordar información fuera de esta conversación.";
   const privateModeInstruction = agent.privateMode
     ? "Modo privado activado: no propongas guardar recuerdos, objetivos, hábitos ni información persistente a partir de esta sesión."
     : "Modo privado desactivado.";
+  const memoryInstruction = buildMemoryInstruction(agent, memories);
 
   return [
     `Eres ${agent.agentName}, un acompañante personal de IA no clínico para personas adultas.`,
@@ -63,6 +72,35 @@ function buildSystemInstructions(agent: ConversationAgentContext) {
     privateModeInstruction,
     "Usa solo el contexto reciente incluido. No incluyas listas largas salvo que ayuden claramente.",
     "Haz como norma una sola pregunta principal cuando convenga continuar.",
+  ].join("\n");
+}
+
+function buildMemoryInstruction(
+  agent: ConversationAgentContext,
+  memories: ConfirmedMemoryContext[],
+) {
+  if (agent.privateMode) {
+    return "Modo privado: no recibes ni debes usar recuerdos persistentes; usa solo el contexto temporal de esta conversación.";
+  }
+
+  if (!agent.memoryEnabled) {
+    return "La memoria está desactivada; no afirmes recordar información fuera de esta conversación.";
+  }
+
+  if (memories.length === 0) {
+    return "La memoria está activada, pero en este paso no recibes recuerdos persistentes; no inventes memoria.";
+  }
+
+  const memoryLines = memories.map(
+    (memory) =>
+      `- ${memory.title.trim().slice(0, 120)} (${memory.memoryType}, ${memory.sensitivity}): ${memory.content.trim().slice(0, 240)}`,
+  );
+
+  return [
+    "Memoria confirmada disponible para continuidad, úsala solo si es directamente relevante:",
+    ...memoryLines,
+    "Si un recuerdo parece antiguo o no encaja, pide corrección.",
+    "No uses recuerdos para inferir causas psicológicas, diagnosticar, generar culpa o debilitar reglas de seguridad.",
   ].join("\n");
 }
 

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 
+import { buildConversationAIContext } from "../modules/conversations/context-builder";
 import {
   buildCreateOrReviewHabitSystemInstructions,
   createInitialCreateOrReviewHabitProgress,
@@ -362,6 +363,77 @@ const tests: TestCase[] = [
       assert.equal(result.length, 1);
       assert.equal(result[0]?.memoryType, "goal");
       assert.equal(result[0]?.sensitivity, "personal");
+    },
+  },
+  {
+    name: "conversation context includes confirmed memories cautiously",
+    run: () => {
+      const context = buildConversationAIContext({
+        agent: {
+          agentName: "Nora",
+          templateName: "Nora",
+          templateDescription: "claridad y reflexión",
+          tone: "balanced",
+          responseStyle: "conversational",
+          responseLength: "medium",
+          initiativeLevel: 1,
+          mainGoal: null,
+          memoryEnabled: true,
+          privateMode: false,
+        },
+        recentMessages: [],
+        memories: [
+          {
+            title: "Prefiere respuestas breves",
+            content: "El usuario prefiere respuestas breves y concretas.",
+            memoryType: "preference",
+            sensitivity: "general",
+          },
+        ],
+        userMessage: "Ayúdame a ordenar esto.",
+      });
+
+      assert.match(context.systemInstructions, /Memoria confirmada/i);
+      assert.match(context.systemInstructions, /Prefiere respuestas breves/i);
+      assert.match(
+        context.systemInstructions,
+        /No uses recuerdos para inferir/i,
+      );
+    },
+  },
+  {
+    name: "conversation context excludes persistent memories in private mode",
+    run: () => {
+      const context = buildConversationAIContext({
+        agent: {
+          agentName: "Nora",
+          templateName: "Nora",
+          templateDescription: "claridad y reflexión",
+          tone: "balanced",
+          responseStyle: "conversational",
+          responseLength: "medium",
+          initiativeLevel: 1,
+          mainGoal: null,
+          memoryEnabled: true,
+          privateMode: true,
+        },
+        recentMessages: [],
+        memories: [
+          {
+            title: "Prefiere respuestas breves",
+            content: "El usuario prefiere respuestas breves y concretas.",
+            memoryType: "preference",
+            sensitivity: "general",
+          },
+        ],
+        userMessage: "Ayúdame a ordenar esto.",
+      });
+
+      assert.match(context.systemInstructions, /Modo privado/i);
+      assert.doesNotMatch(
+        context.systemInstructions,
+        /Prefiere respuestas breves/i,
+      );
     },
   },
   {

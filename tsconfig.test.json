@@ -10,7 +10,9 @@
   },
   "include": [
     "src/tests/**/*.ts",
+    "src/modules/conversations/context-builder.ts",
     "src/modules/guided-modes/*-flow.ts",
+    "src/modules/ai/types.ts",
     "src/modules/memory/extractor.ts",
     "src/modules/safety/**/*.ts"
   ]
