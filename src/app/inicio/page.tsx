@@ -407,6 +407,11 @@ export default async function InicioPage() {
               Preparar conversación difícil
             </Link>
           ) : null}
+          {userContext.profile?.onboardingCompleted ? (
+            <Link className="secondary-link" href="/modos/desarrollo-personal">
+              Desarrollo personal
+            </Link>
+          ) : null}
           <Link className="secondary-link" href="/privacidad">
             Privacidad
           </Link>
@@ -445,6 +450,7 @@ function formatUsageOperation(operationType: string) {
     "guided.organize_thoughts.reply": "Modo ordenar cabeza",
     "guided.prepare_difficult_conversation.reply":
       "Preparar conversación difícil",
+    "guided.personal_development.reply": "Desarrollo personal",
   };
 
   return labels[operationType] ?? operationType;

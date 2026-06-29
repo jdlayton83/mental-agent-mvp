@@ -181,9 +181,18 @@ const guidedModeSeeds: GuidedModeSeed[] = [
     includedUserMessages: 12,
     flowDefinition: {
       result: "foco_y_plan_de_accion",
-      stages: ["valores", "objetivos", "progreso", "plan"],
+      stages: [
+        "area_actual",
+        "por_que_importa",
+        "valores_prioridades",
+        "fortalezas_recursos",
+        "progreso_actual",
+        "obstaculo_restriccion",
+        "foco_y_accion",
+        "resumen",
+      ],
     },
-    isActive: false,
+    isActive: true,
     sortOrder: 60,
   },
 ];

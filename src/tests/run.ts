@@ -18,6 +18,12 @@ import {
   prepareDifficultConversationStages,
   recordPrepareDifficultConversationAnswer,
 } from "../modules/guided-modes/prepare-difficult-conversation-flow";
+import {
+  buildPersonalDevelopmentSystemInstructions,
+  createInitialPersonalDevelopmentProgress,
+  personalDevelopmentStages,
+  recordPersonalDevelopmentAnswer,
+} from "../modules/guided-modes/personal-development-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
 import { buildSafeResponse } from "../modules/safety/safe-response";
 import { validateAssistantOutput } from "../modules/safety/output-validator";
@@ -462,6 +468,57 @@ const tests: TestCase[] = [
       assert.match(instructions, /primera persona/i);
       assert.match(instructions, /No enseñes manipulación/i);
       assert.match(instructions, /No afirmes qué piensa/i);
+    },
+  },
+  {
+    name: "personal development mode starts with eight stages",
+    run: () => {
+      const progress = createInitialPersonalDevelopmentProgress();
+
+      assert.equal(personalDevelopmentStages.length, 8);
+      assert.equal(progress.modeCode, "personal_development");
+      assert.equal(progress.currentStageIndex, 0);
+      assert.equal(progress.completed, false);
+    },
+  },
+  {
+    name: "personal development mode completes after focus action answer",
+    run: () => {
+      let progress = createInitialPersonalDevelopmentProgress();
+
+      for (const answer of [
+        "Quiero revisar cómo estoy creciendo profesionalmente.",
+        "Me importa porque quiero trabajar con más sentido y menos dispersión.",
+        "Quiero cuidar la claridad y la honestidad conmigo.",
+        "Tengo constancia y una persona de confianza para revisar avances.",
+        "Ya he mantenido una rutina de estudio tres semanas.",
+        "Me cuesta elegir una sola prioridad cuando aparecen ideas nuevas.",
+        "Mi foco será terminar una pieza pequeña esta semana.",
+      ]) {
+        progress = recordPersonalDevelopmentAnswer(progress, answer);
+      }
+
+      assert.equal(progress.completed, true);
+      assert.equal(
+        progress.currentStageIndex,
+        personalDevelopmentStages.length - 1,
+      );
+      assert.match(progress.summary ?? "", /Foco/i);
+      assert.match(progress.summary ?? "", /Plan de acción/i);
+    },
+  },
+  {
+    name: "personal development instructions avoid pseudoscience and transformation promises",
+    run: () => {
+      const instructions = buildPersonalDevelopmentSystemInstructions({
+        agentName: "Nora",
+        progress: createInitialPersonalDevelopmentProgress(),
+      });
+
+      assert.match(instructions, /una sola pregunta principal/i);
+      assert.match(instructions, /No infieras causas psicológicas ocultas/i);
+      assert.match(instructions, /No uses pseudociencia/i);
+      assert.match(instructions, /No prometas transformación/i);
     },
   },
 ];
