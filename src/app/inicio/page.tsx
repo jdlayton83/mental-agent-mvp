@@ -383,6 +383,11 @@ export default async function InicioPage() {
             </Link>
           ) : null}
           {userContext.profile?.onboardingCompleted ? (
+            <Link className="secondary-link" href="/historial">
+              Historial
+            </Link>
+          ) : null}
+          {userContext.profile?.onboardingCompleted ? (
             <Link className="secondary-link" href="/metricas">
               Métricas
             </Link>
