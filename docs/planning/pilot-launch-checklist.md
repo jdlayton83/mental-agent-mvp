@@ -115,6 +115,7 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 - [ ] El usuario puede archivar un recuerdo confirmado.
 - [ ] El usuario puede eliminar un recuerdo.
 - [ ] Recuerdos archivados o eliminados no quedan disponibles para recuperación.
+- [ ] Un recuerdo confirmado puede aportar continuidad en conversación normal sin aparecer en modo privado.
 - [ ] Modo privado no crea recuerdos.
 
 ## 9. Privacidad y control
