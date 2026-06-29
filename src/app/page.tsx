@@ -15,11 +15,12 @@ export default async function Home() {
     <main className="page-shell">
       <section className="auth-panel" aria-labelledby="home-title">
         <p className="eyebrow">Mental Agent MVP</p>
-        <h1 id="home-title">Base de autenticación</h1>
+        <h1 id="home-title">Acompañamiento personal no clínico</h1>
         {user ? (
           <>
             <p className="supporting-text">
-              Sesión iniciada como <strong>{user.email}</strong>.
+              Sesión iniciada como <strong>{user.email}</strong>. Continúa con
+              tu agente personal o completa la configuración inicial.
             </p>
             <div className="auth-actions">
               <Link className="primary-link" href={destination}>
@@ -31,7 +32,8 @@ export default async function Home() {
         ) : (
           <>
             <p className="supporting-text">
-              Inicia sesión para validar el acceso local con Auth.js.
+              Inicia sesión para usar el entorno local del MVP con tu agente
+              personal.
             </p>
             <Link className="primary-link" href="/login">
               Entrar
