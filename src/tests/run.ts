@@ -12,6 +12,12 @@ import {
   guidedJournalingStages,
   recordGuidedJournalingAnswer,
 } from "../modules/guided-modes/guided-journaling-flow";
+import {
+  buildPrepareDifficultConversationSystemInstructions,
+  createInitialPrepareDifficultConversationProgress,
+  prepareDifficultConversationStages,
+  recordPrepareDifficultConversationAnswer,
+} from "../modules/guided-modes/prepare-difficult-conversation-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
 import { buildSafeResponse } from "../modules/safety/safe-response";
 import { validateAssistantOutput } from "../modules/safety/output-validator";
@@ -406,6 +412,56 @@ const tests: TestCase[] = [
       assert.match(instructions, /mínima interpretación/i);
       assert.match(instructions, /No explores trauma/i);
       assert.match(instructions, /recuerdos reprimidos/i);
+    },
+  },
+  {
+    name: "difficult conversation mode starts with eight stages",
+    run: () => {
+      const progress = createInitialPrepareDifficultConversationProgress();
+
+      assert.equal(prepareDifficultConversationStages.length, 8);
+      assert.equal(progress.modeCode, "prepare_difficult_conversation");
+      assert.equal(progress.currentStageIndex, 0);
+      assert.equal(progress.completed, false);
+    },
+  },
+  {
+    name: "difficult conversation mode completes after likely responses answer",
+    run: () => {
+      let progress = createInitialPrepareDifficultConversationProgress();
+
+      for (const answer of [
+        "Con mi hermano, sobre cómo repartimos el cuidado de mis padres.",
+        "Quiero pedir una organización más clara.",
+        "El hecho es que yo fui tres veces esta semana; interpreto que no lo ve.",
+        "Me preocupa sonar acusador.",
+        "Me gustaría decir: necesito que repartamos mejor las visitas.",
+        "Pediré acordar dos días fijos por semana.",
+        "Si se enfada, puedo volver al objetivo sin subir el tono.",
+      ]) {
+        progress = recordPrepareDifficultConversationAnswer(progress, answer);
+      }
+
+      assert.equal(progress.completed, true);
+      assert.equal(
+        progress.currentStageIndex,
+        prepareDifficultConversationStages.length - 1,
+      );
+      assert.match(progress.summary ?? "", /Borrador/i);
+      assert.match(progress.summary ?? "", /Límite o petición/i);
+    },
+  },
+  {
+    name: "difficult conversation instructions avoid manipulation and unsupported intent claims",
+    run: () => {
+      const instructions = buildPrepareDifficultConversationSystemInstructions({
+        agentName: "Nora",
+        progress: createInitialPrepareDifficultConversationProgress(),
+      });
+
+      assert.match(instructions, /primera persona/i);
+      assert.match(instructions, /No enseñes manipulación/i);
+      assert.match(instructions, /No afirmes qué piensa/i);
     },
   },
 ];

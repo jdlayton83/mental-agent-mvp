@@ -402,6 +402,11 @@ export default async function InicioPage() {
               Diario guiado
             </Link>
           ) : null}
+          {userContext.profile?.onboardingCompleted ? (
+            <Link className="secondary-link" href="/modos/conversacion-dificil">
+              Preparar conversación difícil
+            </Link>
+          ) : null}
           <Link className="secondary-link" href="/privacidad">
             Privacidad
           </Link>
@@ -438,6 +443,8 @@ function formatUsageOperation(operationType: string) {
     "guided.journaling.reply": "Diario guiado",
     "guided.make_decision.reply": "Modo decisión",
     "guided.organize_thoughts.reply": "Modo ordenar cabeza",
+    "guided.prepare_difficult_conversation.reply":
+      "Preparar conversación difícil",
   };
 
   return labels[operationType] ?? operationType;

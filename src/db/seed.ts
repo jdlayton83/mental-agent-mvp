@@ -158,9 +158,18 @@ const guidedModeSeeds: GuidedModeSeed[] = [
     includedUserMessages: 12,
     flowDefinition: {
       result: "guion_y_plan_de_conversacion",
-      stages: ["objetivo", "mensaje", "limites", "plan"],
+      stages: [
+        "persona_y_tema",
+        "objetivo",
+        "hechos_e_interpretaciones",
+        "preocupacion_principal",
+        "mensaje_central",
+        "limite_o_peticion",
+        "respuestas_posibles",
+        "resumen",
+      ],
     },
-    isActive: false,
+    isActive: true,
     sortOrder: 50,
   },
   {
