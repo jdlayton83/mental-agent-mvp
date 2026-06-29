@@ -93,10 +93,14 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 ## 7. Modos guiados
 
 - [ ] `/modos/ordenar-cabeza` está disponible.
-- [ ] El flujo avanza paso a paso.
-- [ ] El modo no decide por el usuario.
-- [ ] El usuario puede completar o cerrar la sesión.
 - [ ] `/modos/tomar-decision` está disponible.
+- [ ] `/modos/habito` está disponible.
+- [ ] `/modos/diario-guiado` está disponible.
+- [ ] `/modos/conversacion-dificil` está disponible.
+- [ ] `/modos/desarrollo-personal` está disponible.
+- [ ] Cada flujo avanza paso a paso.
+- [ ] Ningún modo decide por el usuario ni promete resultados clínicos o transformadores.
+- [ ] El usuario puede completar o cerrar la sesión.
 - [ ] Las sesiones guiadas aparecen en resúmenes recientes.
 - [ ] El feedback de sesión puede guardarse.
 
