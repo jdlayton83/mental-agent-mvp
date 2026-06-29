@@ -77,6 +77,7 @@ Si `.next` queda bloqueado en Windows, cerrar procesos de Node/Next y borrar `.n
 - [ ] Se puede cerrar sesión conversacional.
 - [ ] Al cerrar, se libera o consume la reserva de créditos correctamente.
 - [ ] Los errores de IA muestran mensaje seguro.
+- [ ] `/historial` muestra conversaciones y sesiones recientes sin exponer mensajes completos.
 
 ## 6. Seguridad conversacional
 
