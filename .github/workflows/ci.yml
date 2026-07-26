@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  quality:
+    name: Quality gate
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: production
+      APP_URL: http://localhost:3000
+      NEXTAUTH_URL: http://localhost:3000
+      AUTH_SECRET: ci_auth_secret_value_at_least_32_chars
+      LOG_LEVEL: info
+      DATABASE_URL: postgresql://localhost:5432/mental_agent_ci
+      LLM_PROVIDER: openai
+      LLM_MODEL: ci_model
+      OPENAI_API_KEY: ci_openai_api_key_placeholder
+      EMBEDDING_PROVIDER: openai
+      EMBEDDING_MODEL: ci_embedding_model
+      INITIAL_CREDIT_BALANCE: 100
+      DEVELOPMENT_USER_EMAIL: dev@example.local
+      DEVELOPMENT_USER_PASSWORD: ci_dev_password_123
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build -- --webpack
