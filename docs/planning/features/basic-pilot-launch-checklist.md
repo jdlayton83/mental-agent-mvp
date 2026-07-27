@@ -18,15 +18,15 @@ Project owner.
 
 ## Objective
 
-Create a practical checklist for deciding whether the MVP is ready for a small local pilot with fictitious or controlled test data.
+Create and maintain a practical checklist for deciding whether the MVP is ready for a small local pilot with fictitious or controlled test data.
 
-The checklist shall make remaining operational, safety, privacy, testing, and manual verification work visible before inviting users.
+The checklist shall make remaining operational, safety, privacy, testing, automated quality gates, and manual verification work visible before inviting users.
 
 ## Problem / Context
 
 The backlog requires a pilot launch checklist before testing the product with users.
 
-The project now has authentication, onboarding, conversation, guided modes, credits, memory controls, privacy controls, audit events, metrics, and safety regression tests. These pieces need a single review gate.
+The project now has authentication, onboarding, conversation, guided modes, credits, memory controls, privacy controls, audit events, metrics, route checks, server-action checks, provider-boundary checks, privacy-export checks, migration checks, and safety regression tests. These pieces need a single review gate.
 
 ## User Value
 
@@ -35,13 +35,13 @@ The project owner can see what is ready, what needs manual confirmation, and wha
 ## Scope
 
 - Add a pilot readiness checklist under `docs/planning/`.
-- Cover environment, database, auth, conversation, guided modes, memory, privacy, safety, audit, metrics, AI provider, secrets, and manual browser testing.
+- Cover environment, database, auth, conversation, guided modes, memory, privacy, safety, audit, metrics, AI provider, secrets, route boundaries, server-action boundaries, and manual browser testing.
 - Keep it practical and Spanish-first.
+- Keep the automated quality-gate command list aligned with `package.json`.
 
 ## Out Of Scope
 
 - Do not claim production readiness.
-- Do not add code.
 - Do not add migrations.
 - Do not change architecture decisions.
 - Do not add legal documents.
@@ -52,6 +52,7 @@ The project owner can see what is ready, what needs manual confirmation, and wha
 - The checklist shall include exact commands for local verification where useful.
 - The checklist shall include a final go/no-go decision section.
 - The checklist shall avoid sensitive data and secrets.
+- The checklist shall list every subcheck included in `npm run ci`.
 
 ## Non-Functional Requirements
 
@@ -62,8 +63,9 @@ The project owner can see what is ready, what needs manual confirmation, and wha
 
 - `docs/planning/pilot-launch-checklist.md` exists.
 - The checklist covers the backlog's Phase 8.4 acceptance criteria.
+- The checklist lists each quality-gate script currently included in `npm run ci`.
 - The checklist does not represent the MVP as production-ready.
-- No source code, schema, migrations, package files, ADRs, README, or AGENTS files are modified.
+- No schema, migrations, ADRs, README, or AGENTS files are modified.
 
 ## Error Cases
 
@@ -96,10 +98,12 @@ No AI behavior impact.
 ## Testing Plan
 
 - `npm run format:check`
+- `npm run ci` when checklist updates accompany implementation quality-gate changes.
 
 ## Implementation Tasks
 
 - [x] Add the pilot launch checklist document.
+- [x] Keep the quality-gate command list aligned with `package.json`.
 - [x] Run format check.
 
 ## Documentation To Update
@@ -115,3 +119,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-06-25 | Initial implemented spec | Define and deliver the pilot checklist slice |
+| 2026-07-27 | Updated for expanded quality gates | Keep the checklist spec aligned with current CI subchecks |
