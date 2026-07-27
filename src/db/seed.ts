@@ -1009,7 +1009,9 @@ seed()
     console.log("Database seed completed.");
   })
   .catch((error: unknown) => {
-    console.error("Database seed failed.", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+
+    console.error(`Database seed failed: ${message}`);
     process.exitCode = 1;
   })
   .finally(async () => {

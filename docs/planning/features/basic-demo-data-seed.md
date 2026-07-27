@@ -88,6 +88,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 ## Error Cases
 
 - If the database is unavailable, the seed shall fail clearly.
+- If the seed fails, it shall log a concise error message instead of dumping raw database error objects or payloads.
 - If the development user cannot be created, the seed shall stop.
 - If required catalog records are missing, the seed shall create or update them before demo rows.
 
@@ -98,6 +99,8 @@ All demo content shall be fictitious and low sensitivity.
 Demo safety events shall contain category, level, policy, action, and a minimized trigger summary only.
 
 No secrets, API keys, real personal data, clinical diagnoses, or therapy claims shall be included.
+
+Failure logs shall avoid raw database payload dumps and shall not print seed data beyond a concise error message.
 
 ## Data Model Impact
 
@@ -146,6 +149,7 @@ The seed shall not call AI providers.
 - [x] Add demo memories.
 - [x] Add demo feedback metadata.
 - [x] Add demo usage, safety, and audit events.
+- [x] Keep seed failure logging concise.
 - [x] Run checks.
 
 ## Documentation To Update
@@ -164,3 +168,4 @@ None.
 |---|---|---|
 | 2026-06-25 | Initial draft | Define development demo seed slice |
 | 2026-06-25 | Marked implemented | Demo data seed implemented and verified |
+| 2026-07-27 | Minimized seed failure logging | Avoid dumping raw database error objects in local tooling logs |
