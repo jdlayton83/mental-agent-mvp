@@ -107,7 +107,7 @@ No AI behavior change is planned.
 - [x] Add usage status helper.
 - [x] Use the helper for free-chat usage persistence.
 - [x] Use the helper for guided-mode usage persistence.
-- [x] Add regression tests.
+- [x] Add regression tests for failed, replaced, truncated and default completed statuses.
 - [x] Add Spanish labels for the new technical statuses in existing usage views.
 - [x] Run the unified CI command.
 

@@ -462,6 +462,29 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "usage status records length-limited replies as truncated",
+    run: () => {
+      assert.equal(
+        getUsageEventStatus({
+          finishReason: "length",
+          safetyStatus: "checked",
+        }),
+        "truncated",
+      );
+    },
+  },
+  {
+    name: "usage status defaults ordinary replies to completed",
+    run: () => {
+      assert.equal(
+        getUsageEventStatus({
+          safetyStatus: "checked",
+        }),
+        "completed",
+      );
+    },
+  },
+  {
     name: "habit guided mode starts with eight stages",
     run: () => {
       const progress = createInitialCreateOrReviewHabitProgress();
