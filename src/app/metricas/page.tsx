@@ -314,6 +314,13 @@ function formatAuditAction(action: string) {
     "memory.reject": "Recuerdo descartado",
     "memory.archive": "Recuerdo archivado",
     "memory.delete": "Recuerdo eliminado",
+    "memory.edit": "Recuerdo corregido",
+    "commitment.create": "Compromiso creado",
+    "commitment.complete": "Compromiso completado",
+    "commitment.archive": "Compromiso archivado",
+    "commitment.delete": "Compromiso eliminado",
+    "commitment.due_date_update": "Fecha de compromiso actualizada",
+    "preferences.update": "Preferencias actualizadas",
     "privacy.export": "Exportación de datos",
     "privacy.account_delete": "Borrado de cuenta",
   };

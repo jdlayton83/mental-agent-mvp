@@ -73,6 +73,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page shall make empty states explicit.
 - The metrics queries shall be server-side.
 - The metrics shall be Spanish-first.
+- Audit action labels shall stay readable in Spanish as new audited MVP actions are added.
 
 ## Non-Functional Requirements
 
@@ -89,6 +90,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - Feedback metrics handle the case where no feedback exists.
 - Feedback comment metrics show counts only and never display comment text.
 - No sensitive content is displayed.
+- Implemented audit actions use Spanish labels.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
 - `npm run format:check` passes.
@@ -150,6 +152,7 @@ No AI behavior changes are planned.
 - [x] Add `/metricas` page.
 - [x] Add `/inicio` link.
 - [x] Add Spanish labels for known technical usage operation types.
+- [x] Add Spanish labels for implemented audit actions.
 - [x] Count feedback entries with optional product comments without displaying comment text.
 - [x] Count commitments by status without displaying commitment content.
 - [x] Run typecheck, lint, and format checks.
@@ -172,3 +175,4 @@ None.
 | 2026-06-25 | Marked implemented | Metrics helper, `/metricas` page, `/inicio` link, and checks completed |
 | 2026-07-27 | Added feedback comment count | Track optional product feedback volume without exposing comment text |
 | 2026-07-27 | Added commitment status counts | Track confirmed-next-action foundation without exposing content |
+| 2026-07-27 | Added labels for newer audit actions | Keep audit metrics readable after memory, commitment, and preference controls |
