@@ -26,7 +26,7 @@ The feature shall make it harder to accidentally weaken safety behavior while co
 
 The safety specification requires regression tests for risk classification, safe routing, output validation, and non-clinical boundaries.
 
-The project already has a minimal `src/tests/run.ts` runner and a `npm run test` script covering some safety and memory cases. Coverage is still thin for prompt injection, clinical boundaries, dependency, self-harm output validation, and safe-response content.
+The project has a Vitest regression suite in `src/tests/regression.test.ts` and a `npm run test` script covering safety, memory, context, usage, feedback and guided-mode cases.
 
 ## User Value
 
