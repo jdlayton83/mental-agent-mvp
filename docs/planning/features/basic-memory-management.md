@@ -20,7 +20,7 @@ Project owner.
 
 Add a minimal user-facing memory management surface so the user can review, confirm, reject, archive, and delete memories created by the MVP.
 
-The feature shall improve user control without adding embeddings, advanced retrieval, memory versioning, or new database tables in this slice.
+The feature shall improve user control without adding embeddings, advanced retrieval, memory versioning, or new database tables in this slice. Basic title and content editing is covered by `basic-memory-editing.md`.
 
 ## Problem / Context
 
@@ -41,6 +41,7 @@ The user can understand what the assistant may remember and can remove or disabl
 - Add archive and delete actions for memories owned by the current user.
 - Soft-delete memories by setting `status = "deleted"`, `is_available_for_retrieval = false`, and `deleted_at`.
 - Keep deleted and archived memories unavailable for retrieval.
+- Basic title and content editing is covered by `basic-memory-editing.md`.
 
 ## Out Of Scope
 
@@ -49,6 +50,7 @@ The user can understand what the assistant may remember and can remove or disabl
 - Do not add memory versioning tables.
 - Do not add goals, habits, commitments, or reminders.
 - Do not add bulk deletion.
+- Do not add editing in this management slice; basic editing is documented separately.
 - Do not change account deletion.
 - Do not create a new database table or migration in this slice.
 - Do not modify AI prompts unless needed to prevent use of deleted or archived memories.

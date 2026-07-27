@@ -6,6 +6,7 @@ import {
   archiveMemory,
   confirmMemory,
   deleteMemory,
+  editMemory,
   rejectMemory,
 } from "@/modules/memory/actions";
 import { getMemoriesForManagement } from "@/modules/memory/summary";
@@ -98,8 +99,10 @@ export default async function MemoriaPage() {
                         </div>
                       </dl>
                       <MemoryActions
+                        content={memory.content}
                         memoryId={memory.id}
                         status={memory.status}
+                        title={memory.title}
                       />
                     </li>
                   ))}
@@ -121,44 +124,77 @@ export default async function MemoriaPage() {
   );
 }
 
-function MemoryActions(input: { memoryId: string; status: string }) {
+function MemoryActions(input: {
+  content: string;
+  memoryId: string;
+  status: string;
+  title: string;
+}) {
   if (input.status === "deleted") {
     return null;
   }
 
   return (
-    <div className="inline-actions">
-      {input.status === "proposed" ? (
-        <>
-          <form action={confirmMemory}>
-            <input name="memoryId" type="hidden" value={input.memoryId} />
-            <button className="primary-button" type="submit">
-              Confirmar
-            </button>
-          </form>
-          <form action={rejectMemory}>
-            <input name="memoryId" type="hidden" value={input.memoryId} />
-            <button className="secondary-button" type="submit">
-              Descartar
-            </button>
-          </form>
-        </>
-      ) : null}
-      {input.status === "confirmed" ? (
-        <form action={archiveMemory}>
-          <input name="memoryId" type="hidden" value={input.memoryId} />
-          <button className="secondary-button" type="submit">
-            Archivar
-          </button>
-        </form>
-      ) : null}
-      <form action={deleteMemory}>
+    <>
+      <form action={editMemory} className="feedback-form">
         <input name="memoryId" type="hidden" value={input.memoryId} />
+        <label className="auth-field">
+          Título
+          <input
+            defaultValue={input.title}
+            maxLength={160}
+            name="title"
+            required
+            type="text"
+          />
+        </label>
+        <label className="auth-field">
+          Contenido
+          <textarea
+            defaultValue={input.content}
+            maxLength={1000}
+            name="content"
+            required
+            rows={3}
+          />
+        </label>
         <button className="secondary-button" type="submit">
-          Eliminar
+          Guardar corrección
         </button>
       </form>
-    </div>
+      <div className="inline-actions">
+        {input.status === "proposed" ? (
+          <>
+            <form action={confirmMemory}>
+              <input name="memoryId" type="hidden" value={input.memoryId} />
+              <button className="primary-button" type="submit">
+                Confirmar
+              </button>
+            </form>
+            <form action={rejectMemory}>
+              <input name="memoryId" type="hidden" value={input.memoryId} />
+              <button className="secondary-button" type="submit">
+                Descartar
+              </button>
+            </form>
+          </>
+        ) : null}
+        {input.status === "confirmed" ? (
+          <form action={archiveMemory}>
+            <input name="memoryId" type="hidden" value={input.memoryId} />
+            <button className="secondary-button" type="submit">
+              Archivar
+            </button>
+          </form>
+        ) : null}
+        <form action={deleteMemory}>
+          <input name="memoryId" type="hidden" value={input.memoryId} />
+          <button className="secondary-button" type="submit">
+            Eliminar
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 

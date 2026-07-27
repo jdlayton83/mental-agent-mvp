@@ -124,6 +124,7 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 - [ ] Una conversación normal puede generar recuerdos propuestos al cerrar sesión.
 - [ ] `/memoria` muestra recuerdos por estado.
 - [ ] El usuario puede confirmar un recuerdo.
+- [ ] El usuario puede corregir título y contenido de un recuerdo.
 - [ ] El usuario puede descartar un recuerdo.
 - [ ] El usuario puede archivar un recuerdo confirmado.
 - [ ] El usuario puede eliminar un recuerdo.
