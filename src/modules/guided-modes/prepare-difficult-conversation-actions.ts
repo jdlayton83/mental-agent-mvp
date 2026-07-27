@@ -17,6 +17,7 @@ import {
   sessions,
   usageEvents,
 } from "@/db/schema";
+import type { AIGenerateTextResult } from "@/modules/ai/types";
 import { generateText } from "@/modules/ai/gateway";
 import { getCurrentUser } from "@/modules/auth/session";
 import { reserveCreditsForSession } from "@/modules/credits/session-reservations";
@@ -38,6 +39,7 @@ import {
   type SafetyAssessment,
 } from "@/modules/safety/risk-classifier";
 import { buildSafeResponse } from "@/modules/safety/safe-response";
+import { getUsageEventStatus } from "@/modules/usage/status";
 
 const guidedMessageSchema = z.object({
   content: z.string().trim().min(1).max(2_000),
@@ -233,7 +235,7 @@ export async function sendPrepareDifficultConversationMessage(
     !prepared.safetyAssessment.shouldInterrupt &&
     outputValidation.status === "replace";
   const finalProgress = shouldReplaceOutput ? prepared.progress : nextProgress;
-  const finalAssistantReply = shouldReplaceOutput
+  const finalAssistantReply: AIGenerateTextResult = shouldReplaceOutput
     ? {
         content: buildSafeResponse(outputValidation.assessment),
         provider: "local",
@@ -242,6 +244,7 @@ export async function sendPrepareDifficultConversationMessage(
         outputTokens: null,
         latencyMs: 0,
         correlationId: assistantReply.correlationId,
+        finishReason: "stop",
       }
     : assistantReply;
   const finalSafetyStatus = prepared.safetyAssessment.shouldInterrupt
@@ -260,6 +263,7 @@ export async function sendPrepareDifficultConversationMessage(
     model: finalAssistantReply.model,
     inputTokens: finalAssistantReply.inputTokens,
     outputTokens: finalAssistantReply.outputTokens,
+    finishReason: finalAssistantReply.finishReason,
     latencyMs: finalAssistantReply.latencyMs,
     correlationId: finalAssistantReply.correlationId,
     progress: finalProgress,
@@ -529,7 +533,7 @@ async function buildGuidedAssistantReply(input: {
   agentName: string;
   userMessage: string;
   progress: PrepareDifficultConversationProgress;
-}) {
+}): Promise<AIGenerateTextResult> {
   const correlationId = crypto.randomUUID();
   const reply = await generateText({
     operationType: "guided.prepare_difficult_conversation.reply",
@@ -556,13 +560,16 @@ async function buildGuidedAssistantReply(input: {
       outputTokens: null,
       latencyMs: 0,
       correlationId,
+      finishReason: "error",
     };
   }
 
   return reply;
 }
 
-function buildSafeGuidedReply(assessment: SafetyAssessment) {
+function buildSafeGuidedReply(
+  assessment: SafetyAssessment,
+): AIGenerateTextResult {
   return {
     content: buildSafeResponse(assessment),
     provider: "local",
@@ -571,6 +578,7 @@ function buildSafeGuidedReply(assessment: SafetyAssessment) {
     outputTokens: null,
     latencyMs: 0,
     correlationId: crypto.randomUUID(),
+    finishReason: "stop",
   };
 }
 
@@ -584,6 +592,7 @@ async function persistPrepareDifficultConversationTurn(input: {
   model: string;
   inputTokens: number | null;
   outputTokens: number | null;
+  finishReason: "stop" | "length" | "error";
   latencyMs: number;
   correlationId: string;
   progress: PrepareDifficultConversationProgress;
@@ -666,9 +675,10 @@ async function persistPrepareDifficultConversationTurn(input: {
       outputUnits: input.outputTokens,
       durationMs: input.latencyMs,
       creditsAssigned: 0,
-      status: input.safetyStatus.startsWith("output_replaced_")
-        ? "replaced"
-        : "completed",
+      status: getUsageEventStatus({
+        finishReason: input.finishReason,
+        safetyStatus: input.safetyStatus,
+      }),
       correlationId: input.correlationId,
     });
 

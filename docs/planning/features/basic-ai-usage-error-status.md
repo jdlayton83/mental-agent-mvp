@@ -18,13 +18,13 @@ Project owner.
 
 ## Objective
 
-Record provider failures in technical usage events with a distinct status.
+Record provider failures in technical usage events with a distinct status across free chat and guided modes.
 
 The change shall preserve safe user-facing fallback behavior while making pilot metrics more accurate.
 
 ## Problem / Context
 
-The AI gateway can return a normalized result with `finishReason: "error"` when the OpenAI provider fails. Conversation persistence used the safety status to decide the usage event status, which could store a provider failure as `completed`.
+The AI gateway can return a normalized result with `finishReason: "error"` when the OpenAI provider fails. Conversation and guided-mode persistence used the safety status to decide the usage event status, which could store a provider failure as `completed`.
 
 The architecture and credit specifications require usage, latency, cost, and errors to be reconstructable without exposing sensitive content.
 
@@ -35,7 +35,7 @@ The project owner can tell the difference between successful AI replies, safety 
 ## Scope
 
 - Add a small usage status helper.
-- Use it when persisting free-chat usage events.
+- Use it when persisting free-chat and guided-mode usage events.
 - Preserve `replaced` for safety output replacements.
 - Record provider errors as `failed`.
 - Record length-limited responses as `truncated`.
@@ -47,7 +47,7 @@ The project owner can tell the difference between successful AI replies, safety 
 - Do not add migrations.
 - Do not expose provider error details to the user.
 - Do not change credit charging rules.
-- Do not rewrite guided-mode persistence in this slice.
+- Do not change guided-mode progress, fallback copy, safety routing, or credit rules.
 
 ## Functional Requirements
 
@@ -65,6 +65,7 @@ The project owner can tell the difference between successful AI replies, safety 
 ## Acceptance Criteria
 
 - A free-chat provider error is not stored as `completed`.
+- A guided-mode provider error handled by local fallback is not stored as `completed`.
 - Safety replacements still take precedence over provider finish reason.
 - `npm run ci` passes.
 
@@ -105,6 +106,7 @@ No AI behavior change is planned.
 
 - [x] Add usage status helper.
 - [x] Use the helper for free-chat usage persistence.
+- [x] Use the helper for guided-mode usage persistence.
 - [x] Add regression tests.
 - [x] Add Spanish labels for the new technical statuses in existing usage views.
 - [x] Run the unified CI command.
