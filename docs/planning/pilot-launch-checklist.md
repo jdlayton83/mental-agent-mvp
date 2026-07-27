@@ -42,6 +42,7 @@ Notas:
 - [ ] `npm run db:check` pasa.
 - [ ] `npm run privacy:check` pasa.
 - [ ] `npm run presentation:check` pasa.
+- [ ] `npm run routes:check` pasa.
 - [ ] `npm run build -- --webpack` pasa en PowerShell local.
 
 Comandos:
@@ -63,6 +64,7 @@ npm run ai:check
 npm run db:check
 npm run privacy:check
 npm run presentation:check
+npm run routes:check
 npm run build -- --webpack
 ```
 
