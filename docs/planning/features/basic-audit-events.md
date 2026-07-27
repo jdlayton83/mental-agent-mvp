@@ -49,6 +49,7 @@ The user and project owner can trust that critical data-control actions are trac
   - commitment create;
   - commitment complete;
   - commitment archive;
+  - commitment delete;
   - account deletion request completed.
 - Include only minimized metadata.
 
@@ -69,7 +70,7 @@ The user and project owner can trust that critical data-control actions are trac
 - The system shall record successful consent grant and revoke actions.
 - The system shall record successful data export requests.
 - The system shall record successful memory confirm, reject, archive, and delete actions.
-- The system shall record successful commitment create, complete, and archive actions.
+- The system shall record successful commitment create, complete, archive, and delete actions.
 - The system shall record successful account deletion completion before or during the deletion transaction in a way that preserves minimal evidence.
 - Audit metadata shall not include sensitive user-authored content.
 - Audit writes shall not weaken the main authorization checks.
@@ -204,3 +205,4 @@ None.
 | 2026-06-25 | Marked implemented | Migration applied externally and real memory confirmation audit event verified |
 | 2026-07-27 | Updated current-state wording | Align problem context with implemented audit events |
 | 2026-07-27 | Added commitment audit events | Keep commitment control actions traceable without storing content |
+| 2026-07-27 | Added commitment deletion audit event | Keep commitment removal traceable without storing content |

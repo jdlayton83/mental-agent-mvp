@@ -108,6 +108,7 @@ export async function createCommitmentFromNextStep(formData: FormData) {
   }
 
   revalidatePath("/inicio");
+  revalidatePath("/compromisos");
   revalidatePath("/metricas");
 }
 
@@ -129,11 +130,20 @@ export async function archiveCommitment(formData: FormData) {
   });
 }
 
+export async function deleteCommitment(formData: FormData) {
+  await updateCommitmentStatus({
+    formData,
+    action: "commitment.delete",
+    toStatus: "deleted",
+    timestampField: "deletedAt",
+  });
+}
+
 async function updateCommitmentStatus(input: {
   formData: FormData;
   action: string;
-  toStatus: "completed" | "archived";
-  timestampField: "completedAt" | "archivedAt";
+  toStatus: "completed" | "archived" | "deleted";
+  timestampField: "completedAt" | "archivedAt" | "deletedAt";
 }) {
   const user = await getCurrentUser();
 
@@ -161,7 +171,9 @@ async function updateCommitmentStatus(input: {
       and(
         eq(commitments.id, parsed.data.commitmentId),
         eq(commitments.userId, user.id),
-        eq(commitments.status, "active"),
+        input.toStatus === "deleted"
+          ? sql`${commitments.status} <> 'deleted'`
+          : eq(commitments.status, "active"),
       ),
     )
     .returning({ id: commitments.id });
@@ -181,5 +193,6 @@ async function updateCommitmentStatus(input: {
   }
 
   revalidatePath("/inicio");
+  revalidatePath("/compromisos");
   revalidatePath("/metricas");
 }

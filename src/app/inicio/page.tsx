@@ -468,6 +468,11 @@ export default async function InicioPage() {
             </Link>
           ) : null}
           {userContext.profile?.onboardingCompleted ? (
+            <Link className="secondary-link" href="/compromisos">
+              Compromisos
+            </Link>
+          ) : null}
+          {userContext.profile?.onboardingCompleted ? (
             <Link className="secondary-link" href="/historial">
               Historial
             </Link>

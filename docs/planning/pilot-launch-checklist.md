@@ -115,6 +115,7 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 - [ ] El feedback de sesión puede guardarse.
 - [ ] Un próximo paso de una sesión puede guardarse como compromiso.
 - [ ] Un compromiso activo puede completarse o archivarse.
+- [ ] `/compromisos` permite revisar y eliminar compromisos.
 
 ## 8. Memoria
 
