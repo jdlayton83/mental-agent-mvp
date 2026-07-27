@@ -90,7 +90,35 @@ export default async function InicioPage() {
           </div>
           <div>
             <dt>Estilo</dt>
-            <dd>{userContext.primaryAgent?.responseStyle ?? "Pendiente"}</dd>
+            <dd>
+              {userContext.primaryAgent
+                ? formatAgentStyle(userContext.primaryAgent.responseStyle)
+                : "Pendiente"}
+            </dd>
+          </div>
+          <div>
+            <dt>Tono</dt>
+            <dd>
+              {userContext.primaryAgent
+                ? formatAgentTone(userContext.primaryAgent.tone)
+                : "Pendiente"}
+            </dd>
+          </div>
+          <div>
+            <dt>Longitud</dt>
+            <dd>
+              {userContext.preferences
+                ? formatResponseLength(userContext.preferences.responseLength)
+                : "Pendiente"}
+            </dd>
+          </div>
+          <div>
+            <dt>Iniciativa</dt>
+            <dd>
+              {userContext.preferences
+                ? formatInitiativeLevel(userContext.preferences.initiativeLevel)
+                : "Pendiente"}
+            </dd>
           </div>
           <div>
             <dt>Créditos disponibles</dt>
@@ -464,6 +492,11 @@ export default async function InicioPage() {
             </Link>
           ) : null}
           {userContext.profile?.onboardingCompleted ? (
+            <Link className="secondary-link" href="/preferencias">
+              Preferencias
+            </Link>
+          ) : null}
+          {userContext.profile?.onboardingCompleted ? (
             <form action={startPrivateConversation}>
               <button className="secondary-button" type="submit">
                 Conversación privada
@@ -672,4 +705,47 @@ function formatCommitmentSource(source: string) {
   };
 
   return labels[source] ?? source;
+}
+
+function formatAgentTone(tone: string) {
+  const labels: Record<string, string> = {
+    soft: "Suave",
+    balanced: "Equilibrado",
+    direct: "Directo",
+    calm: "Calmado",
+    warm: "Cercano",
+  };
+
+  return labels[tone] ?? tone;
+}
+
+function formatAgentStyle(style: string) {
+  const labels: Record<string, string> = {
+    practical: "Práctico",
+    reflective: "Reflexivo",
+    inspiring: "Inspirador",
+    supportive: "De apoyo",
+  };
+
+  return labels[style] ?? style;
+}
+
+function formatResponseLength(responseLength: string) {
+  const labels: Record<string, string> = {
+    short: "Breve",
+    medium: "Media",
+    long: "Detallada",
+  };
+
+  return labels[responseLength] ?? responseLength;
+}
+
+function formatInitiativeLevel(initiativeLevel: number) {
+  const labels: Record<number, string> = {
+    0: "Baja",
+    1: "Equilibrada",
+    2: "Alta",
+  };
+
+  return labels[initiativeLevel] ?? String(initiativeLevel);
 }

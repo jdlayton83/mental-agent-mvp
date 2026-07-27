@@ -52,6 +52,7 @@ The user and project owner can trust that critical data-control actions are trac
   - commitment archive;
   - commitment delete;
   - commitment target-date update;
+  - preference update;
   - account deletion request completed.
 - Include only minimized metadata.
 
@@ -73,6 +74,7 @@ The user and project owner can trust that critical data-control actions are trac
 - The system shall record successful data export requests.
 - The system shall record successful memory confirm, reject, archive, delete, and edit actions.
 - The system shall record successful commitment create, complete, archive, delete, and target-date update actions.
+- The system shall record successful preference update actions.
 - The system shall record successful account deletion completion before or during the deletion transaction in a way that preserves minimal evidence.
 - Audit metadata shall not include sensitive user-authored content.
 - Audit writes shall not weaken the main authorization checks.
@@ -153,6 +155,8 @@ Memory actions shall write audit events using memory IDs, status changes, and ed
 
 Commitment actions shall write audit events using commitment IDs, source, status changes, and whether a target date is present only. Audit metadata shall not include commitment title, description, or exact target date.
 
+Preference actions shall write audit events using field names and boolean presence flags only. Audit metadata shall not include display names, custom names, main goal text, or other user-authored preference content.
+
 Audit events shall not be used as memories and shall not affect memory retrieval.
 
 ## AI Behavior Impact
@@ -210,3 +214,4 @@ None.
 | 2026-07-27 | Added commitment deletion audit event | Keep commitment removal traceable without storing content |
 | 2026-07-27 | Added commitment target-date audit event | Keep date control traceable without storing exact dates |
 | 2026-07-27 | Added memory edit audit event | Keep corrections traceable without storing memory content |
+| 2026-07-27 | Added preference update audit event | Keep personalization changes traceable without storing preference content |

@@ -76,6 +76,7 @@ Si `.next` queda bloqueado en Windows, cerrar procesos de Node/Next y borrar `.n
 - [ ] `/onboarding` permite seleccionar agente.
 - [ ] El usuario puede completar onboarding.
 - [ ] `/inicio` muestra agente, preferencias y créditos.
+- [ ] `/preferencias` permite ajustar tono, estilo, longitud, iniciativa y objetivo principal.
 
 ## 5. Conversación libre
 
