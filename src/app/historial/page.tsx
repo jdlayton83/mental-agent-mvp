@@ -67,6 +67,14 @@ export default async function HistorialPage() {
                     item.mainTopic ??
                     "Resumen no disponible todavía."}
                 </p>
+                <StructuredSummaryList
+                  items={item.decisions}
+                  title="Decisiones"
+                />
+                <StructuredSummaryList
+                  items={item.nextSteps}
+                  title="Próximos pasos"
+                />
               </li>
             ))}
           </ol>
@@ -86,6 +94,29 @@ export default async function HistorialPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function StructuredSummaryList(input: {
+  title: string;
+  items: string[] | null;
+}) {
+  const items =
+    input.items?.filter((item) => item.trim().length > 0).slice(0, 3) ?? [];
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="supporting-text">
+      <strong>{input.title}</strong>
+      <ul>
+        {items.map((item, index) => (
+          <li key={`${input.title}-${index}`}>{item}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

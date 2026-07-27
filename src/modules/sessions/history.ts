@@ -26,6 +26,8 @@ export async function getSessionHistory(userId: string) {
       guidedModeName: guidedModes.name,
       summary: sessionSummaries.summary,
       mainTopic: sessionSummaries.mainTopic,
+      decisions: sessionSummaries.decisions,
+      nextSteps: sessionSummaries.nextSteps,
     })
     .from(sessions)
     .innerJoin(conversations, eq(sessions.conversationId, conversations.id))

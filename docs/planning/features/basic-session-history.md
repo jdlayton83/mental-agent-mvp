@@ -34,7 +34,7 @@ Users can see what they have used recently, distinguish free chat from guided mo
 
 - Add a protected Spanish-first route at `/historial`.
 - Read existing `sessions`, `conversations`, `guided_modes` and `session_summaries` data for the authenticated user.
-- Show recent session title, type, guided mode when present, status, privacy flag, last activity, credits and summary when available.
+- Show recent session title, type, guided mode when present, status, privacy flag, last activity, credits, summary, decisions and next steps when available.
 - Add an entry point from `/inicio`.
 - Keep the implementation read-only.
 
@@ -55,6 +55,7 @@ Users can see what they have used recently, distinguish free chat from guided mo
 - The list shall include free chat and guided-mode sessions.
 - Deleted conversations shall not be shown.
 - The page shall show an empty state if no sessions exist.
+- The page shall show recorded decisions and next steps when summary metadata contains them.
 - The page shall use Spanish labels.
 
 ## Non-Functional Requirements
@@ -69,7 +70,7 @@ Users can see what they have used recently, distinguish free chat from guided mo
 - An authenticated, onboarded user can open `/historial`.
 - Anonymous users are redirected to `/login`.
 - Users without completed onboarding are redirected to `/onboarding`.
-- Recent sessions are displayed with title, type, status, last activity and summary when available.
+- Recent sessions are displayed with title, type, status, last activity, summary, decisions and next steps when available.
 - Raw message content is not displayed.
 - `/inicio` links to `/historial`.
 - `npm run typecheck` passes.
@@ -87,7 +88,7 @@ Users can see what they have used recently, distinguish free chat from guided mo
 
 The history query shall only return records for the current authenticated user.
 
-The page shall show metadata and summaries, not raw message content. This reduces accidental exposure on a dashboard-like surface while still providing continuity.
+The page shall show metadata and structured summaries, not full raw message content. This reduces accidental exposure on a dashboard-like surface while still providing continuity.
 
 ## Data Model Impact
 
@@ -130,6 +131,7 @@ No AI behavior changes.
 - [x] Add a session history read model.
 - [x] Add `/historial`.
 - [x] Add link from `/inicio`.
+- [x] Show available decisions and next steps from existing session summaries.
 - [x] Run typecheck, lint, format check and build.
 
 ## Documentation To Update
@@ -148,3 +150,4 @@ None.
 |---|---|---|
 | 2026-06-29 | Initial draft | Add focused session history page |
 | 2026-06-29 | Marked implemented after read model, route, link and checks passed | Implementation complete |
+| 2026-07-27 | Added decisions and next steps visibility | Surface existing structured session summary data without schema changes |

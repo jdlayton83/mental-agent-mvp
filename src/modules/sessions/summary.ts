@@ -11,6 +11,8 @@ export async function getRecentSessionSummaries(userId: string) {
       sessionId: sessionSummaries.sessionId,
       summary: sessionSummaries.summary,
       mainTopic: sessionSummaries.mainTopic,
+      decisions: sessionSummaries.decisions,
+      nextSteps: sessionSummaries.nextSteps,
       safetySummary: sessionSummaries.safetySummary,
       createdAt: sessionSummaries.createdAt,
       sessionType: sessions.sessionType,

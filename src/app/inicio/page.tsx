@@ -247,6 +247,14 @@ export default async function InicioPage() {
                       <dd>{sessionSummary.safetySummary ?? "Sin eventos"}</dd>
                     </div>
                   </dl>
+                  <StructuredSummaryList
+                    items={sessionSummary.decisions}
+                    title="Decisiones"
+                  />
+                  <StructuredSummaryList
+                    items={sessionSummary.nextSteps}
+                    title="Próximos pasos"
+                  />
                   {sessionSummary.feedback ? (
                     <div className="supporting-text">
                       <p>
@@ -439,6 +447,27 @@ export default async function InicioPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function StructuredSummaryList(input: { title: string; items: string[] }) {
+  const items = input.items
+    .filter((item) => item.trim().length > 0)
+    .slice(0, 3);
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="supporting-text">
+      <strong>{input.title}</strong>
+      <ul>
+        {items.map((item, index) => (
+          <li key={`${input.title}-${index}`}>{item}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
