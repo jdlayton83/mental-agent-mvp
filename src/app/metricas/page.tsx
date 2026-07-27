@@ -285,6 +285,13 @@ function formatAuditAction(action: string) {
 function formatUsageOperation(operationType: string) {
   const labels: Record<string, string> = {
     "conversation.reply": "Respuesta de conversación",
+    "guided.create_or_review_habit.reply": "Modo hábito",
+    "guided.journaling.reply": "Diario guiado",
+    "guided.make_decision.reply": "Modo decisión",
+    "guided.organize_thoughts.reply": "Modo ordenar cabeza",
+    "guided.prepare_difficult_conversation.reply":
+      "Preparar conversación difícil",
+    "guided.personal_development.reply": "Desarrollo personal",
   };
 
   return labels[operationType] ?? operationType;

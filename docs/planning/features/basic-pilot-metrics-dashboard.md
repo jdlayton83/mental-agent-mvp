@@ -146,6 +146,7 @@ No AI behavior changes are planned.
 - [x] Add pilot metrics query helper.
 - [x] Add `/metricas` page.
 - [x] Add `/inicio` link.
+- [x] Add Spanish labels for known technical usage operation types.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
