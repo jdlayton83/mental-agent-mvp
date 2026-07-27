@@ -34,6 +34,7 @@ import {
   type SafetyCategory,
 } from "../modules/safety/risk-classifier";
 import { resolveSafetyResources } from "../modules/safety/resources";
+import { getUsageEventStatus } from "../modules/usage/status";
 
 type TestCase = {
   name: string;
@@ -433,6 +434,30 @@ const tests: TestCase[] = [
       assert.doesNotMatch(
         context.systemInstructions,
         /Prefiere respuestas breves/i,
+      );
+    },
+  },
+  {
+    name: "usage status records provider errors as failed",
+    run: () => {
+      assert.equal(
+        getUsageEventStatus({
+          finishReason: "error",
+          safetyStatus: "checked",
+        }),
+        "failed",
+      );
+    },
+  },
+  {
+    name: "usage status keeps safety replacements distinct",
+    run: () => {
+      assert.equal(
+        getUsageEventStatus({
+          finishReason: "error",
+          safetyStatus: "output_replaced_clinical_level_2",
+        }),
+        "replaced",
       );
     },
   },

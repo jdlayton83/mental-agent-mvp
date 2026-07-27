@@ -30,6 +30,7 @@ import {
 } from "@/modules/safety/risk-classifier";
 import { validateAssistantOutput } from "@/modules/safety/output-validator";
 import { buildSafeResponse } from "@/modules/safety/safe-response";
+import { getUsageEventStatus } from "@/modules/usage/status";
 
 const messageSchema = z.object({
   content: z.string().trim().min(1).max(2_000),
@@ -217,6 +218,7 @@ export async function sendConversationMessage(
       model: "safety-policy-v1",
       inputTokens: null,
       outputTokens: null,
+      finishReason: "stop",
       safetyStatus: `level_${safetyAssessment.level}_${safetyAssessment.category}`,
       shouldReserveCredits: false,
       safetyEvent: {
@@ -329,6 +331,7 @@ export async function sendConversationMessage(
     model: assistantReply.model,
     inputTokens: assistantReply.inputTokens,
     outputTokens: assistantReply.outputTokens,
+    finishReason: assistantReply.finishReason,
     latencyMs: assistantReply.latencyMs,
     correlationId: assistantReply.correlationId,
     safetyStatus: finalSafetyStatus,
@@ -393,6 +396,7 @@ async function persistConversationTurn(input: {
   model: string;
   inputTokens: number | null;
   outputTokens: number | null;
+  finishReason: "stop" | "length" | "error";
   latencyMs?: number;
   correlationId?: string;
   safetyStatus: string;
@@ -514,9 +518,10 @@ async function persistConversationTurn(input: {
         outputUnits: input.outputTokens,
         durationMs: input.latencyMs ?? 0,
         creditsAssigned: 0,
-        status: input.safetyStatus.startsWith("output_replaced_")
-          ? "replaced"
-          : "completed",
+        status: getUsageEventStatus({
+          finishReason: input.finishReason,
+          safetyStatus: input.safetyStatus,
+        }),
         correlationId: input.correlationId,
       });
     }
