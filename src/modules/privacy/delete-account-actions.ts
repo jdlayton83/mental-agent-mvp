@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
   agents,
+  commitments,
   consentRecords,
   conversations,
   creditTransactions,
@@ -56,6 +57,7 @@ export async function deleteCurrentAccount(formData: FormData) {
     await tx.delete(usageEvents).where(eq(usageEvents.userId, user.id));
     await tx.delete(safetyEvents).where(eq(safetyEvents.userId, user.id));
     await tx.delete(memories).where(eq(memories.userId, user.id));
+    await tx.delete(commitments).where(eq(commitments.userId, user.id));
     await tx
       .delete(sessionSummaries)
       .where(eq(sessionSummaries.userId, user.id));

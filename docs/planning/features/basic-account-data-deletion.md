@@ -26,7 +26,7 @@ The feature shall prioritize user control, isolation, and clear communication wh
 
 The backlog requires account and data deletion, including conversations, sessions, memories, history, session revocation, and clear information about retained technical data.
 
-The current app has user-owned data across users, profiles, preferences, agents, conversations, messages, sessions, session summaries, memories, credits, usage, safety events, consent records, audit events, and feedback stored in session metadata. There is no embeddings table yet and no external provider deletion workflow.
+The current app has user-owned data across users, profiles, preferences, agents, conversations, messages, sessions, session summaries, memories, commitments, credits, usage, safety events, consent records, audit events, and feedback stored in session metadata. There is no embeddings table yet and no external provider deletion workflow.
 
 ## User Value
 
@@ -38,7 +38,7 @@ The user can remove their local MVP data and stop account access without relying
 - Require an explicit confirmation phrase before deletion.
 - Delete or anonymize current user-owned local data in a safe order.
 - Revoke the active account by marking the user deleted and incrementing `session_version`.
-- Remove conversation content, memories, summaries, sessions, credits, usage, consent records, profile, preferences, and agents where technically possible.
+- Remove conversation content, memories, commitments, summaries, sessions, credits, usage, consent records, profile, preferences, and agents where technically possible.
 - Keep the operation scoped to the current authenticated user.
 - Explain that backups and external provider deletion are outside this local MVP flow.
 
@@ -150,6 +150,7 @@ No AI behavior changes are planned.
 - [x] Ensure session revocation through `session_version`.
 - [x] Preserve minimal account deletion evidence through the audit events feature.
 - [x] Show a safe login-page confirmation after deletion.
+- [x] Delete user-owned commitments during account deletion.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -171,3 +172,4 @@ None.
 | 2026-06-22 | Marked implemented after current-user deletion action, UI, session revocation, and checks passed | Implementation complete |
 | 2026-07-27 | Updated audit wording | Align deletion spec with implemented audit events |
 | 2026-07-27 | Added deletion confirmation message | Make the post-deletion redirect outcome visible |
+| 2026-07-27 | Added commitments to deletion flow | Keep newly implemented user-owned data covered by account deletion |

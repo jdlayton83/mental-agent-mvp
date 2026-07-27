@@ -4,6 +4,7 @@ import { db } from "@/db";
 import {
   agents,
   auditEvents,
+  commitments,
   consentRecords,
   conversations,
   creditTransactions,
@@ -31,6 +32,7 @@ export async function buildUserDataExport(userId: string) {
     userSessions,
     summaries,
     userMemories,
+    userCommitments,
     wallets,
     creditLedger,
     reservations,
@@ -68,6 +70,11 @@ export async function buildUserDataExport(userId: string) {
       .from(memories)
       .where(eq(memories.userId, userId))
       .orderBy(asc(memories.createdAt)),
+    db
+      .select()
+      .from(commitments)
+      .where(eq(commitments.userId, userId))
+      .orderBy(asc(commitments.createdAt)),
     db.select().from(creditWallets).where(eq(creditWallets.userId, userId)),
     db
       .select()
@@ -113,6 +120,7 @@ export async function buildUserDataExport(userId: string) {
     sessions: userSessions,
     sessionSummaries: summaries,
     memories: userMemories,
+    commitments: userCommitments,
     credits: {
       wallets,
       transactions: creditLedger,
@@ -125,7 +133,7 @@ export async function buildUserDataExport(userId: string) {
     notImplementedYet: {
       goals: [],
       habits: [],
-      note: "Goals and habits are planned but not implemented in this MVP state.",
+      note: "Goals and habits are planned but not implemented in this MVP state. Commitments are exported separately when present.",
     },
   };
 }

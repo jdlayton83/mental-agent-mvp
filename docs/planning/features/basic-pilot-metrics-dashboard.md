@@ -48,6 +48,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
   - number of feedback entries with an optional product comment;
   - confirmed memories;
   - deleted or archived memories;
+  - commitments by status;
   - safety events;
   - audit events;
   - recent technical usage events.
@@ -84,7 +85,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - `/inicio` links to the pilot metrics page.
 - The metrics page loads for an authenticated user.
 - The metrics page redirects anonymous visitors to `/login`.
-- The page shows counts for users, sessions, memories, safety events, audit events, and usage.
+- The page shows counts for users, sessions, memories, commitments, safety events, audit events, and usage.
 - Feedback metrics handle the case where no feedback exists.
 - Feedback comment metrics show counts only and never display comment text.
 - No sensitive content is displayed.
@@ -102,7 +103,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 
 This MVP has no role system yet. The page shall be protected by authentication, but it is not a full admin boundary.
 
-The page shall show aggregate operational metrics only. It shall not display message content, memory content, feedback comment text, exported data, secrets, or prompt text.
+The page shall show aggregate operational metrics only. It shall not display message content, memory content, commitment content, feedback comment text, exported data, secrets, or prompt text.
 
 ## Data Model Impact
 
@@ -150,6 +151,7 @@ No AI behavior changes are planned.
 - [x] Add `/inicio` link.
 - [x] Add Spanish labels for known technical usage operation types.
 - [x] Count feedback entries with optional product comments without displaying comment text.
+- [x] Count commitments by status without displaying commitment content.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -169,3 +171,4 @@ None.
 | 2026-06-25 | Initial draft | Define pilot-readiness metrics slice |
 | 2026-06-25 | Marked implemented | Metrics helper, `/metricas` page, `/inicio` link, and checks completed |
 | 2026-07-27 | Added feedback comment count | Track optional product feedback volume without exposing comment text |
+| 2026-07-27 | Added commitment status counts | Track confirmed-next-action foundation without exposing content |

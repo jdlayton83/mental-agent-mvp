@@ -118,6 +118,30 @@ export default async function MetricasPage() {
           </dl>
         </section>
 
+        <section aria-labelledby="metrics-commitments-title">
+          <h2 className="section-title" id="metrics-commitments-title">
+            Compromisos
+          </h2>
+          <dl className="compact-summary">
+            <MetricItem label="Activos" value={metrics.commitments.active} />
+            <MetricItem
+              label="Completados"
+              value={metrics.commitments.completed}
+            />
+            <MetricItem
+              label="Archivados/eliminados"
+              value={metrics.commitments.archivedOrDeleted}
+            />
+            {metrics.commitments.byStatus.map((entry) => (
+              <MetricItem
+                key={entry.status}
+                label={formatCommitmentStatus(entry.status)}
+                value={entry.count}
+              />
+            ))}
+          </dl>
+        </section>
+
         <section aria-labelledby="metrics-safety-title">
           <h2 className="section-title" id="metrics-safety-title">
             Seguridad y auditoría
@@ -264,6 +288,17 @@ function formatMemoryStatus(status: string) {
     proposed: "Propuestos",
     confirmed: "Confirmados",
     rejected: "Descartados",
+    archived: "Archivados",
+    deleted: "Eliminados",
+  };
+
+  return labels[status] ?? status;
+}
+
+function formatCommitmentStatus(status: string) {
+  const labels: Record<string, string> = {
+    active: "Activos",
+    completed: "Completados",
     archived: "Archivados",
     deleted: "Eliminados",
   };

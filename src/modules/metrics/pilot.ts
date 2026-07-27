@@ -3,6 +3,7 @@ import { desc, eq, isNull, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
   auditEvents,
+  commitments,
   conversations,
   memories,
   safetyEvents,
@@ -42,6 +43,7 @@ export async function getPilotMetrics() {
     sessionTypeCounts,
     feedbackRows,
     memoryStatusCounts,
+    commitmentStatusCounts,
     safetyEventCount,
     safetyLevelCounts,
     auditEventCount,
@@ -55,6 +57,7 @@ export async function getPilotMetrics() {
     getSessionTypeCounts(),
     getSessionFeedbackRows(),
     getMemoryStatusCounts(),
+    getCommitmentStatusCounts(),
     getSafetyEventCount(),
     getSafetyLevelCounts(),
     getAuditEventCount(),
@@ -83,6 +86,14 @@ export async function getPilotMetrics() {
       archivedOrDeleted:
         getNamedCount(memoryStatusCounts, "archived") +
         getNamedCount(memoryStatusCounts, "deleted"),
+    },
+    commitments: {
+      byStatus: commitmentStatusCounts,
+      active: getNamedCount(commitmentStatusCounts, "active"),
+      completed: getNamedCount(commitmentStatusCounts, "completed"),
+      archivedOrDeleted:
+        getNamedCount(commitmentStatusCounts, "archived") +
+        getNamedCount(commitmentStatusCounts, "deleted"),
     },
     safety: {
       totalEvents: safetyEventCount,
@@ -191,6 +202,17 @@ async function getMemoryStatusCounts() {
     .from(memories)
     .groupBy(memories.status)
     .orderBy(memories.status);
+}
+
+async function getCommitmentStatusCounts() {
+  return db
+    .select({
+      status: commitments.status,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(commitments)
+    .groupBy(commitments.status)
+    .orderBy(commitments.status);
 }
 
 async function getSafetyLevelCounts() {
