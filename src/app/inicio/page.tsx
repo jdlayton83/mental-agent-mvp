@@ -248,12 +248,18 @@ export default async function InicioPage() {
                     </div>
                   </dl>
                   {sessionSummary.feedback ? (
-                    <p className="supporting-text">
-                      Feedback: {sessionSummary.feedback.satisfactionScore}/5 ·{" "}
-                      {sessionSummary.feedback.wouldReuse
-                        ? "Lo usaría de nuevo"
-                        : "No lo usaría de nuevo"}
-                    </p>
+                    <div className="supporting-text">
+                      <p>
+                        Feedback: {sessionSummary.feedback.satisfactionScore}/5
+                        ·{" "}
+                        {sessionSummary.feedback.wouldReuse
+                          ? "Lo usaría de nuevo"
+                          : "No lo usaría de nuevo"}
+                      </p>
+                      {sessionSummary.feedback.comment ? (
+                        <p>Comentario: {sessionSummary.feedback.comment}</p>
+                      ) : null}
+                    </div>
                   ) : (
                     <form
                       action={submitSessionFeedback}
@@ -296,6 +302,15 @@ export default async function InicioPage() {
                           No
                         </label>
                       </fieldset>
+                      <label className="auth-field">
+                        Comentario breve opcional
+                        <textarea
+                          maxLength={280}
+                          name="comment"
+                          placeholder="Qué mejorarías del producto, sin detalles íntimos"
+                          rows={3}
+                        />
+                      </label>
                       <button className="secondary-button" type="submit">
                         Guardar feedback
                       </button>

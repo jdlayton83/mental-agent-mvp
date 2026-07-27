@@ -26,6 +26,11 @@ import {
   recordPersonalDevelopmentAnswer,
 } from "../modules/guided-modes/personal-development-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
+import {
+  buildSessionFeedbackMetadata,
+  normalizeSessionFeedbackComment,
+  parseSessionFeedback,
+} from "../modules/sessions/feedback";
 import { buildSafeResponse } from "../modules/safety/safe-response";
 import { validateAssistantOutput } from "../modules/safety/output-validator";
 import {
@@ -482,6 +487,38 @@ const tests: TestCase[] = [
         }),
         "completed",
       );
+    },
+  },
+  {
+    name: "session feedback parses older metadata without comments",
+    run: () => {
+      const feedback = parseSessionFeedback({
+        feedback: {
+          version: 1,
+          satisfactionScore: 4,
+          wouldReuse: true,
+          submittedAt: "2026-07-27T00:00:00.000Z",
+        },
+      });
+
+      assert.equal(feedback?.comment, undefined);
+      assert.equal(feedback?.satisfactionScore, 4);
+      assert.equal(feedback?.wouldReuse, true);
+    },
+  },
+  {
+    name: "session feedback normalizes optional comments",
+    run: () => {
+      const metadata = buildSessionFeedbackMetadata({
+        metadata: { existing: true },
+        satisfactionScore: 5,
+        wouldReuse: true,
+        comment: `  ${"útil ".repeat(80)}  `,
+      });
+
+      assert.equal((metadata as Record<string, unknown>).existing, true);
+      assert.equal(metadata.feedback.comment?.length, 280);
+      assert.equal(normalizeSessionFeedbackComment("   "), null);
     },
   },
   {

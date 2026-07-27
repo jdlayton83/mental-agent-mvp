@@ -4,6 +4,7 @@ export const sessionFeedbackSchema = z.object({
   version: z.literal(1),
   satisfactionScore: z.number().int().min(1).max(5),
   wouldReuse: z.boolean(),
+  comment: z.string().max(280).nullable().optional(),
   submittedAt: z.string(),
 });
 
@@ -21,6 +22,7 @@ export function buildSessionFeedbackMetadata(input: {
   metadata: Record<string, unknown> | null;
   satisfactionScore: number;
   wouldReuse: boolean;
+  comment?: string | null;
 }) {
   return {
     ...(input.metadata ?? {}),
@@ -28,7 +30,16 @@ export function buildSessionFeedbackMetadata(input: {
       version: 1,
       satisfactionScore: input.satisfactionScore,
       wouldReuse: input.wouldReuse,
+      comment: normalizeSessionFeedbackComment(input.comment),
       submittedAt: new Date().toISOString(),
     },
   };
+}
+
+export function normalizeSessionFeedbackComment(
+  comment: string | null | undefined,
+) {
+  const normalized = comment?.trim() ?? "";
+
+  return normalized.length > 0 ? normalized.slice(0, 280) : null;
 }

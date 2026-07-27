@@ -14,6 +14,7 @@ const feedbackSchema = z.object({
   sessionId: z.string().uuid(),
   satisfactionScore: z.coerce.number().int().min(1).max(5),
   wouldReuse: z.enum(["yes", "no"]).transform((value) => value === "yes"),
+  comment: z.string().max(280).optional(),
 });
 
 export async function submitSessionFeedback(formData: FormData) {
@@ -27,6 +28,7 @@ export async function submitSessionFeedback(formData: FormData) {
     sessionId: formData.get("sessionId"),
     satisfactionScore: formData.get("satisfactionScore"),
     wouldReuse: formData.get("wouldReuse"),
+    comment: formData.get("comment"),
   });
 
   if (!parsed.success) {
@@ -59,6 +61,7 @@ export async function submitSessionFeedback(formData: FormData) {
         metadata: session.metadata,
         satisfactionScore: parsed.data.satisfactionScore,
         wouldReuse: parsed.data.wouldReuse,
+        comment: parsed.data.comment ?? null,
       }),
       updatedAt: sql`now()`,
     })
