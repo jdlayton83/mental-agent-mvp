@@ -293,7 +293,9 @@ function formatUsageOperation(operationType: string) {
 function formatUsageStatus(status: string) {
   const labels: Record<string, string> = {
     completed: "Completado",
+    failed: "Fallido",
     replaced: "Sustituido por seguridad",
+    truncated: "Truncado",
   };
 
   return labels[status] ?? status;

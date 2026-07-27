@@ -86,7 +86,7 @@ No API impact.
 
 ## UI/UX Impact
 
-Existing usage views may show `failed` or `truncated` status labels through their fallback display until dedicated Spanish labels are added.
+Existing usage views shall show the known technical statuses with short Spanish labels.
 
 ## Memory Impact
 
@@ -106,6 +106,7 @@ No AI behavior change is planned.
 - [x] Add usage status helper.
 - [x] Use the helper for free-chat usage persistence.
 - [x] Add regression tests.
+- [x] Add Spanish labels for the new technical statuses in existing usage views.
 - [x] Run the unified CI command.
 
 ## Documentation To Update
