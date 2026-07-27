@@ -45,6 +45,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
   - guided-mode sessions;
   - average satisfaction where feedback exists;
   - reuse intent where feedback exists;
+  - number of feedback entries with an optional product comment;
   - confirmed memories;
   - deleted or archived memories;
   - safety events;
@@ -85,6 +86,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page redirects anonymous visitors to `/login`.
 - The page shows counts for users, sessions, memories, safety events, audit events, and usage.
 - Feedback metrics handle the case where no feedback exists.
+- Feedback comment metrics show counts only and never display comment text.
 - No sensitive content is displayed.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
@@ -100,7 +102,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 
 This MVP has no role system yet. The page shall be protected by authentication, but it is not a full admin boundary.
 
-The page shall show aggregate operational metrics only. It shall not display message content, memory content, exported data, secrets, or prompt text.
+The page shall show aggregate operational metrics only. It shall not display message content, memory content, feedback comment text, exported data, secrets, or prompt text.
 
 ## Data Model Impact
 
@@ -147,6 +149,7 @@ No AI behavior changes are planned.
 - [x] Add `/metricas` page.
 - [x] Add `/inicio` link.
 - [x] Add Spanish labels for known technical usage operation types.
+- [x] Count feedback entries with optional product comments without displaying comment text.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -165,3 +168,4 @@ None.
 |---|---|---|
 | 2026-06-25 | Initial draft | Define pilot-readiness metrics slice |
 | 2026-06-25 | Marked implemented | Metrics helper, `/metricas` page, `/inicio` link, and checks completed |
+| 2026-07-27 | Added feedback comment count | Track optional product feedback volume without exposing comment text |

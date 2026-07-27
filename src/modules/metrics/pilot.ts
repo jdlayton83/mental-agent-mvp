@@ -243,6 +243,7 @@ function calculateFeedbackMetrics(
       averageSatisfaction: null,
       wouldReuseCount: 0,
       wouldReuseRate: null,
+      withCommentCount: 0,
     };
   }
 
@@ -251,12 +252,14 @@ function calculateFeedbackMetrics(
     0,
   );
   const wouldReuseCount = feedback.filter((entry) => entry.wouldReuse).length;
+  const withCommentCount = feedback.filter((entry) => entry.comment).length;
 
   return {
     submittedCount: feedback.length,
     averageSatisfaction: satisfactionTotal / feedback.length,
     wouldReuseCount,
     wouldReuseRate: calculateRate(wouldReuseCount, feedback.length),
+    withCommentCount,
   };
 }
 

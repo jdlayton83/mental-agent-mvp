@@ -88,6 +88,10 @@ export default async function MetricasPage() {
               label="Tasa reutilización"
               value={formatPercent(metrics.feedback.wouldReuseRate)}
             />
+            <MetricItem
+              label="Comentarios"
+              value={metrics.feedback.withCommentCount}
+            />
           </dl>
         </section>
 
