@@ -37,6 +37,10 @@ Notas:
 - [ ] `npm run format:check` pasa.
 - [ ] `npm run test` pasa.
 - [ ] `npm run secrets:check` pasa.
+- [ ] `npm run env:check` pasa.
+- [ ] `npm run ai:check` pasa.
+- [ ] `npm run db:check` pasa.
+- [ ] `npm run privacy:check` pasa.
 - [ ] `npm run build -- --webpack` pasa en PowerShell local.
 
 Comandos:
@@ -53,6 +57,10 @@ npm run lint
 npm run format:check
 npm run test
 npm run secrets:check
+npm run env:check
+npm run ai:check
+npm run db:check
+npm run privacy:check
 npm run build -- --webpack
 ```
 
