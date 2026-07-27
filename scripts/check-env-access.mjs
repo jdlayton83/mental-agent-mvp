@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const allowedFiles = new Set(["src/config/env.ts"]);
 const pattern = /\bprocess\s*\.\s*env\b/;
@@ -8,6 +8,10 @@ const files = readFileSync(0, "utf8")
   .filter(Boolean);
 
 const violations = files.filter((file) => {
+  if (!existsSync(file)) {
+    return false;
+  }
+
   if (allowedFiles.has(file)) {
     return false;
   }

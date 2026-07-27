@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const secretPatterns = [
   {
@@ -28,6 +28,10 @@ const trackedFiles = readFileSync(0, "utf8").split(/\r?\n/).filter(Boolean);
 const findings = [];
 
 for (const filePath of trackedFiles) {
+  if (!existsSync(filePath)) {
+    continue;
+  }
+
   const fileBuffer = readFileSync(filePath);
 
   if (fileBuffer.includes(0)) {

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const allowedPrefix = "src/modules/ai/providers/openai/";
 const importPattern =
@@ -9,6 +9,10 @@ const files = readFileSync(0, "utf8")
   .filter(Boolean);
 
 const violations = files.filter((file) => {
+  if (!existsSync(file)) {
+    return false;
+  }
+
   if (file.startsWith(allowedPrefix)) {
     return false;
   }

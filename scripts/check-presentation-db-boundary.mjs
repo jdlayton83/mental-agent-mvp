@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const forbiddenImportPattern =
   /\bfrom\s+["'](?:@\/db(?:\/schema)?|drizzle-orm(?:\/[^"']*)?)["']|\brequire\(\s*["'](?:@\/db(?:\/schema)?|drizzle-orm(?:\/[^"']*)?)["']\s*\)/;
@@ -8,6 +8,10 @@ const files = readFileSync(0, "utf8")
   .filter(Boolean);
 
 const violations = files.filter((file) => {
+  if (!existsSync(file)) {
+    return false;
+  }
+
   const content = readFileSync(file, "utf8");
 
   return forbiddenImportPattern.test(content);

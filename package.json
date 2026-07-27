@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsc --project tsconfig.test.json && node .test-dist/tests/run.js",
+    "test": "vitest run --pool=threads",
     "secrets:check": "git ls-files | node scripts/check-secrets.mjs",
     "env:check": "git ls-files src | node scripts/check-env-access.mjs",
     "ai:check": "git ls-files src | node scripts/check-ai-provider-boundary.mjs",

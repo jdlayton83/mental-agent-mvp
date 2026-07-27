@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { test } from "vitest";
 
 import { buildConversationAIContext } from "../modules/conversations/context-builder";
 import {
@@ -735,9 +736,6 @@ function assertSafetyAssessment(
   assert.deepEqual(actual, expected);
 }
 
-for (const test of tests) {
-  test.run();
-  console.log(`ok - ${test.name}`);
+for (const testCase of tests) {
+  test(testCase.name, testCase.run);
 }
-
-console.log(`${tests.length} tests passed.`);
