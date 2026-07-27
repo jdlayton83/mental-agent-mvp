@@ -3,6 +3,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
   agents,
+  auditEvents,
   consentRecords,
   conversations,
   creditTransactions,
@@ -35,6 +36,7 @@ export async function buildUserDataExport(userId: string) {
     reservations,
     usage,
     safety,
+    audit,
     consents,
   ] = await Promise.all([
     getAccountExport(userId),
@@ -89,6 +91,11 @@ export async function buildUserDataExport(userId: string) {
       .orderBy(asc(safetyEvents.createdAt)),
     db
       .select()
+      .from(auditEvents)
+      .where(eq(auditEvents.actorUserId, userId))
+      .orderBy(asc(auditEvents.createdAt)),
+    db
+      .select()
       .from(consentRecords)
       .where(eq(consentRecords.userId, userId))
       .orderBy(asc(consentRecords.createdAt)),
@@ -113,6 +120,7 @@ export async function buildUserDataExport(userId: string) {
     },
     usageEvents: usage,
     safetyEvents: safety,
+    auditEvents: audit,
     consentRecords: consents,
     notImplementedYet: {
       goals: [],

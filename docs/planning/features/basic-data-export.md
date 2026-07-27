@@ -26,7 +26,7 @@ The export shall support the user's right of access and portability at a lightwe
 
 The backlog requires exporting profile, conversations, sessions, memories, objectives, and consent records without including other users' data.
 
-The current app has user profile, preferences, agents, conversations, messages, sessions, summaries, memories, credits, usage, safety events, and consent records. Goals and habits are not implemented yet, so they shall be represented as empty arrays or omitted with an explicit note.
+The current app has user profile, preferences, agents, conversations, messages, sessions, summaries, memories, credits, usage, safety events, audit events, and consent records. Goals and habits are not implemented yet, so they shall be represented as empty arrays or omitted with an explicit note.
 
 ## User Value
 
@@ -48,6 +48,7 @@ The user can download a readable snapshot of their data and understand what the 
   - credit wallet and transactions;
   - usage events;
   - safety events;
+  - audit events;
   - consent records.
 - Include an `exportedAt` timestamp and export schema version.
 - Filter every query by current `user_id`.
@@ -71,6 +72,7 @@ The user can download a readable snapshot of their data and understand what the 
 - The export shall include only data for the current user.
 - The export shall exclude `password_hash`.
 - The export shall include consent history.
+- The export shall include minimized audit events for the authenticated user.
 - The export shall include empty arrays or an explicit note for not-yet-implemented goals and habits.
 
 ## Non-Functional Requirements
@@ -83,7 +85,7 @@ The user can download a readable snapshot of their data and understand what the 
 
 - `/privacidad/exportar` downloads or displays JSON for the current user.
 - The JSON includes `exportVersion` and `exportedAt`.
-- The JSON includes profile, preferences, conversations, messages, sessions, summaries, memories, credits, usage, safety events, and consent records.
+- The JSON includes profile, preferences, conversations, messages, sessions, summaries, memories, credits, usage, safety events, audit events, and consent records.
 - The JSON does not include `password_hash`.
 - Every user-owned query filters by current user ID.
 - `/privacidad` links to the export route.
@@ -139,6 +141,7 @@ No AI behavior changes are planned.
 - [x] Add data export helper.
 - [x] Add `/privacidad/exportar` route.
 - [x] Link export from `/privacidad`.
+- [x] Include minimized audit events in the export.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -158,3 +161,4 @@ None.
 | 2026-06-21 | Initial draft | Start Phase 7.2 basic JSON data export |
 | 2026-06-22 | Approved for implementation as authenticated JSON export | User approval |
 | 2026-06-22 | Marked implemented after export helper, route, UI link, and checks passed | Implementation complete |
+| 2026-07-27 | Added audit events to export | Align export with implemented audit trail |
