@@ -19,6 +19,14 @@ const commitmentActionSchema = z.object({
   commitmentId: z.string().uuid(),
 });
 
+const commitmentDueDateSchema = z.object({
+  commitmentId: z.string().uuid(),
+  dueDate: z.preprocess(
+    (value) => (typeof value === "string" ? value.trim() : value),
+    z.union([z.literal(""), z.string().regex(/^\d{4}-\d{2}-\d{2}$/)]),
+  ),
+});
+
 export async function createCommitmentFromNextStep(formData: FormData) {
   const user = await getCurrentUser();
 
@@ -139,6 +147,63 @@ export async function deleteCommitment(formData: FormData) {
   });
 }
 
+export async function updateCommitmentDueDate(formData: FormData) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const parsed = commitmentDueDateSchema.safeParse({
+    commitmentId: formData.get("commitmentId"),
+    dueDate: formData.get("dueDate"),
+  });
+
+  if (!parsed.success) {
+    revalidatePath("/compromisos");
+    return;
+  }
+
+  const dueAt = parseCommitmentDueDate(parsed.data.dueDate);
+
+  if (dueAt === undefined) {
+    revalidatePath("/compromisos");
+    return;
+  }
+
+  const updated = await db
+    .update(commitments)
+    .set({
+      dueAt,
+      updatedAt: sql`now()`,
+    })
+    .where(
+      and(
+        eq(commitments.id, parsed.data.commitmentId),
+        eq(commitments.userId, user.id),
+        sql`${commitments.status} <> 'deleted'`,
+      ),
+    )
+    .returning({ id: commitments.id });
+
+  if (updated.length > 0) {
+    await recordAuditEvent({
+      actorUserId: user.id,
+      action: "commitment.due_date_update",
+      entityType: "commitment",
+      entityId: parsed.data.commitmentId,
+      result: "success",
+      metadata: {
+        hasDueDate: dueAt !== null,
+      },
+    });
+  }
+
+  revalidatePath("/inicio");
+  revalidatePath("/compromisos");
+  revalidatePath("/metricas");
+}
+
 async function updateCommitmentStatus(input: {
   formData: FormData;
   action: string;
@@ -195,4 +260,21 @@ async function updateCommitmentStatus(input: {
   revalidatePath("/inicio");
   revalidatePath("/compromisos");
   revalidatePath("/metricas");
+}
+
+function parseCommitmentDueDate(value: string) {
+  if (value === "") {
+    return null;
+  }
+
+  const dueAt = new Date(`${value}T12:00:00.000Z`);
+
+  if (
+    Number.isNaN(dueAt.getTime()) ||
+    dueAt.toISOString().slice(0, 10) !== value
+  ) {
+    return undefined;
+  }
+
+  return dueAt;
 }

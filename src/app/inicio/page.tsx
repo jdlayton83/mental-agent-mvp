@@ -242,6 +242,14 @@ export default async function InicioPage() {
                       <dd>Activo</dd>
                     </div>
                     <div>
+                      <dt>Fecha objetivo</dt>
+                      <dd>
+                        {commitment.dueAt
+                          ? formatCommitmentTargetDate(commitment.dueAt)
+                          : "Sin fecha"}
+                      </dd>
+                    </div>
+                    <div>
                       <dt>Fecha</dt>
                       <dd>
                         {formatCreditTransactionDate(commitment.createdAt)}
@@ -592,6 +600,12 @@ function formatCreditTransactionDate(date: Date) {
   return new Intl.DateTimeFormat("es-ES", {
     dateStyle: "short",
     timeStyle: "short",
+  }).format(date);
+}
+
+function formatCommitmentTargetDate(date: Date) {
+  return new Intl.DateTimeFormat("es-ES", {
+    dateStyle: "medium",
   }).format(date);
 }
 

@@ -50,6 +50,7 @@ The user and project owner can trust that critical data-control actions are trac
   - commitment complete;
   - commitment archive;
   - commitment delete;
+  - commitment target-date update;
   - account deletion request completed.
 - Include only minimized metadata.
 
@@ -70,7 +71,7 @@ The user and project owner can trust that critical data-control actions are trac
 - The system shall record successful consent grant and revoke actions.
 - The system shall record successful data export requests.
 - The system shall record successful memory confirm, reject, archive, and delete actions.
-- The system shall record successful commitment create, complete, archive, and delete actions.
+- The system shall record successful commitment create, complete, archive, delete, and target-date update actions.
 - The system shall record successful account deletion completion before or during the deletion transaction in a way that preserves minimal evidence.
 - Audit metadata shall not include sensitive user-authored content.
 - Audit writes shall not weaken the main authorization checks.
@@ -149,7 +150,7 @@ Existing pages and actions shall behave the same from the user's perspective.
 
 Memory actions shall write audit events using memory IDs and status changes only. Audit metadata shall not include memory title, content, normalized content, or extracted details.
 
-Commitment actions shall write audit events using commitment IDs, source, and status changes only. Audit metadata shall not include commitment title or description.
+Commitment actions shall write audit events using commitment IDs, source, status changes, and whether a target date is present only. Audit metadata shall not include commitment title, description, or exact target date.
 
 Audit events shall not be used as memories and shall not affect memory retrieval.
 
@@ -206,3 +207,4 @@ None.
 | 2026-07-27 | Updated current-state wording | Align problem context with implemented audit events |
 | 2026-07-27 | Added commitment audit events | Keep commitment control actions traceable without storing content |
 | 2026-07-27 | Added commitment deletion audit event | Keep commitment removal traceable without storing content |
+| 2026-07-27 | Added commitment target-date audit event | Keep date control traceable without storing exact dates |

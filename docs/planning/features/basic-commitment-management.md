@@ -42,7 +42,7 @@ The user can see active and past commitments in one place and remove commitments
 
 ## Out Of Scope
 
-- Do not add due-date editing yet.
+- Due-date editing is covered by `basic-commitment-due-dates.md`.
 - Do not add reminders, notifications, streaks, goals, habits or check-ins.
 - Do not add automatic AI commitment extraction.
 - Do not add a migration.

@@ -6,6 +6,7 @@ import {
   archiveCommitment,
   completeCommitment,
   deleteCommitment,
+  updateCommitmentDueDate,
 } from "@/modules/commitments/actions";
 import { getCommitmentsForManagement } from "@/modules/commitments/summary";
 
@@ -87,6 +88,14 @@ export default async function CompromisosPage() {
                           </dd>
                         </div>
                         <div>
+                          <dt>Fecha objetivo</dt>
+                          <dd>
+                            {commitment.dueAt
+                              ? formatTargetDate(commitment.dueAt)
+                              : "Sin fecha"}
+                          </dd>
+                        </div>
+                        <div>
                           <dt>Creado</dt>
                           <dd>{formatDate(commitment.createdAt)}</dd>
                         </div>
@@ -96,6 +105,7 @@ export default async function CompromisosPage() {
                         </div>
                       </dl>
                       <CommitmentActions
+                        dueAt={commitment.dueAt}
                         commitmentId={commitment.id}
                         status={commitment.status}
                       />
@@ -121,44 +131,64 @@ export default async function CompromisosPage() {
   );
 }
 
-function CommitmentActions(input: { commitmentId: string; status: string }) {
+function CommitmentActions(input: {
+  commitmentId: string;
+  dueAt: Date | null;
+  status: string;
+}) {
   if (input.status === "deleted") {
     return null;
   }
 
   return (
-    <div className="inline-actions">
-      {input.status === "active" ? (
-        <>
-          <form action={completeCommitment}>
-            <input
-              name="commitmentId"
-              type="hidden"
-              value={input.commitmentId}
-            />
-            <button className="primary-button" type="submit">
-              Completar
-            </button>
-          </form>
-          <form action={archiveCommitment}>
-            <input
-              name="commitmentId"
-              type="hidden"
-              value={input.commitmentId}
-            />
-            <button className="secondary-button" type="submit">
-              Archivar
-            </button>
-          </form>
-        </>
-      ) : null}
-      <form action={deleteCommitment}>
+    <>
+      <form action={updateCommitmentDueDate} className="feedback-form">
         <input name="commitmentId" type="hidden" value={input.commitmentId} />
+        <label className="auth-field">
+          Fecha objetivo
+          <input
+            defaultValue={formatDateInputValue(input.dueAt)}
+            name="dueDate"
+            type="date"
+          />
+        </label>
         <button className="secondary-button" type="submit">
-          Eliminar
+          Guardar fecha
         </button>
       </form>
-    </div>
+      <div className="inline-actions">
+        {input.status === "active" ? (
+          <>
+            <form action={completeCommitment}>
+              <input
+                name="commitmentId"
+                type="hidden"
+                value={input.commitmentId}
+              />
+              <button className="primary-button" type="submit">
+                Completar
+              </button>
+            </form>
+            <form action={archiveCommitment}>
+              <input
+                name="commitmentId"
+                type="hidden"
+                value={input.commitmentId}
+              />
+              <button className="secondary-button" type="submit">
+                Archivar
+              </button>
+            </form>
+          </>
+        ) : null}
+        <form action={deleteCommitment}>
+          <input name="commitmentId" type="hidden" value={input.commitmentId} />
+          <button className="secondary-button" type="submit">
+            Eliminar
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 
@@ -167,6 +197,16 @@ function formatDate(date: Date) {
     dateStyle: "short",
     timeStyle: "short",
   }).format(date);
+}
+
+function formatTargetDate(date: Date) {
+  return new Intl.DateTimeFormat("es-ES", {
+    dateStyle: "medium",
+  }).format(date);
+}
+
+function formatDateInputValue(date: Date | null) {
+  return date ? date.toISOString().slice(0, 10) : "";
 }
 
 function formatCommitmentStatus(status: string) {
