@@ -61,6 +61,7 @@ The user can remove their local MVP data and stop account access without relying
 - The deletion action shall remove or neutralize data in dependency-safe order.
 - The user account shall be marked inactive/deleted and `session_version` shall be incremented to revoke sessions.
 - After deletion, the user shall be signed out or redirected to `/login`.
+- After deletion, `/login` shall show a short confirmation that the local account was deleted.
 - The UI shall explain that this deletes local MVP data and may not affect backups or external providers.
 
 ## Non-Functional Requirements
@@ -79,6 +80,7 @@ The user can remove their local MVP data and stop account access without relying
 - The user account is disabled and session version increments.
 - Existing sessions are revoked after deletion.
 - The user is redirected away from private pages after deletion.
+- The login page confirms deletion after the redirect.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
 - `npm run format:check` passes.
@@ -147,6 +149,7 @@ No AI behavior changes are planned.
 - [x] Add danger-zone UI on `/privacidad`.
 - [x] Ensure session revocation through `session_version`.
 - [x] Preserve minimal account deletion evidence through the audit events feature.
+- [x] Show a safe login-page confirmation after deletion.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -167,3 +170,4 @@ None.
 | 2026-06-22 | Approved with recommendation to test on a throwaway user instead of `dev@example.local` | User approval |
 | 2026-06-22 | Marked implemented after current-user deletion action, UI, session revocation, and checks passed | Implementation complete |
 | 2026-07-27 | Updated audit wording | Align deletion spec with implemented audit events |
+| 2026-07-27 | Added deletion confirmation message | Make the post-deletion redirect outcome visible |
