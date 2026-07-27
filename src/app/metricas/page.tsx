@@ -60,6 +60,14 @@ export default async function MetricasPage() {
               label="Completadas"
               value={metrics.sessions.completed}
             />
+            <MetricItem
+              label="Créditos totales"
+              value={metrics.sessions.totalCredits}
+            />
+            <MetricItem
+              label="Créditos medios"
+              value={formatDecimal(metrics.sessions.averageCredits)}
+            />
             {metrics.sessions.byType.map((entry) => (
               <MetricItem
                 key={entry.sessionType}

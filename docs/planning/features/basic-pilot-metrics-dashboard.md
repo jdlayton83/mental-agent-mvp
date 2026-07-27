@@ -41,6 +41,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
   - onboarding completed;
   - users with at least one conversation;
   - completed sessions;
+  - total and average simulated credits for completed sessions;
   - free-chat sessions;
   - guided-mode sessions;
   - average satisfaction where feedback exists;
@@ -70,6 +71,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page shall show aggregate product metrics using existing data.
 - The metrics page shall not show private conversation content or memory content.
 - The metrics page shall include session feedback averages only when feedback exists.
+- The metrics page shall include total and average simulated credits for completed sessions.
 - The metrics page shall make empty states explicit.
 - The metrics queries shall be server-side.
 - The metrics shall be Spanish-first.
@@ -87,6 +89,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page loads for an authenticated user.
 - The metrics page redirects anonymous visitors to `/login`.
 - The page shows counts for users, sessions, memories, commitments, safety events, audit events, and usage.
+- The page shows total and average simulated session credits.
 - Feedback metrics handle the case where no feedback exists.
 - Feedback comment metrics show counts only and never display comment text.
 - No sensitive content is displayed.
@@ -151,6 +154,7 @@ No AI behavior changes are planned.
 - [x] Add pilot metrics query helper.
 - [x] Add `/metricas` page.
 - [x] Add `/inicio` link.
+- [x] Add aggregate simulated-credit metrics for completed sessions.
 - [x] Add Spanish labels for known technical usage operation types.
 - [x] Add Spanish labels for implemented audit actions.
 - [x] Count feedback entries with optional product comments without displaying comment text.
@@ -176,3 +180,4 @@ None.
 | 2026-07-27 | Added feedback comment count | Track optional product feedback volume without exposing comment text |
 | 2026-07-27 | Added commitment status counts | Track confirmed-next-action foundation without exposing content |
 | 2026-07-27 | Added labels for newer audit actions | Keep audit metrics readable after memory, commitment, and preference controls |
+| 2026-07-27 | Added aggregate session credit metrics | Support pilot cost review without exposing session content |

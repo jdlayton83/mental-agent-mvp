@@ -40,6 +40,7 @@ export async function getPilotMetrics() {
     onboardedUsers,
     usersWithConversations,
     completedSessions,
+    sessionCreditMetrics,
     sessionTypeCounts,
     feedbackRows,
     memoryStatusCounts,
@@ -54,6 +55,7 @@ export async function getPilotMetrics() {
     getOnboardedUserCount(),
     getUsersWithConversationCount(),
     getCompletedSessionCount(),
+    getSessionCreditMetrics(),
     getSessionTypeCounts(),
     getSessionFeedbackRows(),
     getMemoryStatusCounts(),
@@ -77,6 +79,8 @@ export async function getPilotMetrics() {
     },
     sessions: {
       completed: completedSessions,
+      totalCredits: sessionCreditMetrics.totalCredits,
+      averageCredits: sessionCreditMetrics.averageCredits,
       byType: sessionTypeCounts,
     },
     feedback: feedbackMetrics,
@@ -182,6 +186,23 @@ async function getSessionTypeCounts() {
     .from(sessions)
     .groupBy(sessions.sessionType)
     .orderBy(sessions.sessionType);
+}
+
+async function getSessionCreditMetrics() {
+  const [row] = await db
+    .select({
+      totalCredits: sql<number>`coalesce(sum(${sessions.totalCreditCost}), 0)::int`,
+      averageCredits: sql<
+        number | null
+      >`avg(${sessions.totalCreditCost})::float`,
+    })
+    .from(sessions)
+    .where(eq(sessions.status, "completed"));
+
+  return {
+    totalCredits: row?.totalCredits ?? 0,
+    averageCredits: row?.averageCredits ?? null,
+  };
 }
 
 async function getSessionFeedbackRows() {
