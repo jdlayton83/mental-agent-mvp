@@ -113,6 +113,8 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 - [ ] El usuario puede completar o cerrar la sesión.
 - [ ] Las sesiones guiadas aparecen en resúmenes recientes.
 - [ ] El feedback de sesión puede guardarse.
+- [ ] Un próximo paso de una sesión puede guardarse como compromiso.
+- [ ] Un compromiso activo puede completarse o archivarse.
 
 ## 8. Memoria
 
@@ -147,7 +149,7 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 - [ ] Borrar cuenta genera evidencia mínima de auditoría.
 - [ ] `/metricas` carga para usuario autenticado.
 - [ ] `/metricas` no muestra contenido de conversaciones ni recuerdos.
-- [ ] `/metricas` muestra usuarios, sesiones, feedback, memoria, seguridad, auditoría y uso técnico.
+- [ ] `/metricas` muestra usuarios, sesiones, feedback, memoria, compromisos, seguridad, auditoría y uso técnico.
 
 ## 11. Datos de prueba
 
