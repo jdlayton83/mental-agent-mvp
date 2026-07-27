@@ -43,7 +43,7 @@ The user can keep a small list of concrete next actions after a session and mark
 
 - Do not create commitments automatically.
 - Do not add due-date editing yet.
-- Do not add a dedicated commitments page yet.
+- Dedicated commitment management is covered by `basic-commitment-management.md`.
 - Do not add goals, habits, reminders, notifications or check-ins.
 - Do not modify AI prompts or memory retrieval.
 - Do not add a migration.
@@ -144,7 +144,7 @@ Manual browser test:
 
 ## Documentation To Update
 
-Update this feature spec if the commitments page, due dates, automatic extraction, memory integration or goals/habits integration is added.
+Update this feature spec if the capture flow changes. Dedicated management, due dates, automatic extraction, memory integration and goals/habits integration shall remain documented in their own feature specs.
 
 No ADR or README update is expected.
 
@@ -157,3 +157,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-27 | Initial implemented slice | Turn visible next steps into user-confirmed commitments without expanding into goals or habits |
+| 2026-07-27 | Clarified management-page ownership | Dedicated commitment management now has its own feature spec |

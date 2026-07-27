@@ -24,7 +24,7 @@ Add the minimal database foundation for user commitments so the MVP can later tu
 
 The MVP and memory specifications require próximos pasos, commitments, goals and habits. The app already stores session summaries with `next_steps`, but there is no dedicated entity for confirmed commitments.
 
-This slice adds only the `commitments` table and Drizzle schema. Runtime creation, editing and UI will be implemented in later slices after the migration is applied.
+This slice added only the `commitments` table and Drizzle schema. Runtime creation and management are covered by later commitment feature specs.
 
 ## User Value
 
@@ -131,7 +131,9 @@ node --env-file=.env .\node_modules\drizzle-kit\bin.cjs migrate
 
 ## Documentation To Update
 
-Update this feature spec when runtime commitment creation, management, export or memory integration is added.
+Runtime commitment creation and management are documented in separate feature specs.
+
+Update this feature spec if the database foundation itself changes.
 
 No ADR or README update is expected.
 
@@ -144,3 +146,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-27 | Initial implemented foundation | Add minimal commitment entity without taking on full goals or habits scope |
+| 2026-07-27 | Clarified runtime follow-up wording | Runtime commitment features are now documented separately |
