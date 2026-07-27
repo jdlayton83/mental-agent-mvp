@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { MakeDecisionComposer } from "@/components/guided-modes/make-decision-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getMakeDecisionView,
   startNewMakeDecisionSession,
@@ -19,6 +20,8 @@ export default async function TomarDecisionPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

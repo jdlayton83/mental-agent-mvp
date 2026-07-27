@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { CreateOrReviewHabitComposer } from "@/components/guided-modes/create-or-review-habit-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getCreateOrReviewHabitView,
   startNewCreateOrReviewHabitSession,
@@ -19,6 +20,8 @@ export default async function HabitoPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

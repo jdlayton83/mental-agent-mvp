@@ -42,6 +42,7 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - Add a Spanish-first privacy/consent page or section.
 - Link the consent page from `/inicio`.
 - Keep memory consent synchronized with `user_preferences.memory_enabled` for this MVP slice.
+- Gate normal authenticated product pages when required terms or privacy consent are missing.
 
 ## Out Of Scope
 
@@ -64,6 +65,8 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - Granting or revoking consent shall append a new record and shall not overwrite previous records.
 - The current consent state shall be derived from the latest record per consent type.
 - Terms and privacy shall be treated as required for normal MVP use.
+- If required terms or privacy consent are missing, normal authenticated product pages shall redirect to `/privacidad`.
+- Privacy controls, data export, login, and onboarding shall remain reachable so the user can resolve missing consent or control data.
 - Memory and analytics shall be optional and independently revocable.
 - Revoking memory consent shall set `user_preferences.memory_enabled` to `false`.
 - Granting memory consent shall set `user_preferences.memory_enabled` to `true`.
@@ -86,6 +89,7 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - The user can grant and revoke memory consent.
 - The user can grant and revoke analytics consent.
 - Terms and privacy can be granted if missing.
+- Missing required terms or privacy redirects normal product pages to `/privacidad` with a Spanish status message.
 - Consent history is append-only.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
@@ -155,6 +159,7 @@ Future AI context builders should respect `memory_enabled`; this is already part
 - [x] Export consent schema from `src/db/schema/index.ts`.
 - [x] Create and register manual migration.
 - [x] Add consent state and action helpers.
+- [x] Add required-consent gate for normal authenticated product pages.
 - [x] Add `/privacidad` page.
 - [x] Link `/privacidad` from `/inicio`.
 - [x] Run typecheck, lint, and format checks.
@@ -177,3 +182,4 @@ None.
 | 2026-06-21 | Approved with terms and privacy granted manually through the UI | User approval |
 | 2026-06-21 | Marked implemented after schema, manual migration, UI, actions, and checks passed | Implementation complete |
 | 2026-07-27 | Updated current-state wording | Align consent spec with implemented consent and audit flows |
+| 2026-07-27 | Added required-consent gate | Treat terms and privacy as required before normal MVP use |

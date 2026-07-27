@@ -15,6 +15,7 @@ export default async function PrivacidadPage({
 }: {
   searchParams?: Promise<{
     deleteError?: string;
+    required?: string;
   }>;
 }) {
   const user = await getCurrentUser();
@@ -27,6 +28,12 @@ export default async function PrivacidadPage({
   const resolvedSearchParams = await searchParams;
   const hasDeleteConfirmationError =
     resolvedSearchParams?.deleteError === "confirmation";
+  const isRequiredConsentRedirect = resolvedSearchParams?.required === "1";
+  const hasMissingRequiredConsent = consentStates.some(
+    (consent) => consent.required && consent.status !== "granted",
+  );
+  const shouldShowRequiredConsentMessage =
+    isRequiredConsentRedirect || hasMissingRequiredConsent;
 
   return (
     <main className="page-shell">
@@ -41,6 +48,11 @@ export default async function PrivacidadPage({
           sustituyen una política legal completa; sirven para validar el flujo
           de consentimiento y revocación.
         </p>
+        {shouldShowRequiredConsentMessage ? (
+          <p className="status-note" aria-live="polite">
+            Acepta los términos y la privacidad para continuar usando el MVP.
+          </p>
+        ) : null}
 
         <ol className="ledger-list">
           {consentStates.map((consent) => {

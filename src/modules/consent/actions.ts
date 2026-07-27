@@ -74,4 +74,5 @@ async function recordConsentAction(
 
   revalidatePath("/inicio");
   revalidatePath("/privacidad");
+  redirect("/privacidad");
 }

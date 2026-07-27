@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   archiveCommitment,
   completeCommitment,
@@ -30,6 +31,8 @@ export default async function CompromisosPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const commitments = await getCommitmentsForManagement(user.id);
 

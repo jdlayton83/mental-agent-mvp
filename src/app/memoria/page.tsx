@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   archiveMemory,
   confirmMemory,
@@ -33,6 +34,8 @@ export default async function MemoriaPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const memories = await getMemoriesForManagement(user.id);
 

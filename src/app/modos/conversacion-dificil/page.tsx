@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { PrepareDifficultConversationComposer } from "@/components/guided-modes/prepare-difficult-conversation-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getPrepareDifficultConversationView,
   startNewPrepareDifficultConversationSession,
@@ -19,6 +20,8 @@ export default async function ConversacionDificilPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

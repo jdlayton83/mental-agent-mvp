@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import { getPilotMetrics } from "@/modules/metrics/pilot";
 
 export default async function MetricasPage() {
@@ -10,6 +11,8 @@ export default async function MetricasPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const metrics = await getPilotMetrics();
 

@@ -9,6 +9,7 @@ import {
   createCommitmentFromNextStep,
 } from "@/modules/commitments/actions";
 import { getRecentActiveCommitments } from "@/modules/commitments/summary";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import { startPrivateConversation } from "@/modules/conversations/conversation-flow";
 import {
   getCreditSummary,
@@ -36,6 +37,8 @@ export default async function InicioPage({
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const resolvedSearchParams = await searchParams;
   const feedbackStatusMessage = getFeedbackStatusMessage(

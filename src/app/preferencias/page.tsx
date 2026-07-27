@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import { updatePreferences } from "@/modules/users/preferences-actions";
 import { getUserContext } from "@/modules/users/user-context";
 
@@ -11,6 +12,8 @@ export default async function PreferenciasPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

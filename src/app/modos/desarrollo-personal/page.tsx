@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { PersonalDevelopmentComposer } from "@/components/guided-modes/personal-development-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getPersonalDevelopmentView,
   startNewPersonalDevelopmentSession,
@@ -19,6 +20,8 @@ export default async function DesarrolloPersonalPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

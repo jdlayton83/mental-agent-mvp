@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { OrganizeThoughtsComposer } from "@/components/guided-modes/organize-thoughts-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getOrganizeThoughtsView,
   startNewOrganizeThoughtsSession,
@@ -19,6 +20,8 @@ export default async function OrdenarCabezaPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

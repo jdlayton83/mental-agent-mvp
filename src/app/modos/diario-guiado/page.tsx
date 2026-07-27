@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { GuidedJournalingComposer } from "@/components/guided-modes/guided-journaling-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getGuidedJournalingView,
   startNewGuidedJournalingSession,
@@ -19,6 +20,8 @@ export default async function DiarioGuiadoPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 

@@ -136,6 +136,7 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 ## 9. Privacidad y control
 
 - [ ] `/privacidad` muestra consentimientos.
+- [ ] Si faltan términos o privacidad, las áreas normales del MVP redirigen a `/privacidad`.
 - [ ] Se puede conceder y revocar memoria.
 - [ ] Se puede conceder y revocar analítica opcional.
 - [ ] `/privacidad/exportar` descarga JSON.

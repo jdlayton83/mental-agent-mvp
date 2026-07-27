@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { ConversationComposer } from "@/components/conversations/conversation-composer";
 import { getCurrentUser } from "@/modules/auth/session";
+import { requireRequiredConsents } from "@/modules/consent/required-consents";
 import {
   getCurrentConversation,
   startPrivateConversation,
@@ -17,6 +18,8 @@ export default async function ConversacionPage() {
   if (!user) {
     redirect("/login");
   }
+
+  await requireRequiredConsents(user.id);
 
   const userContext = await getUserContext(user.id);
 
