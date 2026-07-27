@@ -109,7 +109,7 @@ export async function buildUserDataExport(userId: string) {
   ]);
 
   return {
-    exportVersion: 1,
+    exportVersion: 2,
     exportedAt: new Date().toISOString(),
     account,
     profile: profiles[0] ?? null,

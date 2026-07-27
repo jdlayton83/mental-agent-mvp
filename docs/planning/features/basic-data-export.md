@@ -81,12 +81,14 @@ The user can download a readable snapshot of their data and understand what the 
 
 - The implementation shall be simple and synchronous for MVP-sized local data.
 - The JSON structure shall be stable and versioned.
+- Adding commitments to the export shall use `exportVersion = 2`.
 - Typecheck, lint, and format checks shall remain clean.
 
 ## Acceptance Criteria
 
 - `/privacidad/exportar` downloads or displays JSON for the current user.
 - The JSON includes `exportVersion` and `exportedAt`.
+- Commitment-aware exports use `exportVersion = 2`.
 - The JSON includes profile, preferences, conversations, messages, sessions, summaries, memories, commitments, credits, usage, safety events, audit events, and consent records.
 - The JSON does not include `password_hash`.
 - Every user-owned query filters by current user ID.
@@ -166,3 +168,4 @@ None.
 | 2026-06-22 | Marked implemented after export helper, route, UI link, and checks passed | Implementation complete |
 | 2026-07-27 | Added audit events to export | Align export with implemented audit trail |
 | 2026-07-27 | Added commitments to export | Keep newly implemented user-owned data portable |
+| 2026-07-27 | Bumped export version to 2 | Reflect the commitment-aware JSON shape |
