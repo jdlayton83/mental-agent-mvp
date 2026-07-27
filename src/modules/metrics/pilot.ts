@@ -34,6 +34,11 @@ type SafetyLevelCount = {
   count: number;
 };
 
+type UsageStatusCount = {
+  status: string;
+  count: number;
+};
+
 export async function getPilotMetrics() {
   const [
     activeUsers,
@@ -49,6 +54,7 @@ export async function getPilotMetrics() {
     safetyLevelCounts,
     auditEventCount,
     auditActionCounts,
+    usageStatusCounts,
     recentUsageEvents,
   ] = await Promise.all([
     getActiveUserCount(),
@@ -64,6 +70,7 @@ export async function getPilotMetrics() {
     getSafetyLevelCounts(),
     getAuditEventCount(),
     getAuditActionCounts(),
+    getUsageStatusCounts(),
     getRecentPilotUsageEvents(),
   ]);
 
@@ -108,6 +115,7 @@ export async function getPilotMetrics() {
       byAction: auditActionCounts,
     },
     usage: {
+      byStatus: usageStatusCounts,
       recentEvents: recentUsageEvents,
     },
   };
@@ -273,6 +281,17 @@ async function getRecentPilotUsageEvents() {
     .limit(8);
 }
 
+async function getUsageStatusCounts() {
+  return db
+    .select({
+      status: usageEvents.status,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(usageEvents)
+    .groupBy(usageEvents.status)
+    .orderBy(usageEvents.status);
+}
+
 function calculateFeedbackMetrics(
   rows: Array<{ metadata: Record<string, unknown> }>,
 ) {
@@ -335,3 +354,4 @@ export type PilotSessionTypeCount = SessionTypeCount;
 export type PilotMemoryStatusCount = MemoryStatusCount;
 export type PilotAuditActionCount = AuditActionCount;
 export type PilotSafetyLevelCount = SafetyLevelCount;
+export type PilotUsageStatusCount = UsageStatusCount;

@@ -201,6 +201,15 @@ export default async function MetricasPage() {
           <h2 className="section-title" id="metrics-usage-title">
             Uso técnico reciente
           </h2>
+          <dl className="compact-summary">
+            {metrics.usage.byStatus.map((entry) => (
+              <MetricItem
+                key={entry.status}
+                label={formatUsageStatus(entry.status)}
+                value={entry.count}
+              />
+            ))}
+          </dl>
           {metrics.usage.recentEvents.length > 0 ? (
             <ol className="ledger-list">
               {metrics.usage.recentEvents.map((event) => (
