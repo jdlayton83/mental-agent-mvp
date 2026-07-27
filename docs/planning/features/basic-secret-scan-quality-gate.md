@@ -30,6 +30,8 @@ The pilot checklist requires confirming that secrets are not committed. The repo
 
 The project owner gets a fast warning before pushing accidental real credentials to GitHub.
 
+The unified CI command shall also remain runnable in the local Windows environment used for this MVP. If Next.js worker spawning fails with `spawn EPERM`, the build configuration shall prefer explicit quality checks and an in-process webpack build over repeating the failing worker spawn.
+
 ## Scope
 
 - Add a local script that scans only Git-tracked files.
@@ -67,6 +69,9 @@ The project owner gets a fast warning before pushing accidental real credentials
 - `npm run ci` includes `npm run secrets:check`.
 - The pilot launch checklist references the check.
 - `npm run ci` passes.
+- `next.config.ts` disables the webpack build worker when needed so the local Windows CI command can complete without the known worker `spawn EPERM`.
+- `next.config.ts` may skip Next's internal TypeScript build worker only because `npm run ci` runs `npm run typecheck` before `next build -- --webpack`.
+- `next.config.ts` limits static generation workers and enables worker threads to avoid child-process `spawn EPERM` during page-data collection in the local Windows gate.
 
 ## Error Cases
 
@@ -108,6 +113,9 @@ No AI behavior impact.
 - [x] Add `secrets:check` script.
 - [x] Include the check in `npm run ci`.
 - [x] Update the pilot launch checklist.
+- [x] Disable the Next.js webpack build worker for the local Windows quality gate.
+- [x] Keep TypeScript enforcement in `npm run typecheck` instead of Next's internal build worker.
+- [x] Limit Next.js page-data worker spawning for the local Windows quality gate.
 - [x] Run the unified CI command.
 
 ## Documentation To Update
@@ -125,3 +133,6 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-27 | Initial implemented spec | Add lightweight tracked-file secret check to the quality gate |
+| 2026-07-27 | Disabled the Next.js webpack build worker for local CI | Avoid Windows `spawn EPERM` during `next build -- --webpack` |
+| 2026-07-27 | Moved TypeScript enforcement to the explicit CI typecheck step | Avoid duplicate Next build worker `spawn EPERM` while preserving the quality gate |
+| 2026-07-27 | Limited page-data build workers and enabled worker threads | Avoid child-process `spawn EPERM` during static page-data collection |

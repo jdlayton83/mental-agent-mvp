@@ -57,6 +57,12 @@ npm run build -- --webpack
 
 Si `.next` queda bloqueado en Windows, cerrar procesos de Node/Next y borrar `.next` manualmente antes de repetir el build.
 
+En este repositorio, `next.config.ts` desactiva `experimental.webpackBuildWorker` para evitar fallos locales `spawn EPERM` al ejecutar `next build -- --webpack` en Windows.
+
+También evita que `next build` ejecute su comprobación interna de TypeScript, porque en este entorno esa fase puede fallar por `spawn EPERM`. La calidad no se relaja: `npm run ci` ejecuta primero `npm run typecheck`, y el build solo deberá considerarse válido si ese paso previo ha pasado.
+
+Para la recolección de datos de páginas, la configuración limita los workers y usa worker threads para reducir nuevos procesos en Windows.
+
 ## 3. Secretos y configuración
 
 - [ ] `.env` no está versionado.
