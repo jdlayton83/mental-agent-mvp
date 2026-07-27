@@ -91,6 +91,7 @@ The user can download a readable snapshot of their data and understand what the 
 - Commitment-aware exports use `exportVersion = 2`.
 - The JSON includes profile, preferences, conversations, messages, sessions, summaries, memories, commitments, credits, usage, safety events, audit events, and consent records.
 - The JSON does not include `password_hash`.
+- `npm run privacy:check` protects the export path from adding password hashes, provider keys, internal environment values, or direct raw environment access.
 - Every user-owned query filters by current user ID.
 - `/privacidad` links to the export route.
 - `npm run typecheck` passes.
@@ -133,6 +134,7 @@ No AI behavior changes are planned.
 
 - `npm run typecheck`
 - `npm run lint`
+- `npm run privacy:check`
 - `npm run format:check`
 - Manual browser test:
   - open `/privacidad`;
@@ -147,6 +149,7 @@ No AI behavior changes are planned.
 - [x] Link export from `/privacidad`.
 - [x] Include minimized audit events in the export.
 - [x] Include commitments in the export.
+- [x] Add a static privacy export guard for forbidden sensitive fields.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -169,3 +172,4 @@ None.
 | 2026-07-27 | Added audit events to export | Align export with implemented audit trail |
 | 2026-07-27 | Added commitments to export | Keep newly implemented user-owned data portable |
 | 2026-07-27 | Bumped export version to 2 | Reflect the commitment-aware JSON shape |
+| 2026-07-27 | Added privacy export guard | Prevent accidental export of password hashes, provider keys or internal configuration |
