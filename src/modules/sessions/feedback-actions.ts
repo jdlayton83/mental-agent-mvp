@@ -32,7 +32,7 @@ export async function submitSessionFeedback(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return;
+    redirect("/inicio?feedback=invalid");
   }
 
   const [session] = await db
@@ -51,7 +51,7 @@ export async function submitSessionFeedback(formData: FormData) {
     .limit(1);
 
   if (!session) {
-    return;
+    redirect("/inicio?feedback=not_saved");
   }
 
   await db
@@ -74,4 +74,5 @@ export async function submitSessionFeedback(formData: FormData) {
     );
 
   revalidatePath("/inicio");
+  redirect("/inicio?feedback=saved");
 }

@@ -62,6 +62,7 @@ The user can quickly indicate whether a session helped, which guides product imp
 - The system shall show a submitted state after feedback is saved.
 - The system shall preserve existing session metadata when adding feedback.
 - The system shall trim optional feedback comments and store empty comments as `null`.
+- If feedback input is invalid or cannot be saved, the home page shall show a short Spanish status message.
 
 ## Non-Functional Requirements
 
@@ -79,6 +80,7 @@ The user can quickly indicate whether a session helped, which guides product imp
 - `npm run typecheck` passes.
 - `npm run lint` passes.
 - `npm run format:check` passes.
+- Invalid feedback redirects to `/inicio` with a Spanish status message.
 
 ## Error Cases
 
@@ -163,3 +165,4 @@ None.
 | 2026-06-21 | Marked implemented after metadata storage, `/inicio` controls, and checks passed | Implementation complete |
 | 2026-07-27 | Updated current-state wording | Clarify that satisfaction and reuse intent are now collected |
 | 2026-07-27 | Added optional short product-feedback comment | Align with backlog feedback requirement while avoiding sensitive content collection |
+| 2026-07-27 | Added feedback status messages | Make invalid or unsaved feedback visible to the user |

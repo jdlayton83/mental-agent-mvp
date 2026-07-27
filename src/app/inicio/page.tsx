@@ -24,13 +24,23 @@ import { getRecentSessionSummaries } from "@/modules/sessions/summary";
 import { getRecentUsageEvents } from "@/modules/usage/summary";
 import { getUserContext } from "@/modules/users/user-context";
 
-export default async function InicioPage() {
+export default async function InicioPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{
+    feedback?: string;
+  }>;
+}) {
   const user = await getCurrentUser();
 
   if (!user) {
     redirect("/login");
   }
 
+  const resolvedSearchParams = await searchParams;
+  const feedbackStatusMessage = getFeedbackStatusMessage(
+    resolvedSearchParams?.feedback,
+  );
   const userContext = await getUserContext(user.id);
   const creditSummary = await getCreditSummary(user.id);
   const recentCreditTransactions = await getRecentCreditTransactions(user.id);
@@ -54,6 +64,11 @@ export default async function InicioPage() {
           Has accedido como <strong>{user.email}</strong>. Estos datos se leen
           desde tu perfil y preferencias.
         </p>
+        {feedbackStatusMessage ? (
+          <p className="status-note" aria-live="polite">
+            {feedbackStatusMessage}
+          </p>
+        ) : null}
         <dl className="profile-summary">
           <div>
             <dt>Idioma</dt>
@@ -748,4 +763,15 @@ function formatInitiativeLevel(initiativeLevel: number) {
   };
 
   return labels[initiativeLevel] ?? String(initiativeLevel);
+}
+
+function getFeedbackStatusMessage(feedbackStatus: string | undefined) {
+  const labels: Record<string, string> = {
+    invalid: "No se ha guardado el feedback porque faltaba algún dato válido.",
+    not_saved:
+      "No se ha guardado el feedback porque la sesión ya no está disponible.",
+    saved: "Feedback guardado.",
+  };
+
+  return feedbackStatus ? (labels[feedbackStatus] ?? null) : null;
 }
