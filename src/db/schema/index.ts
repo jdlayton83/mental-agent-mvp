@@ -1,6 +1,7 @@
 export * from "./audit-events";
 export * from "./agents";
 export * from "./agent-templates";
+export * from "./commitments";
 export * from "./consent-records";
 export * from "./conversations";
 export * from "./credit-transactions";
