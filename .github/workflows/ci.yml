@@ -19,11 +19,11 @@ jobs:
       AUTH_SECRET: ci_auth_secret_value_at_least_32_chars
       LOG_LEVEL: info
       DATABASE_URL: postgresql://localhost:5432/mental_agent_ci
-      LLM_PROVIDER: openai
-      LLM_MODEL: ci_model
+      LLM_PROVIDER: local
+      LLM_MODEL: ci_local_model
       OPENAI_API_KEY: ci_openai_api_key_placeholder
-      EMBEDDING_PROVIDER: openai
-      EMBEDDING_MODEL: ci_embedding_model
+      EMBEDDING_PROVIDER: local
+      EMBEDDING_MODEL: ci_local_embedding_model
       INITIAL_CREDIT_BALANCE: 100
       DEVELOPMENT_USER_EMAIL: dev@example.local
       DEVELOPMENT_USER_PASSWORD: ci_dev_password_123
