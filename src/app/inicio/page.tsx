@@ -3,6 +3,12 @@ import { redirect } from "next/navigation";
 
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { getCurrentUser } from "@/modules/auth/session";
+import {
+  archiveCommitment,
+  completeCommitment,
+  createCommitmentFromNextStep,
+} from "@/modules/commitments/actions";
+import { getRecentActiveCommitments } from "@/modules/commitments/summary";
 import { startPrivateConversation } from "@/modules/conversations/conversation-flow";
 import {
   getCreditSummary,
@@ -31,6 +37,7 @@ export default async function InicioPage() {
   const recentConfirmedMemories = await getRecentConfirmedMemories(user.id);
   const recentProposedMemories = await getRecentProposedMemories(user.id);
   const recentSessionSummaries = await getRecentSessionSummaries(user.id);
+  const recentActiveCommitments = await getRecentActiveCommitments(user.id);
   const recentUsageEvents = await getRecentUsageEvents(user.id);
   const displayName =
     userContext.profile?.displayName ??
@@ -217,6 +224,60 @@ export default async function InicioPage() {
           )}
         </section>
 
+        <section aria-labelledby="commitments-title">
+          <h2 id="commitments-title" className="section-title">
+            Compromisos activos
+          </h2>
+          {recentActiveCommitments.length > 0 ? (
+            <ol className="ledger-list">
+              {recentActiveCommitments.map((commitment) => (
+                <li key={commitment.id}>
+                  <div>
+                    <strong>{commitment.title}</strong>
+                    <span>{formatCommitmentSource(commitment.source)}</span>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Estado</dt>
+                      <dd>Activo</dd>
+                    </div>
+                    <div>
+                      <dt>Fecha</dt>
+                      <dd>
+                        {formatCreditTransactionDate(commitment.createdAt)}
+                      </dd>
+                    </div>
+                  </dl>
+                  <div className="inline-actions">
+                    <form action={completeCommitment}>
+                      <input
+                        name="commitmentId"
+                        type="hidden"
+                        value={commitment.id}
+                      />
+                      <button className="primary-button" type="submit">
+                        Completar
+                      </button>
+                    </form>
+                    <form action={archiveCommitment}>
+                      <input
+                        name="commitmentId"
+                        type="hidden"
+                        value={commitment.id}
+                      />
+                      <button className="secondary-button" type="submit">
+                        Archivar
+                      </button>
+                    </form>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="supporting-text">Aún no hay compromisos activos.</p>
+          )}
+        </section>
+
         <section aria-labelledby="session-summary-title">
           <h2 id="session-summary-title" className="section-title">
             Resúmenes de sesión
@@ -251,8 +312,9 @@ export default async function InicioPage() {
                     items={sessionSummary.decisions}
                     title="Decisiones"
                   />
-                  <StructuredSummaryList
+                  <SaveableNextStepList
                     items={sessionSummary.nextSteps}
+                    sessionSummaryId={sessionSummary.id}
                     title="Próximos pasos"
                   />
                   {sessionSummary.feedback ? (
@@ -471,6 +533,44 @@ function StructuredSummaryList(input: { title: string; items: string[] }) {
   );
 }
 
+function SaveableNextStepList(input: {
+  title: string;
+  items: string[];
+  sessionSummaryId: string;
+}) {
+  const items = input.items
+    .filter((item) => item.trim().length > 0)
+    .slice(0, 3);
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="supporting-text">
+      <strong>{input.title}</strong>
+      <ul>
+        {items.map((item, index) => (
+          <li key={`${input.title}-${index}`}>
+            <span>{item}</span>
+            <form action={createCommitmentFromNextStep}>
+              <input
+                name="sessionSummaryId"
+                type="hidden"
+                value={input.sessionSummaryId}
+              />
+              <input name="nextStep" type="hidden" value={item} />
+              <button className="secondary-button" type="submit">
+                Guardar compromiso
+              </button>
+            </form>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function formatCreditTransactionType(transactionType: string) {
   const labels: Record<string, string> = {
     initial_balance: "Saldo inicial",
@@ -545,4 +645,12 @@ function formatMemorySensitivity(sensitivity: string) {
   };
 
   return labels[sensitivity] ?? sensitivity;
+}
+
+function formatCommitmentSource(source: string) {
+  const labels: Record<string, string> = {
+    session_next_step: "Próximo paso de sesión",
+  };
+
+  return labels[source] ?? source;
 }

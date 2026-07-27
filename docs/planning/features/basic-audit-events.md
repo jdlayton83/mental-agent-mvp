@@ -26,7 +26,7 @@ The audit trail shall help verify that sensitive user actions happened without s
 
 The architecture specifies an `audit_events` table, and the backlog requires auditability for privacy and control actions.
 
-The app has consent changes, JSON data export, account deletion, and memory confirmation/archive/delete actions instrumented with minimized audit records. `audit_events` exists in the schema and migrations.
+The app has consent changes, JSON data export, account deletion, memory confirmation/archive/delete actions, and commitment create/complete/archive actions instrumented with minimized audit records. `audit_events` exists in the schema and migrations.
 
 ## User Value
 
@@ -46,6 +46,9 @@ The user and project owner can trust that critical data-control actions are trac
   - memory reject;
   - memory archive;
   - memory delete;
+  - commitment create;
+  - commitment complete;
+  - commitment archive;
   - account deletion request completed.
 - Include only minimized metadata.
 
@@ -66,6 +69,7 @@ The user and project owner can trust that critical data-control actions are trac
 - The system shall record successful consent grant and revoke actions.
 - The system shall record successful data export requests.
 - The system shall record successful memory confirm, reject, archive, and delete actions.
+- The system shall record successful commitment create, complete, and archive actions.
 - The system shall record successful account deletion completion before or during the deletion transaction in a way that preserves minimal evidence.
 - Audit metadata shall not include sensitive user-authored content.
 - Audit writes shall not weaken the main authorization checks.
@@ -84,6 +88,7 @@ The user and project owner can trust that critical data-control actions are trac
 - A manual migration creates `audit_events`.
 - The migration journal includes the new migration entry with the next sequential index.
 - Critical consent, export, memory, and account deletion actions write audit records.
+- Commitment status changes write minimized audit records.
 - Audit metadata excludes conversation content, memory content, secrets, and API keys.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
@@ -143,6 +148,8 @@ Existing pages and actions shall behave the same from the user's perspective.
 
 Memory actions shall write audit events using memory IDs and status changes only. Audit metadata shall not include memory title, content, normalized content, or extracted details.
 
+Commitment actions shall write audit events using commitment IDs, source, and status changes only. Audit metadata shall not include commitment title or description.
+
 Audit events shall not be used as memories and shall not affect memory retrieval.
 
 ## AI Behavior Impact
@@ -174,6 +181,7 @@ Audit events shall not be included in prompts.
 - [x] Instrument consent actions.
 - [x] Instrument data export.
 - [x] Instrument memory actions.
+- [x] Instrument commitment actions.
 - [x] Instrument account deletion completion.
 - [x] Run typecheck, lint, and format checks.
 
@@ -195,3 +203,4 @@ None.
 | 2026-06-25 | Implementation prepared | Schema, manual migration, audit helper, instrumentation, and checks completed; migration still pending manual application |
 | 2026-06-25 | Marked implemented | Migration applied externally and real memory confirmation audit event verified |
 | 2026-07-27 | Updated current-state wording | Align problem context with implemented audit events |
+| 2026-07-27 | Added commitment audit events | Keep commitment control actions traceable without storing content |
