@@ -6,10 +6,12 @@ export async function generateText(
   input: AIGenerateTextInput,
 ): Promise<AIGenerateTextResult> {
   if (env.LLM_PROVIDER.toLowerCase() === "openai") {
+    const startedAt = Date.now();
+
     try {
       return await generateOpenAIText(input);
     } catch {
-      return buildProviderErrorReply(input);
+      return buildProviderErrorReply(input, Date.now() - startedAt);
     }
   }
 
@@ -42,6 +44,7 @@ function buildLocalPlaceholderReply(userMessage?: string) {
 
 function buildProviderErrorReply(
   input: AIGenerateTextInput,
+  latencyMs: number,
 ): AIGenerateTextResult {
   return {
     content:
@@ -51,7 +54,7 @@ function buildProviderErrorReply(
     finishReason: "error",
     inputTokens: null,
     outputTokens: null,
-    latencyMs: 0,
+    latencyMs,
     correlationId: input.correlationId,
   };
 }

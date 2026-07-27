@@ -39,6 +39,7 @@ The project owner can tell the difference between successful AI replies, safety 
 - Preserve `replaced` for safety output replacements.
 - Record provider errors as `failed`.
 - Record length-limited responses as `truncated`.
+- Preserve measured provider latency when a provider call fails.
 - Add deterministic tests for the status mapping.
 
 ## Out Of Scope
@@ -55,6 +56,7 @@ The project owner can tell the difference between successful AI replies, safety 
 - If the AI finish reason is `error` and safety did not replace the output, the usage event status shall be `failed`.
 - If the AI finish reason is `length`, the usage event status shall be `truncated`.
 - Otherwise, the usage event status shall be `completed`.
+- Provider failure responses shall preserve the elapsed provider-call duration as technical latency.
 
 ## Non-Functional Requirements
 
@@ -66,6 +68,7 @@ The project owner can tell the difference between successful AI replies, safety 
 
 - A free-chat provider error is not stored as `completed`.
 - A guided-mode provider error handled by local fallback is not stored as `completed`.
+- A provider error records non-placeholder latency when the failing call consumed time.
 - Safety replacements still take precedence over provider finish reason.
 - `npm run ci` passes.
 
@@ -109,6 +112,7 @@ No AI behavior change is planned.
 - [x] Use the helper for guided-mode usage persistence.
 - [x] Add regression tests for failed, replaced, truncated and default completed statuses.
 - [x] Add Spanish labels for the new technical statuses in existing usage views.
+- [x] Preserve provider-call latency for failed OpenAI calls.
 - [x] Run the unified CI command.
 
 ## Documentation To Update
@@ -124,3 +128,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-27 | Initial implemented spec | Prevent provider errors from being counted as completed usage |
+| 2026-07-27 | Preserved latency for failed provider calls | Keep failure metrics technically useful without exposing provider errors |
