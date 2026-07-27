@@ -35,6 +35,7 @@ Notas:
 - [ ] `npm run lint` pasa.
 - [ ] `npm run format:check` pasa.
 - [ ] `npm run test` pasa.
+- [ ] `npm run secrets:check` pasa.
 - [ ] `npm run build -- --webpack` pasa en PowerShell local.
 
 Comandos:
@@ -50,6 +51,7 @@ npm run typecheck
 npm run lint
 npm run format:check
 npm run test
+npm run secrets:check
 npm run build -- --webpack
 ```
 
@@ -61,7 +63,7 @@ Si `.next` queda bloqueado en Windows, cerrar procesos de Node/Next y borrar `.n
 - [ ] `.env.local` no está versionado.
 - [ ] `.env.example` contiene solo valores ficticios.
 - [ ] `AUTH_SECRET` tiene al menos 32 caracteres.
-- [ ] `OPENAI_API_KEY` no aparece en documentación, logs ni archivos versionados.
+- [ ] No aparecen claves reales de proveedores de IA en documentación, logs ni archivos versionados.
 - [ ] `DATABASE_URL` apunta a la base local esperada.
 - [ ] `APP_URL` y `NEXTAUTH_URL` apuntan a `http://localhost:3000` para el piloto local.
 
