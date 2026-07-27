@@ -26,7 +26,7 @@ The feature shall capture satisfaction and intent to reuse after completed sessi
 
 The backlog requires comparing free chat and guided modes by completion, duration, satisfaction, reuse intention, and technical cost.
 
-The app already records session type, completion, duration, usage events, credits, and summaries. It does not yet collect user-reported satisfaction or reuse intent.
+The app records session type, completion, duration, usage events, credits, summaries, satisfaction, and reuse intent. This feature keeps that feedback lightweight and separate from sensitive conversation content.
 
 ## User Value
 
@@ -153,3 +153,4 @@ None.
 | 2026-06-21 | Initial draft | Prepare Phase 6.3 lightweight comparison metrics |
 | 2026-06-21 | Approved 1-5 satisfaction scale and yes/no reuse intent | User approval |
 | 2026-06-21 | Marked implemented after metadata storage, `/inicio` controls, and checks passed | Implementation complete |
+| 2026-07-27 | Updated current-state wording | Clarify that satisfaction and reuse intent are now collected |

@@ -24,7 +24,7 @@ The feature shall respect memory consent, private mode, user isolation and safet
 
 ## Problem / Context
 
-The memory system can create, confirm, archive and delete memories. The free-chat context builder currently says memory is enabled but does not receive persistent memories. This means confirmed memories are visible to the user but not useful in conversation yet.
+The memory system can create, confirm, archive and delete memories. Free-chat context now receives a bounded set of recent confirmed memories when memory is enabled and the session is not private.
 
 Full pgvector retrieval remains a larger future slice. This feature provides a conservative bridge using only recent confirmed memories that are explicitly available for retrieval.
 
@@ -157,3 +157,4 @@ None.
 |---|---|---|
 | 2026-06-29 | Initial draft | Add conservative confirmed-memory context |
 | 2026-06-29 | Marked implemented after context retrieval, prompt integration, tests and checks passed | Implementation complete |
+| 2026-07-27 | Updated current-state wording | Clarify that confirmed memories now reach free-chat context |

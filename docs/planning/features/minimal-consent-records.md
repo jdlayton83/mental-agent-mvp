@@ -26,7 +26,7 @@ The feature shall keep legal/privacy consent separate from user preferences and 
 
 The backlog requires minimum consents for terms, privacy, memory, and optional analytics. The database architecture specifies a `consent_records` table and states that legal consents shall not be stored in `user_preferences`.
 
-The current app has `user_preferences.memory_enabled`, but it does not yet have a versioned consent history or a user-facing consent control surface.
+The app has `user_preferences.memory_enabled`, versioned consent history, and a user-facing consent control surface. Memory consent remains synchronized with the preference for this MVP slice.
 
 ## User Value
 
@@ -49,7 +49,7 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - Do not add cookie banners or marketing communications.
 - Do not add multimodal, microphone, camera, recording, or training consents.
 - Do not implement data export or account deletion in this slice.
-- Do not add audit events until the audit table exists.
+- Do not add a new audit table in this slice; consent audit instrumentation is covered by the basic audit events feature.
 - Do not run `drizzle-kit generate`.
 - Do not apply migrations from Codex.
 
@@ -176,3 +176,4 @@ None.
 | 2026-06-21 | Initial draft | Start Phase 7.1 minimal consent implementation |
 | 2026-06-21 | Approved with terms and privacy granted manually through the UI | User approval |
 | 2026-06-21 | Marked implemented after schema, manual migration, UI, actions, and checks passed | Implementation complete |
+| 2026-07-27 | Updated current-state wording | Align consent spec with implemented consent and audit flows |
