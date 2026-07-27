@@ -41,17 +41,5 @@ jobs:
       - name: Install dependencies
         run: npm ci --include=dev
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm run test
-
-      - name: Format check
-        run: npm run format:check
-
-      - name: Build
-        run: npm run build -- --webpack
+      - name: Quality gate
+        run: npm run ci

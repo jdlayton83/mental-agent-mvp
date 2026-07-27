@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsc --project tsconfig.test.json && node .test-dist/tests/run.js",
+    "ci": "npm run typecheck && npm run lint && npm run test && npm run format:check && npm run build -- --webpack",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",

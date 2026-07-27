@@ -30,6 +30,7 @@ Notas:
 
 ## 2. Calidad técnica mínima
 
+- [ ] `npm run ci` pasa.
 - [ ] `npm run typecheck` pasa.
 - [ ] `npm run lint` pasa.
 - [ ] `npm run format:check` pasa.
@@ -37,6 +38,12 @@ Notas:
 - [ ] `npm run build -- --webpack` pasa en PowerShell local.
 
 Comandos:
+
+```powershell
+npm run ci
+```
+
+Comandos equivalentes si se necesita aislar un fallo:
 
 ```powershell
 npm run typecheck
