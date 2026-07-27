@@ -38,6 +38,7 @@ Notas:
 - [ ] `npm run test` pasa.
 - [ ] `npm run secrets:check` pasa.
 - [ ] `npm run env:check` pasa.
+- [ ] `npm run env-example:check` pasa.
 - [ ] `npm run ai:check` pasa.
 - [ ] `npm run db:check` pasa.
 - [ ] `npm run privacy:check` pasa.
@@ -60,6 +61,7 @@ npm run format:check
 npm run test
 npm run secrets:check
 npm run env:check
+npm run env-example:check
 npm run ai:check
 npm run db:check
 npm run privacy:check
@@ -81,6 +83,7 @@ Para la recolección de datos de páginas, la configuración limita los workers 
 - [ ] `.env` no está versionado.
 - [ ] `.env.local` no está versionado.
 - [ ] `.env.example` contiene solo valores ficticios.
+- [ ] `.env.example` contiene todas las variables obligatorias y pasa `npm run env-example:check`.
 - [ ] `AUTH_SECRET` tiene al menos 32 caracteres.
 - [ ] No aparecen claves reales de proveedores de IA en documentación, logs ni archivos versionados.
 - [ ] `DATABASE_URL` apunta a la base local esperada.

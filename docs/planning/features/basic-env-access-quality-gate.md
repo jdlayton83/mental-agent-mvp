@@ -18,11 +18,13 @@ Project owner.
 
 ## Objective
 
-Add a lightweight local check that fails when application source files access `process.env` outside the centralized validated configuration module.
+Add lightweight local checks that fail when application source files access `process.env` outside the centralized validated configuration module or when `.env.example` drifts away from the required environment keys.
 
 ## Problem / Context
 
 The backlog requires centralized configuration and no scattered `process.env` access. The current code follows this rule, but the unified CI command did not yet protect it automatically.
+
+The local pilot also needs a safe `.env.example` that can be copied without triggering validation errors caused by placeholder values.
 
 ## User Value
 
@@ -32,8 +34,9 @@ The project owner gets a fast warning if future code bypasses `src/config/env.ts
 
 - Add a local script that scans Git-tracked files under `src/`.
 - Allow `process.env` only in `src/config/env.ts`.
-- Add a package script for the check.
-- Include the check in `npm run ci`.
+- Add package scripts for the checks.
+- Include the checks in `npm run ci`.
+- Ensure `.env.example` uses local placeholder values instead of declaring the OpenAI provider with fake OpenAI credentials.
 
 ## Out Of Scope
 
@@ -41,12 +44,17 @@ The project owner gets a fast warning if future code bypasses `src/config/env.ts
 - Do not change runtime configuration behavior.
 - Do not add dependencies.
 - Do not scan ignored local files such as `.env`.
+- Do not include real provider secrets in `.env.example`.
 
 ## Functional Requirements
 
 - The check shall report each source file that accesses `process.env` outside `src/config/env.ts`.
 - The check shall exit with a non-zero status when a violation exists.
 - The check shall pass when only the centralized env module accesses `process.env`.
+- The `.env.example` check shall verify that all required keys from `src/config/env.ts` are present once and no unexpected keys are present.
+- The `.env.example` check shall reject example values that violate the local validation rules for URLs, enum values, minimum secret length, development email, development password length or non-negative credit balance.
+- The `.env.example` check shall reject real-looking OpenAI API keys in tracked example configuration.
+- The `.env.example` file shall use `LLM_PROVIDER=local` while the OpenAI key is represented by a placeholder.
 
 ## Non-Functional Requirements
 
@@ -56,17 +64,21 @@ The project owner gets a fast warning if future code bypasses `src/config/env.ts
 ## Acceptance Criteria
 
 - `npm run env:check` passes in the current repository state.
+- `npm run env-example:check` passes in the current repository state.
 - `npm run ci` includes `npm run env:check`.
+- `npm run ci` includes `npm run env-example:check`.
 - No application behavior changes.
 - `npm run ci` passes.
 
 ## Error Cases
 
 - If a future source file needs new configuration, it shall import `env` from `@/config/env` instead of reading `process.env` directly.
+- If a future required env key is added, `.env.example` shall be updated in the same change.
+- If local development should use the OpenAI provider, the developer shall configure a real key only in ignored local env files.
 
 ## Security And Privacy Considerations
 
-Centralized environment validation reduces accidental use of missing, placeholder, or malformed secrets and configuration values.
+Centralized environment validation reduces accidental use of missing, placeholder, or malformed secrets and configuration values. The example configuration shall remain safe to commit and shall not contain real provider credentials.
 
 ## Data Model Impact
 
@@ -91,13 +103,17 @@ No AI behavior impact.
 ## Testing Plan
 
 - `npm run env:check`
+- `npm run env-example:check`
 - `npm run ci`
 
 ## Implementation Tasks
 
 - [x] Add env access scan script.
 - [x] Add `env:check` script.
+- [x] Add `.env.example` validation script.
+- [x] Add `env-example:check` script.
 - [x] Include the check in `npm run ci`.
+- [x] Normalize `.env.example` for local placeholder configuration.
 - [x] Run the unified CI command.
 
 ## Documentation To Update
@@ -113,3 +129,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-27 | Initial implemented spec | Protect centralized environment access in CI |
+| 2026-07-27 | Added `.env.example` validation | Prevent invalid local placeholder configuration from breaking setup |
