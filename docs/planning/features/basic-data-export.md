@@ -62,7 +62,7 @@ The user can download a readable snapshot of their data and understand what the 
 - Do not implement account deletion in this slice.
 - Do not export data belonging to other users.
 - Do not include secrets, password hashes, provider keys, or internal environment values.
-- Do not add an audit table yet.
+- Do not add a new audit table in this slice.
 
 ## Functional Requirements
 
