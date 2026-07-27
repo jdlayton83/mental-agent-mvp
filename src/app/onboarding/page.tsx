@@ -121,6 +121,18 @@ export default async function OnboardingPage() {
             </label>
 
             <label className="check-row">
+              <input name="termsAccepted" required type="checkbox" />
+              <span>Acepto los términos mínimos de uso del MVP local.</span>
+            </label>
+
+            <label className="check-row">
+              <input name="privacyAccepted" required type="checkbox" />
+              <span>
+                Acepto la información básica de privacidad y control de datos.
+              </span>
+            </label>
+
+            <label className="check-row">
               <input name="aiDisclosureAccepted" required type="checkbox" />
               <span>
                 Entiendo que el agente es una IA de acompañamiento no clínico.

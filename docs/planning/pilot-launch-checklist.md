@@ -75,6 +75,7 @@ Si `.next` queda bloqueado en Windows, cerrar procesos de Node/Next y borrar `.n
 - [ ] Rutas privadas redirigen a `/login` si no hay sesión.
 - [ ] `/onboarding` permite seleccionar agente.
 - [ ] El usuario puede completar onboarding.
+- [ ] Onboarding registra términos, privacidad y elección inicial de memoria.
 - [ ] `/inicio` muestra agente, preferencias y créditos.
 - [ ] `/preferencias` permite ajustar tono, estilo, longitud, iniciativa y objetivo principal.
 

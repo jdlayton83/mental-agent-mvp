@@ -43,6 +43,7 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - Link the consent page from `/inicio`.
 - Keep memory consent synchronized with `user_preferences.memory_enabled` for this MVP slice.
 - Gate normal authenticated product pages when required terms or privacy consent are missing.
+- Record onboarding terms, privacy, and memory choices in consent history.
 
 ## Out Of Scope
 
@@ -64,6 +65,7 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - Each consent record shall include user, consent type, policy version, status, timestamps, source, and metadata.
 - Granting or revoking consent shall append a new record and shall not overwrite previous records.
 - The current consent state shall be derived from the latest record per consent type.
+- Completing onboarding shall append consent records for terms, privacy, and the initial memory choice.
 - Terms and privacy shall be treated as required for normal MVP use.
 - If required terms or privacy consent are missing, normal authenticated product pages shall redirect to `/privacidad`.
 - Privacy controls, data export, login, and onboarding shall remain reachable so the user can resolve missing consent or control data.
@@ -89,6 +91,7 @@ The user can see which core consents are active, grant or revoke optional ones, 
 - The user can grant and revoke memory consent.
 - The user can grant and revoke analytics consent.
 - Terms and privacy can be granted if missing.
+- Onboarding creates traceable consent records for required terms, privacy, and the initial memory choice.
 - Missing required terms or privacy redirects normal product pages to `/privacidad` with a Spanish status message.
 - Consent history is append-only.
 - `npm run typecheck` passes.
@@ -160,6 +163,7 @@ Future AI context builders should respect `memory_enabled`; this is already part
 - [x] Create and register manual migration.
 - [x] Add consent state and action helpers.
 - [x] Add required-consent gate for normal authenticated product pages.
+- [x] Record onboarding consent choices.
 - [x] Add `/privacidad` page.
 - [x] Link `/privacidad` from `/inicio`.
 - [x] Run typecheck, lint, and format checks.
@@ -183,3 +187,4 @@ None.
 | 2026-06-21 | Marked implemented after schema, manual migration, UI, actions, and checks passed | Implementation complete |
 | 2026-07-27 | Updated current-state wording | Align consent spec with implemented consent and audit flows |
 | 2026-07-27 | Added required-consent gate | Treat terms and privacy as required before normal MVP use |
+| 2026-07-27 | Added onboarding consent recording | Keep initial terms, privacy, and memory choices traceable |

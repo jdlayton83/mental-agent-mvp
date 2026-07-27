@@ -8,10 +8,16 @@ import { db } from "@/db";
 import {
   agentTemplates,
   agents,
+  consentRecords,
   userPreferences,
   userProfiles,
 } from "@/db/schema";
+import { recordAuditEvent } from "@/modules/audit/log";
 import { getCurrentUser } from "@/modules/auth/session";
+import {
+  currentPolicyVersion,
+  type ConsentType,
+} from "@/modules/consent/state";
 
 const onboardingSchema = z.object({
   templateId: z.uuid(),
@@ -22,6 +28,8 @@ const onboardingSchema = z.object({
   initiativeLevel: z.coerce.number().int().min(0).max(2),
   mainGoal: z.string().trim().max(500).optional(),
   memoryEnabled: z.boolean(),
+  termsAccepted: z.literal(true),
+  privacyAccepted: z.literal(true),
   aiDisclosureAccepted: z.literal(true),
 });
 
@@ -41,6 +49,8 @@ export async function completeOnboarding(formData: FormData) {
     initiativeLevel: formData.get("initiativeLevel"),
     mainGoal: emptyStringToUndefined(formData.get("mainGoal")),
     memoryEnabled: formData.get("memoryEnabled") === "on",
+    termsAccepted: formData.get("termsAccepted") === "on",
+    privacyAccepted: formData.get("privacyAccepted") === "on",
     aiDisclosureAccepted: formData.get("aiDisclosureAccepted") === "on",
   });
 
@@ -114,6 +124,15 @@ export async function completeOnboarding(formData: FormData) {
         },
       });
 
+    await recordOnboardingConsent(tx, user.id, "terms", "granted");
+    await recordOnboardingConsent(tx, user.id, "privacy", "granted");
+    await recordOnboardingConsent(
+      tx,
+      user.id,
+      "memory",
+      parsed.memoryEnabled ? "granted" : "revoked",
+    );
+
     await tx
       .insert(userProfiles)
       .values({
@@ -134,6 +153,39 @@ export async function completeOnboarding(formData: FormData) {
   });
 
   redirect("/inicio");
+}
+
+async function recordOnboardingConsent(
+  tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
+  userId: string,
+  consentType: ConsentType,
+  status: "granted" | "revoked",
+) {
+  await tx.insert(consentRecords).values({
+    userId,
+    consentType,
+    policyVersion: currentPolicyVersion,
+    status,
+    grantedAt: status === "granted" ? sql`now()` : null,
+    revokedAt: status === "revoked" ? sql`now()` : null,
+    source: "onboarding",
+    metadata: {},
+  });
+
+  await recordAuditEvent(
+    {
+      actorUserId: userId,
+      action: `consent.${status}`,
+      entityType: "consent",
+      result: "success",
+      metadata: {
+        consentType,
+        policyVersion: currentPolicyVersion,
+        source: "onboarding",
+      },
+    },
+    tx,
+  );
 }
 
 function emptyStringToUndefined(value: FormDataEntryValue | null) {
