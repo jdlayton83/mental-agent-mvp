@@ -26,7 +26,7 @@ The feature shall prioritize user control, isolation, and clear communication wh
 
 The backlog requires account and data deletion, including conversations, sessions, memories, history, session revocation, and clear information about retained technical data.
 
-The current app has user-owned data across users, profiles, preferences, agents, conversations, messages, sessions, session summaries, memories, credits, usage, safety events, consent records, and feedback stored in session metadata. There is no `audit_events` table yet, no embeddings table yet, and no external provider deletion workflow.
+The current app has user-owned data across users, profiles, preferences, agents, conversations, messages, sessions, session summaries, memories, credits, usage, safety events, consent records, audit events, and feedback stored in session metadata. There is no embeddings table yet and no external provider deletion workflow.
 
 ## User Value
 
@@ -44,7 +44,7 @@ The user can remove their local MVP data and stop account access without relying
 
 ## Out Of Scope
 
-- Do not add `audit_events` in this slice.
+- Do not add a new audit table in this slice; account deletion audit instrumentation is covered by the basic audit events feature.
 - Do not implement provider-side deletion requests.
 - Do not implement backup suppression lists.
 - Do not implement admin deletion tools.
@@ -102,9 +102,9 @@ Safety and financial-style ledger data may require future retention/anonymizatio
 
 ## Data Model Impact
 
-No new table is planned for the first implementation.
+No new table is planned for this feature.
 
-If foreign key constraints make safe deletion impossible, a follow-up spec may introduce an audit or deletion-request table.
+The later basic audit events feature provides the audit table used to preserve minimal deletion evidence.
 
 ## API Impact
 
@@ -146,6 +146,7 @@ No AI behavior changes are planned.
 - [x] Add deletion helper/action.
 - [x] Add danger-zone UI on `/privacidad`.
 - [x] Ensure session revocation through `session_version`.
+- [x] Preserve minimal account deletion evidence through the audit events feature.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -165,3 +166,4 @@ None.
 | 2026-06-22 | Initial draft | Start Phase 7.3 basic local deletion flow |
 | 2026-06-22 | Approved with recommendation to test on a throwaway user instead of `dev@example.local` | User approval |
 | 2026-06-22 | Marked implemented after current-user deletion action, UI, session revocation, and checks passed | Implementation complete |
+| 2026-07-27 | Updated audit wording | Align deletion spec with implemented audit events |

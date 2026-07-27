@@ -26,7 +26,7 @@ The audit trail shall help verify that sensitive user actions happened without s
 
 The architecture specifies an `audit_events` table, and the backlog requires auditability for privacy and control actions.
 
-The current app already has consent changes, JSON data export, account deletion, and memory confirmation/archive/delete actions, but those actions do not write audit records yet. `audit_events` does not currently exist in the schema or migrations.
+The app has consent changes, JSON data export, account deletion, and memory confirmation/archive/delete actions instrumented with minimized audit records. `audit_events` exists in the schema and migrations.
 
 ## User Value
 
@@ -194,3 +194,4 @@ None.
 | 2026-06-25 | Initial draft | Define basic audit trail slice |
 | 2026-06-25 | Implementation prepared | Schema, manual migration, audit helper, instrumentation, and checks completed; migration still pending manual application |
 | 2026-06-25 | Marked implemented | Migration applied externally and real memory confirmation audit event verified |
+| 2026-07-27 | Updated current-state wording | Align problem context with implemented audit events |
