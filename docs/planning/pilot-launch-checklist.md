@@ -41,6 +41,7 @@ Notas:
 - [ ] `npm run env-example:check` pasa.
 - [ ] `npm run ai:check` pasa.
 - [ ] `npm run db:check` pasa.
+- [ ] `npm run schema:check` pasa.
 - [ ] `npm run privacy:check` pasa.
 - [ ] `npm run presentation:check` pasa.
 - [ ] `npm run routes:check` pasa.
@@ -68,6 +69,7 @@ npm run env:check
 npm run env-example:check
 npm run ai:check
 npm run db:check
+npm run schema:check
 npm run privacy:check
 npm run presentation:check
 npm run routes:check
