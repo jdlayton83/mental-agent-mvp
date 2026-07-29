@@ -75,6 +75,18 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "classifies violence signals as interrupting level 3",
+    run: () => {
+      const result = classifyUserMessageSafety("He matado a un gato.");
+
+      assertSafetyAssessment(result, {
+        level: 3,
+        category: "violence",
+        shouldInterrupt: true,
+      });
+    },
+  },
+  {
     name: "classifies clinical diagnosis requests as interrupting level 2",
     run: () => {
       const result = classifyUserMessageSafety(
@@ -176,6 +188,23 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "replaces violence-enabling assistant output",
+    run: () => {
+      const result = validateAssistantOutput(
+        "Puedo ayudarte a ocultar lo que ha pasado.",
+      );
+
+      assert.deepEqual(result, {
+        status: "replace",
+        assessment: {
+          level: 3,
+          category: "violence",
+          shouldInterrupt: true,
+        },
+      });
+    },
+  },
+  {
     name: "replaces clinical diagnosis in assistant output",
     run: () => {
       const result = validateAssistantOutput("Tu diagnóstico es depresión.");
@@ -239,6 +268,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "builds violence safe response with immediate safety boundary",
+    run: () => {
+      const response = buildSafeResponse({
+        level: 3,
+        category: "violence",
+        shouldInterrupt: true,
+      });
+
+      assert.match(response, /No puedo ayudar a ocultar/i);
+      assert.match(response, /reducir el riesgo inmediato/i);
+      assert.match(response, /Recursos sugeridos/i);
+    },
+  },
+  {
     name: "resolves fallback resources for self-harm emergencies without static phone numbers",
     run: () => {
       const resources = resolveSafetyResources({
@@ -256,6 +299,29 @@ const tests: TestCase[] = [
       assert.equal(
         resources.every((resource) => resource.source === "fallback"),
         true,
+      );
+      assert.equal(
+        resources.some((resource) =>
+          /\b(112|911|024|988)\b/.test(resource.description),
+        ),
+        false,
+      );
+    },
+  },
+  {
+    name: "resolves fallback resources for violence risk without static phone numbers",
+    run: () => {
+      const resources = resolveSafetyResources({
+        assessment: {
+          level: 3,
+          category: "violence",
+          shouldInterrupt: true,
+        },
+      });
+
+      assert.deepEqual(
+        resources.map((resource) => resource.kind),
+        ["local_emergency", "trusted_person", "urgent_care"],
       );
       assert.equal(
         resources.some((resource) =>

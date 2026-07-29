@@ -1,5 +1,6 @@
 export type SafetyCategory =
   | "self_harm"
+  | "violence"
   | "clinical"
   | "medication"
   | "dependency"
@@ -32,6 +33,14 @@ const medicationPatterns = [
   /\bansiol[ií]tico\b/i,
   /\bdejar.*pastilla/i,
   /\bdejar.*medic/i,
+];
+
+const violencePatterns = [
+  /\b(quiero|voy a|podr[ií]a).*(matar|herir|hacer da[ñn]o|pegar|atacar).*(a otra persona|a alguien|a mi pareja|a mi familia|a un animal|a mi mascota|a un gato|a un perro|al gato|al perro)\b/i,
+  /\b(acabo de|he|ya).*(matado|herido|atacado|pegado).*(a alguien|a otra persona|a mi pareja|a mi familia|a un animal|a mi mascota|a un gato|a un perro|al gato|al perro)\b/i,
+  /\bpuedo hacerle da[ñn]o a alguien\b/i,
+  /\bi (want to|am going to|could).*(kill|hurt|attack).*(someone|another person|my partner|my family|an animal|my pet)\b/i,
+  /\bi (killed|hurt|attacked).*(someone|another person|my partner|my family|an animal|my pet)\b/i,
 ];
 
 const clinicalPatterns = [
@@ -72,6 +81,14 @@ export function classifyUserMessageSafety(content: string): SafetyAssessment {
     return {
       level: 2,
       category: "medication",
+      shouldInterrupt: true,
+    };
+  }
+
+  if (matchesAny(content, violencePatterns)) {
+    return {
+      level: 3,
+      category: "violence",
       shouldInterrupt: true,
     };
   }

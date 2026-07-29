@@ -852,5 +852,9 @@ function getSafetyPolicy(assessment: SafetyAssessment) {
     return "prompt_injection_boundary_v1";
   }
 
+  if (assessment.category === "violence") {
+    return "violence_safe_response_v1";
+  }
+
   return "non_clinical_boundary_v1";
 }

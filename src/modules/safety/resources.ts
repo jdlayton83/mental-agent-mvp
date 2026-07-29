@@ -57,6 +57,35 @@ export function resolveSafetyResources(input: {
     ];
   }
 
+  if (input.assessment.category === "violence") {
+    return [
+      createResource({
+        id: "local-emergency",
+        kind: "local_emergency",
+        title: "Emergencias locales",
+        description:
+          "Si hay peligro inmediato para una persona o un animal, contacta con el servicio oficial de emergencias de tu ubicación actual.",
+        priority: 10,
+      }),
+      createResource({
+        id: "trusted-person",
+        kind: "trusted_person",
+        title: "Persona de confianza",
+        description:
+          "Pide a alguien cercano que se quede contigo y ayude a mantener distancia de la situación.",
+        priority: 20,
+      }),
+      createResource({
+        id: "urgent-care",
+        kind: "urgent_care",
+        title: "Ayuda urgente",
+        description:
+          "Si alguien o un animal está herido, busca ayuda presencial urgente y evita manipular la situación.",
+        priority: 30,
+      }),
+    ];
+  }
+
   if (
     input.assessment.category === "clinical" ||
     input.assessment.category === "medication"

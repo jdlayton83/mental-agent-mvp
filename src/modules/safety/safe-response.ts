@@ -25,6 +25,17 @@ export function buildSafeResponse(assessment: SafetyAssessment) {
       .join("\n\n");
   }
 
+  if (assessment.category === "violence") {
+    return [
+      "No puedo ayudar a ocultar, justificar ni continuar una situación de daño. Lo importante ahora es reducir el riesgo inmediato.",
+      "Aléjate de cualquier objeto o lugar con el que puedas hacer daño. Si hay peligro para una persona o un animal, contacta con emergencias locales o pide ayuda presencial ahora.",
+      "Puedo ayudarte a elegir un siguiente paso seguro y breve, pero no a encubrir ni normalizar lo ocurrido.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }
+
   if (assessment.category === "clinical") {
     return [
       "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.",

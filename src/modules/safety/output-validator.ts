@@ -26,6 +26,15 @@ const medicationAdvicePatterns = [
   /\byou should (stop|start|increase|reduce).*(medication|dose)\b/i,
 ];
 
+const violenceInstructionPatterns = [
+  /\bpuedo ayudarte a (ocultar|justificar|amenazar|atacar|pegar|hacer da[ñn]o|matar)\b/i,
+  /\b(puedes|deber[ií]as|te recomiendo).*(ocultar|justificar|amenazar|atacar|pegar|hacer da[ñn]o|matar)\b/i,
+  /\b(forma|manera|m[eé]todo).*(de atacar|de hacer da[ñn]o|de matar|para ocultar).*(a alguien|a otra persona|a un animal|a tu mascota)\b/i,
+  /\bno pasa nada por haber (matado|herido|atacado|pegado)\b/i,
+  /\byou should (hide|justify|threaten|attack|hurt|kill)\b/i,
+  /\bhow to (attack|hurt|kill|hide).*(someone|another person|an animal|your pet)\b/i,
+];
+
 const clinicalDiagnosisPatterns = [
   /\b(tienes|padeces|sufres).*(depresi[oó]n|ansiedad|trastorno|tdah|bipolaridad)\b/i,
   /\btu diagn[oó]stico es\b/i,
@@ -55,6 +64,10 @@ export function validateAssistantOutput(
 
   if (matchesAny(content, medicationAdvicePatterns)) {
     return replaceWith("medication", 2);
+  }
+
+  if (matchesAny(content, violenceInstructionPatterns)) {
+    return replaceWith("violence", 3);
   }
 
   if (matchesAny(content, clinicalDiagnosisPatterns)) {
