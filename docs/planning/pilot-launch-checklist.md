@@ -28,6 +28,7 @@ Notas:
 - No usar `drizzle-kit generate` en este entorno si vuelve a provocar `spawn EPERM`.
 - No ejecutar comandos Docker desde Codex si el acceso a Docker Desktop sigue fallando por permisos.
 - `npm run db:generate` está desactivado en este entorno para evitar el fallo conocido `spawn EPERM`; las migraciones deberán crearse manualmente y registrarse en el journal de Drizzle.
+- Si `npm run dev` falla en este entorno con `spawn EPERM`, usar `npm run dev:local` como arranque local sin fork para pruebas internas.
 
 ## 2. Calidad técnica mínima
 

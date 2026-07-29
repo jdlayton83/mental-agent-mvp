@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:local": "node scripts/next-dev-no-fork.mjs",
     "prebuild": "node -e \"const fs=require('fs');if(fs.existsSync('.next'))fs.rmSync('.next',{recursive:true,force:true,maxRetries:10,retryDelay:100})\"",
     "build": "next build",
     "start": "next start",
