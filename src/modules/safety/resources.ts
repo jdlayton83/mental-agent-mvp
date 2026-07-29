@@ -4,7 +4,8 @@ export type SafetyResourceKind =
   | "local_emergency"
   | "trusted_person"
   | "urgent_care"
-  | "professional_care";
+  | "professional_care"
+  | "specialized_support";
 
 export type SafetyResource = {
   id: string;
@@ -81,6 +82,35 @@ export function resolveSafetyResources(input: {
         title: "Ayuda urgente",
         description:
           "Si alguien o un animal está herido, busca ayuda presencial urgente y evita manipular la situación.",
+        priority: 30,
+      }),
+    ];
+  }
+
+  if (input.assessment.category === "abuse") {
+    return [
+      createResource({
+        id: "local-emergency",
+        kind: "local_emergency",
+        title: "Emergencias locales",
+        description:
+          "Si hay peligro inmediato, contacta con el servicio oficial de emergencias de tu ubicación actual.",
+        priority: 10,
+      }),
+      createResource({
+        id: "trusted-person",
+        kind: "trusted_person",
+        title: "Persona de confianza",
+        description:
+          "Si puedes hacerlo sin aumentar el riesgo, contacta con alguien cercano y comparte que necesitas apoyo.",
+        priority: 20,
+      }),
+      createResource({
+        id: "specialized-support",
+        kind: "specialized_support",
+        title: "Apoyo especializado",
+        description:
+          "Busca un servicio local verificado de apoyo ante violencia o abuso cuando puedas hacerlo de forma segura.",
         priority: 30,
       }),
     ];

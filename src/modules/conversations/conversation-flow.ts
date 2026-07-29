@@ -602,6 +602,10 @@ function getSafetyPolicy(assessment: SafetyAssessment) {
     return "violence_safe_response_v1";
   }
 
+  if (assessment.category === "abuse") {
+    return "abuse_safe_response_v1";
+  }
+
   return "non_clinical_boundary_v1";
 }
 

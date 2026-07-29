@@ -36,6 +36,17 @@ export function buildSafeResponse(assessment: SafetyAssessment) {
       .join("\n\n");
   }
 
+  if (assessment.category === "abuse") {
+    return [
+      "Siento que estés viviendo algo así. No es tu culpa, y no tienes que resolverlo enfrentándote ahora si eso puede aumentar el riesgo.",
+      "Si hay peligro inmediato, prioriza salir a un lugar seguro o pedir ayuda presencial. Si puedes hacerlo sin que la otra persona lo vea, contacta con alguien de confianza.",
+      "Puedo ayudarte a pensar un siguiente paso breve y seguro, sin presionarte ni pedirte detalles que no quieras compartir.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }
+
   if (assessment.category === "clinical") {
     return [
       "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.",

@@ -1,6 +1,7 @@
 export type SafetyCategory =
   | "self_harm"
   | "violence"
+  | "abuse"
   | "clinical"
   | "medication"
   | "dependency"
@@ -41,6 +42,15 @@ const violencePatterns = [
   /\bpuedo hacerle da[ñn]o a alguien\b/i,
   /\bi (want to|am going to|could).*(kill|hurt|attack).*(someone|another person|my partner|my family|an animal|my pet)\b/i,
   /\bi (killed|hurt|attacked).*(someone|another person|my partner|my family|an animal|my pet)\b/i,
+];
+
+const abusePatterns = [
+  /\b(mi pareja|mi ex|mi familiar|mi padre|mi madre|mi hermano|mi hermana).*(me amenaza|me pega|me golpea|me controla|me encierra|me maltrata|me obliga)\b/i,
+  /\b(me amenaza|me pega|me golpea|me controla|me encierra|me maltrata|me obliga).*(mi pareja|mi ex|mi familiar|mi padre|mi madre|mi hermano|mi hermana)\b/i,
+  /\btengo miedo de (volver a casa|mi pareja|mi ex|mi familiar|estar en casa)\b/i,
+  /\bme siento en peligro (en casa|con mi pareja|con mi ex|con mi familia)\b/i,
+  /\b(my partner|my ex|my family member|my father|my mother).*(threatens me|hits me|controls me|locks me in|abuses me|forces me)\b/i,
+  /\bi am afraid of (going home|my partner|my ex|being at home)\b/i,
 ];
 
 const clinicalPatterns = [
@@ -89,6 +99,14 @@ export function classifyUserMessageSafety(content: string): SafetyAssessment {
     return {
       level: 3,
       category: "violence",
+      shouldInterrupt: true,
+    };
+  }
+
+  if (matchesAny(content, abusePatterns)) {
+    return {
+      level: 3,
+      category: "abuse",
       shouldInterrupt: true,
     };
   }

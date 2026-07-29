@@ -35,6 +35,14 @@ const violenceInstructionPatterns = [
   /\bhow to (attack|hurt|kill|hide).*(someone|another person|an animal|your pet)\b/i,
 ];
 
+const abuseUnsafeAdvicePatterns = [
+  /\b(seguro que|quiz[aá]s|tal vez).*(es tu culpa|lo provocaste)\b/i,
+  /\b(deber[ií]as|puedes|te recomiendo).*(aguantar|callarte|enfrentarte ahora|provocarle|devolverle el golpe)\b/i,
+  /\bsi te (amenaza|pega|controla).*(aguanta|no digas nada|enfr[eé]ntate ahora)\b/i,
+  /\byou probably (caused|provoked) it\b/i,
+  /\byou should (stay quiet|put up with it|confront them now|hit back)\b/i,
+];
+
 const clinicalDiagnosisPatterns = [
   /\b(tienes|padeces|sufres).*(depresi[oó]n|ansiedad|trastorno|tdah|bipolaridad)\b/i,
   /\btu diagn[oó]stico es\b/i,
@@ -68,6 +76,10 @@ export function validateAssistantOutput(
 
   if (matchesAny(content, violenceInstructionPatterns)) {
     return replaceWith("violence", 3);
+  }
+
+  if (matchesAny(content, abuseUnsafeAdvicePatterns)) {
+    return replaceWith("abuse", 3);
   }
 
   if (matchesAny(content, clinicalDiagnosisPatterns)) {

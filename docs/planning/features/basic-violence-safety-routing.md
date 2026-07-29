@@ -24,7 +24,7 @@ Add deterministic local safety routing for violence and abuse risk signals so th
 
 The safety specification requires violence and abuse signals to activate a safety protocol instead of continuing through the ordinary conversational flow.
 
-The current local classifier covers self-harm, medication, clinical boundary, dependency, prompt injection, and ordinary non-risk messages. It does not yet have a deterministic violence category.
+The current local classifier covers self-harm, medication, clinical boundary, dependency, prompt injection, and ordinary non-risk messages. It now includes deterministic violence routing and shall also route abuse or victim-safety signals.
 
 ## User Value
 
@@ -32,8 +32,8 @@ The project owner can test obvious violence-risk inputs and see a safe Spanish r
 
 ## Scope
 
-- Add a `violence` safety category to the local classifier.
-- Classify direct violence or harm-to-others signals as interrupting level 3.
+- Add `violence` and `abuse` safety categories to the local classifier.
+- Classify direct violence, harm-to-others, abuse, or victim-safety signals as interrupting level 3.
 - Add output validation for assistant text that encourages or justifies violence.
 - Add a Spanish safe response for violence risk.
 - Resolve only generic fallback resources, without static telephone numbers.
@@ -51,11 +51,12 @@ The project owner can test obvious violence-risk inputs and see a safe Spanish r
 
 ## Functional Requirements
 
-- Violence-risk user messages shall interrupt the ordinary conversation flow.
-- Violence-risk user messages shall persist a safe assistant response and a safety event.
-- Assistant output that encourages, justifies, hides, or instructs violence shall be replaced.
+- Violence-risk and abuse-risk user messages shall interrupt the ordinary conversation flow.
+- Violence-risk and abuse-risk user messages shall persist a safe assistant response and a safety event.
+- Assistant output that encourages, justifies, hides, instructs violence, blames a victim, or pushes confrontation in abuse contexts shall be replaced.
 - Safe responses shall prioritize immediate safety, distance from means of harm, and human or emergency help when needed.
 - Safe responses shall avoid helping the user conceal, justify, or continue harmful behavior.
+- Abuse safe responses shall avoid blaming the user and shall not push confrontation with the other person.
 - The implementation shall not invent country-specific phone numbers.
 
 ## Non-Functional Requirements
@@ -67,9 +68,10 @@ The project owner can test obvious violence-risk inputs and see a safe Spanish r
 ## Acceptance Criteria
 
 - The local classifier returns category `violence`, level `3`, and `shouldInterrupt = true` for direct violence signals.
-- The output validator replaces assistant text that encourages violence.
-- `buildSafeResponse` returns a Spanish violence response with an immediate-safety boundary.
-- `resolveSafetyResources` returns generic fallback resources for violence without static phone numbers.
+- The local classifier returns category `abuse`, level `3`, and `shouldInterrupt = true` for direct abuse or victim-safety signals.
+- The output validator replaces assistant text that encourages violence or unsafe abuse handling.
+- `buildSafeResponse` returns Spanish violence and abuse responses with immediate-safety boundaries.
+- `resolveSafetyResources` returns generic fallback resources for violence and abuse without static phone numbers.
 - `npm run ci` passes.
 
 ## Error Cases
@@ -83,7 +85,7 @@ Safety events shall store minimized trigger summaries through the existing pipel
 
 ## Data Model Impact
 
-No schema change is planned. The existing `safety_events.category` text field can store `violence`.
+No schema change is planned. The existing `safety_events.category` text field can store `violence` and `abuse`.
 
 ## API Impact
 
@@ -132,3 +134,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-29 | Initial implemented spec | Close deterministic violence safety routing gap |
+| 2026-07-29 | Added abuse routing | Handle victim-safety signals with different wording from perpetration-risk signals |
