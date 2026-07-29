@@ -173,6 +173,13 @@ export default async function MetricasPage() {
                 value={entry.count}
               />
             ))}
+            {metrics.safety.byCategory.map((entry) => (
+              <MetricItem
+                key={entry.category}
+                label={formatSafetyCategory(entry.category)}
+                value={entry.count}
+              />
+            ))}
           </dl>
 
           {metrics.audit.byAction.length > 0 ? (
@@ -346,6 +353,21 @@ function formatAuditAction(action: string) {
   };
 
   return labels[action] ?? action;
+}
+
+function formatSafetyCategory(category: string) {
+  const labels: Record<string, string> = {
+    abuse: "Abuso o peligro relacional",
+    clinical: "Límite clínico",
+    dependency: "Dependencia",
+    medication: "Medicación",
+    prompt_injection: "Prompt injection",
+    reality_distress: "Malestar con realidad percibida",
+    self_harm: "Autolesión",
+    violence: "Violencia",
+  };
+
+  return labels[category] ?? category;
 }
 
 function formatUsageOperation(operationType: string) {

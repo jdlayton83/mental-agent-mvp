@@ -50,7 +50,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
   - confirmed memories;
   - deleted or archived memories;
   - commitments by status;
-  - safety events;
+  - safety events by level and category;
   - audit events;
   - usage events by status;
   - recent technical usage events.
@@ -74,6 +74,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page shall include session feedback averages only when feedback exists.
 - The metrics page shall include total and average simulated credits for completed sessions.
 - The metrics page shall include technical usage counts by status.
+- The metrics page shall include safety event counts by risk level and category.
 - The metrics page shall make empty states explicit.
 - The metrics queries shall be server-side.
 - The metrics shall be Spanish-first.
@@ -91,6 +92,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page loads for an authenticated user.
 - The metrics page redirects anonymous visitors to `/login`.
 - The page shows counts for users, sessions, memories, commitments, safety events, audit events, and usage.
+- The page shows safety event category counts without displaying trigger summaries or message content.
 - The page shows usage status counts so provider errors and safety replacements are visible.
 - The page shows total and average simulated session credits.
 - Feedback metrics handle the case where no feedback exists.
@@ -163,6 +165,7 @@ No AI behavior changes are planned.
 - [x] Add Spanish labels for implemented audit actions.
 - [x] Count feedback entries with optional product comments without displaying comment text.
 - [x] Count commitments by status without displaying commitment content.
+- [x] Count safety events by category without displaying trigger summaries or message content.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -186,3 +189,4 @@ None.
 | 2026-07-27 | Added labels for newer audit actions | Keep audit metrics readable after memory, commitment, and preference controls |
 | 2026-07-27 | Added aggregate session credit metrics | Support pilot cost review without exposing session content |
 | 2026-07-27 | Added usage status counts | Surface technical failures and replacements without exposing logs |
+| 2026-07-29 | Added safety category counts | Make guardrail activation visible without exposing sensitive content |

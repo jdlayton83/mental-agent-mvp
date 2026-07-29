@@ -34,6 +34,11 @@ type SafetyLevelCount = {
   count: number;
 };
 
+type SafetyCategoryCount = {
+  category: string;
+  count: number;
+};
+
 type UsageStatusCount = {
   status: string;
   count: number;
@@ -52,6 +57,7 @@ export async function getPilotMetrics() {
     commitmentStatusCounts,
     safetyEventCount,
     safetyLevelCounts,
+    safetyCategoryCounts,
     auditEventCount,
     auditActionCounts,
     usageStatusCounts,
@@ -68,6 +74,7 @@ export async function getPilotMetrics() {
     getCommitmentStatusCounts(),
     getSafetyEventCount(),
     getSafetyLevelCounts(),
+    getSafetyCategoryCounts(),
     getAuditEventCount(),
     getAuditActionCounts(),
     getUsageStatusCounts(),
@@ -109,6 +116,7 @@ export async function getPilotMetrics() {
     safety: {
       totalEvents: safetyEventCount,
       byLevel: safetyLevelCounts,
+      byCategory: safetyCategoryCounts,
     },
     audit: {
       totalEvents: auditEventCount,
@@ -255,6 +263,17 @@ async function getSafetyLevelCounts() {
     .orderBy(safetyEvents.riskLevel);
 }
 
+async function getSafetyCategoryCounts() {
+  return db
+    .select({
+      category: safetyEvents.category,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(safetyEvents)
+    .groupBy(safetyEvents.category)
+    .orderBy(safetyEvents.category);
+}
+
 async function getAuditActionCounts() {
   return db
     .select({
@@ -354,4 +373,5 @@ export type PilotSessionTypeCount = SessionTypeCount;
 export type PilotMemoryStatusCount = MemoryStatusCount;
 export type PilotAuditActionCount = AuditActionCount;
 export type PilotSafetyLevelCount = SafetyLevelCount;
+export type PilotSafetyCategoryCount = SafetyCategoryCount;
 export type PilotUsageStatusCount = UsageStatusCount;
