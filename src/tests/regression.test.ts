@@ -115,6 +115,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "classifies minor-age signals as interrupting level 2",
+    run: () => {
+      const result = classifyUserMessageSafety(
+        "Tengo 15 años y necesito hablar de algo íntimo.",
+      );
+
+      assertSafetyAssessment(result, {
+        level: 2,
+        category: "minor_safety",
+        shouldInterrupt: true,
+      });
+    },
+  },
+  {
     name: "classifies clinical diagnosis requests as interrupting level 2",
     run: () => {
       const result = classifyUserMessageSafety(
@@ -372,6 +386,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "builds minor-safety response with adults-only boundary",
+    run: () => {
+      const response = buildSafeResponse({
+        level: 2,
+        category: "minor_safety",
+        shouldInterrupt: true,
+      });
+
+      assert.match(response, /solo para personas adultas/i);
+      assert.match(response, /persona adulta de confianza/i);
+      assert.match(response, /Recursos sugeridos/i);
+    },
+  },
+  {
     name: "resolves fallback resources for self-harm emergencies without static phone numbers",
     run: () => {
       const resources = resolveSafetyResources({
@@ -389,6 +417,29 @@ const tests: TestCase[] = [
       assert.equal(
         resources.every((resource) => resource.source === "fallback"),
         true,
+      );
+      assert.equal(
+        resources.some((resource) =>
+          /\b(112|911|024|988)\b/.test(resource.description),
+        ),
+        false,
+      );
+    },
+  },
+  {
+    name: "resolves fallback resources for minor safety without static phone numbers",
+    run: () => {
+      const resources = resolveSafetyResources({
+        assessment: {
+          level: 2,
+          category: "minor_safety",
+          shouldInterrupt: true,
+        },
+      });
+
+      assert.deepEqual(
+        resources.map((resource) => resource.kind),
+        ["trusted_person", "local_emergency"],
       );
       assert.equal(
         resources.some((resource) =>

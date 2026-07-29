@@ -3,6 +3,7 @@ export type SafetyCategory =
   | "violence"
   | "abuse"
   | "reality_distress"
+  | "minor_safety"
   | "clinical"
   | "medication"
   | "dependency"
@@ -61,6 +62,16 @@ const realityDistressPatterns = [
   /\b(todos|la gente).*(conspira|conspiran|est[aá]n en mi contra)\b/i,
   /\b(they are watching me|they follow me|they are following me|they read my thoughts)\b/i,
   /\b(hidden cameras|hidden microphones).*(in my home|in my room|everywhere)\b/i,
+];
+
+const minorSafetyPatterns = [
+  /\b(tengo|soy de) (1[0-7]|[0-9]) a[ñn]os\b/i,
+  /\bsoy menor( de edad)?\b/i,
+  /\bno soy adulto\b/i,
+  /\bi am (1[0-7]|[0-9]) years old\b/i,
+  /\bi'm (1[0-7]|[0-9])\b/i,
+  /\bi am under 18\b/i,
+  /\bi am a minor\b/i,
 ];
 
 const clinicalPatterns = [
@@ -125,6 +136,14 @@ export function classifyUserMessageSafety(content: string): SafetyAssessment {
     return {
       level: 2,
       category: "reality_distress",
+      shouldInterrupt: true,
+    };
+  }
+
+  if (matchesAny(content, minorSafetyPatterns)) {
+    return {
+      level: 2,
+      category: "minor_safety",
       shouldInterrupt: true,
     };
   }

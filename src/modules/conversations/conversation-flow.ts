@@ -610,6 +610,10 @@ function getSafetyPolicy(assessment: SafetyAssessment) {
     return "reality_distress_safe_response_v1";
   }
 
+  if (assessment.category === "minor_safety") {
+    return "minor_safety_boundary_v1";
+  }
+
   return "non_clinical_boundary_v1";
 }
 

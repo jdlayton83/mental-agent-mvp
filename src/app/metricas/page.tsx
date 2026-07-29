@@ -361,6 +361,7 @@ function formatSafetyCategory(category: string) {
     clinical: "Límite clínico",
     dependency: "Dependencia",
     medication: "Medicación",
+    minor_safety: "Menor de edad",
     prompt_injection: "Prompt injection",
     reality_distress: "Malestar con realidad percibida",
     self_harm: "Autolesión",

@@ -137,6 +137,27 @@ export function resolveSafetyResources(input: {
     ];
   }
 
+  if (input.assessment.category === "minor_safety") {
+    return [
+      createResource({
+        id: "trusted-person",
+        kind: "trusted_person",
+        title: "Adulto de confianza",
+        description:
+          "Habla con una persona adulta de confianza, especialmente si el tema es sensible, urgente o te hace sentir en riesgo.",
+        priority: 10,
+      }),
+      createResource({
+        id: "local-emergency",
+        kind: "local_emergency",
+        title: "Ayuda urgente local",
+        description:
+          "Si hay peligro inmediato, busca ayuda presencial o contacta con los servicios oficiales de emergencia de tu ubicación actual.",
+        priority: 20,
+      }),
+    ];
+  }
+
   if (
     input.assessment.category === "clinical" ||
     input.assessment.category === "medication"

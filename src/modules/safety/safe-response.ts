@@ -58,6 +58,17 @@ export function buildSafeResponse(assessment: SafetyAssessment) {
       .join("\n\n");
   }
 
+  if (assessment.category === "minor_safety") {
+    return [
+      "Este MVP está pensado solo para personas adultas, así que no puedo continuar como una conversación normal si pareces ser menor de edad.",
+      "Si el tema es sensible, urgente o te preocupa tu seguridad, habla con una persona adulta de confianza o busca ayuda presencial en tu zona.",
+      "Puedo dejarte una orientación muy general: no compartas datos privados aquí y busca apoyo humano adecuado.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }
+
   if (assessment.category === "clinical") {
     return [
       "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.",
