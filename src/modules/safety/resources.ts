@@ -116,6 +116,27 @@ export function resolveSafetyResources(input: {
     ];
   }
 
+  if (input.assessment.category === "reality_distress") {
+    return [
+      createResource({
+        id: "trusted-person",
+        kind: "trusted_person",
+        title: "Persona de confianza",
+        description:
+          "Si te sientes en peligro o muy alterado, contacta con alguien cercano y comparte lo que estás viviendo.",
+        priority: 10,
+      }),
+      createResource({
+        id: "professional-care",
+        kind: "professional_care",
+        title: "Apoyo profesional",
+        description:
+          "Si el malestar es intenso o te cuesta sentirte seguro, busca apoyo de un profesional cualificado o atención presencial.",
+        priority: 20,
+      }),
+    ];
+  }
+
   if (
     input.assessment.category === "clinical" ||
     input.assessment.category === "medication"

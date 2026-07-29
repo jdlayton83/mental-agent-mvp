@@ -841,5 +841,9 @@ function getSafetyPolicy(assessment: SafetyAssessment) {
     return "abuse_safe_response_v1";
   }
 
+  if (assessment.category === "reality_distress") {
+    return "reality_distress_safe_response_v1";
+  }
+
   return "non_clinical_boundary_v1";
 }

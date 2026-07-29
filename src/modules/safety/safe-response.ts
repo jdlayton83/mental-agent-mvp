@@ -47,6 +47,17 @@ export function buildSafeResponse(assessment: SafetyAssessment) {
       .join("\n\n");
   }
 
+  if (assessment.category === "reality_distress") {
+    return [
+      "No puedo confirmar que eso esté ocurriendo como un hecho, pero sí tomo en serio que te esté generando malestar o miedo.",
+      "Ahora conviene centrarse en lo observable y en tu seguridad inmediata: dónde estás, si hay peligro real ahora, y si puedes contactar con una persona de confianza.",
+      "Si el miedo es intenso o te cuesta sentirte seguro, busca apoyo presencial o profesional cualificado. Puedo ayudarte a ordenar un siguiente paso pequeño sin asumir conclusiones.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }
+
   if (assessment.category === "clinical") {
     return [
       "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.",

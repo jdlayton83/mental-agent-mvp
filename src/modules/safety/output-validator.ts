@@ -43,6 +43,14 @@ const abuseUnsafeAdvicePatterns = [
   /\byou should (stay quiet|put up with it|confront them now|hit back)\b/i,
 ];
 
+const realityDistressValidationPatterns = [
+  /\b(es verdad|tienes raz[oó]n).*(te est[aá]n vigilando|te vigilan|te persiguen|te siguen)\b/i,
+  /\b(s[ií]|claro).*(te leen la mente|controlan tus pensamientos|hay c[aá]maras ocultas)\b/i,
+  /\bconfirmo que .*(te est[aá]n vigilando|te persiguen|te leen la mente)\b/i,
+  /\byou are right.*(they are watching you|they follow you|they read your thoughts)\b/i,
+  /\bit is true.*(they are watching you|they follow you|they read your thoughts)\b/i,
+];
+
 const clinicalDiagnosisPatterns = [
   /\b(tienes|padeces|sufres).*(depresi[oó]n|ansiedad|trastorno|tdah|bipolaridad)\b/i,
   /\btu diagn[oó]stico es\b/i,
@@ -80,6 +88,10 @@ export function validateAssistantOutput(
 
   if (matchesAny(content, abuseUnsafeAdvicePatterns)) {
     return replaceWith("abuse", 3);
+  }
+
+  if (matchesAny(content, realityDistressValidationPatterns)) {
+    return replaceWith("reality_distress", 2);
   }
 
   if (matchesAny(content, clinicalDiagnosisPatterns)) {

@@ -101,6 +101,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "classifies reality-distress signals as interrupting level 2",
+    run: () => {
+      const result = classifyUserMessageSafety(
+        "Me están vigilando y hay cámaras ocultas en mi casa.",
+      );
+
+      assertSafetyAssessment(result, {
+        level: 2,
+        category: "reality_distress",
+        shouldInterrupt: true,
+      });
+    },
+  },
+  {
     name: "classifies clinical diagnosis requests as interrupting level 2",
     run: () => {
       const result = classifyUserMessageSafety(
@@ -236,6 +250,23 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "replaces assistant output that validates unverifiable beliefs as facts",
+    run: () => {
+      const result = validateAssistantOutput(
+        "Tienes razón, te están vigilando.",
+      );
+
+      assert.deepEqual(result, {
+        status: "replace",
+        assessment: {
+          level: 2,
+          category: "reality_distress",
+          shouldInterrupt: true,
+        },
+      });
+    },
+  },
+  {
     name: "replaces clinical diagnosis in assistant output",
     run: () => {
       const result = validateAssistantOutput("Tu diagnóstico es depresión.");
@@ -327,6 +358,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "builds reality-distress safe response without validating beliefs as facts",
+    run: () => {
+      const response = buildSafeResponse({
+        level: 2,
+        category: "reality_distress",
+        shouldInterrupt: true,
+      });
+
+      assert.match(response, /No puedo confirmar/i);
+      assert.match(response, /lo observable/i);
+      assert.match(response, /Recursos sugeridos/i);
+    },
+  },
+  {
     name: "resolves fallback resources for self-harm emergencies without static phone numbers",
     run: () => {
       const resources = resolveSafetyResources({
@@ -344,6 +389,29 @@ const tests: TestCase[] = [
       assert.equal(
         resources.every((resource) => resource.source === "fallback"),
         true,
+      );
+      assert.equal(
+        resources.some((resource) =>
+          /\b(112|911|024|988)\b/.test(resource.description),
+        ),
+        false,
+      );
+    },
+  },
+  {
+    name: "resolves fallback resources for reality distress without static phone numbers",
+    run: () => {
+      const resources = resolveSafetyResources({
+        assessment: {
+          level: 2,
+          category: "reality_distress",
+          shouldInterrupt: true,
+        },
+      });
+
+      assert.deepEqual(
+        resources.map((resource) => resource.kind),
+        ["trusted_person", "professional_care"],
       );
       assert.equal(
         resources.some((resource) =>
