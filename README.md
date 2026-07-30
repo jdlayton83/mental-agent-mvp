@@ -38,5 +38,6 @@ docs/
     ├── llm-provider-abstraction.md
     ├── local-first-cloud-ready.md
     ├── privacy-and-compliance.md
-    └── security-architecture.md
+    ├── security-architecture.md
+    └── threat-model.md
 ```

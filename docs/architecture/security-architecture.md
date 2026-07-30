@@ -40,7 +40,7 @@ Capacidades futuras como cámara, audio, biometría o procesamiento avanzado de 
 
 ## 4. Modelo de amenazas
 
-El threat model se mantendrá versionado e incluirá:
+El threat model inicial se mantiene en `threat-model.md`. Deberá mantenerse versionado e incluir:
 
 - robo de cuenta y sesión;
 - acceso horizontal y escalada de privilegios;

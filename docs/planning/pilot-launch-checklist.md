@@ -14,6 +14,7 @@ Este checklist no declara preparación para producción. Sirve para decidir si e
 - [ ] El seed se ha ejecutado correctamente.
 - [ ] El usuario de desarrollo puede iniciar sesión.
 - [ ] La aplicación arranca en `http://localhost:3000`.
+- [ ] `docs/architecture/threat-model.md` está revisado para el alcance del piloto.
 
 Comandos de verificación:
 
