@@ -37,6 +37,7 @@ The user receives a safe temporary message or local guided fallback if requests 
 - Use the authenticated user ID as the rate-limit key in free chat and guided modes.
 - Return a safe Spanish fallback without calling the provider when the local limit is exceeded.
 - Add deterministic regression tests for the limiter.
+- Add a CI quality gate so future `generateText` calls include `rateLimitKey`.
 - Document the local-only nature of the control.
 
 ## Out Of Scope
@@ -70,6 +71,7 @@ The user receives a safe temporary message or local guided fallback if requests 
 - Different keys do not share the same counter.
 - `generateText` can return a local rate-limit result before provider selection.
 - Free chat and guided modes provide a user-scoped key.
+- `npm run ai-rate-limit:check` fails if a `generateText` call omits `rateLimitKey`.
 - `npm run ci` passes.
 
 ## Error Cases
@@ -114,6 +116,7 @@ The gateway may avoid a provider call during local rate limiting. Safety routing
 - [x] Apply it in the AI gateway.
 - [x] Pass user-scoped keys from free chat and guided modes.
 - [x] Add regression tests.
+- [x] Add a CI quality gate for user-scoped AI text calls.
 - [x] Update relevant architecture/spec docs.
 - [x] Run checks.
 
@@ -132,3 +135,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-07-30 | Initial implemented local rate guard | Reduce loop and local cost risk before controlled pilot testing |
+| 2026-07-30 | Added rate-limit quality gate | Keep future AI text calls covered by a user-scoped limiter |
