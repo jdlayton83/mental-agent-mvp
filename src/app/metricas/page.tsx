@@ -41,12 +41,44 @@ export default async function MetricasPage() {
               value={metrics.users.withConversation}
             />
             <MetricItem
+              label="Activos 7 días"
+              value={metrics.users.activeLast7Days}
+            />
+            <MetricItem
+              label="Activos 30 días"
+              value={metrics.users.activeLast30Days}
+            />
+            <MetricItem
+              label="Cohorte 7 días"
+              value={metrics.users.returnEligible7Days}
+            />
+            <MetricItem
+              label="Cohorte 30 días"
+              value={metrics.users.returnEligible30Days}
+            />
+            <MetricItem
+              label="Retorno 7 días"
+              value={metrics.users.returned7Days}
+            />
+            <MetricItem
+              label="Retorno 30 días"
+              value={metrics.users.returned30Days}
+            />
+            <MetricItem
               label="Tasa onboarding"
               value={formatPercent(metrics.users.onboardingRate)}
             />
             <MetricItem
               label="Primera conversación"
               value={formatPercent(metrics.users.firstConversationRate)}
+            />
+            <MetricItem
+              label="Tasa retorno 7 días"
+              value={formatPercent(metrics.users.returnRate7Days)}
+            />
+            <MetricItem
+              label="Tasa retorno 30 días"
+              value={formatPercent(metrics.users.returnRate30Days)}
             />
           </dl>
         </section>

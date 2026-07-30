@@ -38,8 +38,10 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - Show aggregate counts and simple ratios from existing tables.
 - Include metrics for:
   - active users;
+  - users active in the last 7 and 30 days;
   - onboarding completed;
   - users with at least one conversation;
+  - 7-day and 30-day return signals;
   - completed sessions;
   - total and average simulated credits for completed sessions;
   - free-chat sessions;
@@ -71,6 +73,8 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page shall require authentication.
 - The metrics page shall show aggregate product metrics using existing data.
 - The metrics page shall not show private conversation content or memory content.
+- The metrics page shall show recent user activity for the last 7 and 30 days.
+- The metrics page shall show 7-day and 30-day return signals based on session dates.
 - The metrics page shall include session feedback averages only when feedback exists.
 - The metrics page shall include total and average simulated credits for completed sessions.
 - The metrics page shall include technical usage counts by status.
@@ -92,6 +96,8 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The metrics page loads for an authenticated user.
 - The metrics page redirects anonymous visitors to `/login`.
 - The page shows counts for users, sessions, memories, commitments, safety events, audit events, and usage.
+- The page shows users active in the last 7 and 30 days.
+- The page shows 7-day and 30-day return counts and rates.
 - The page shows safety event category counts without displaying trigger summaries or message content.
 - The page shows usage status counts so provider errors and safety replacements are visible.
 - The page shows total and average simulated session credits.
@@ -159,6 +165,7 @@ No AI behavior changes are planned.
 - [x] Add pilot metrics query helper.
 - [x] Add `/metricas` page.
 - [x] Add `/inicio` link.
+- [x] Add 7-day and 30-day recent activity and return metrics.
 - [x] Add aggregate simulated-credit metrics for completed sessions.
 - [x] Add usage status counts.
 - [x] Add Spanish labels for known technical usage operation types.
@@ -190,3 +197,4 @@ None.
 | 2026-07-27 | Added aggregate session credit metrics | Support pilot cost review without exposing session content |
 | 2026-07-27 | Added usage status counts | Surface technical failures and replacements without exposing logs |
 | 2026-07-29 | Added safety category counts | Make guardrail activation visible without exposing sensitive content |
+| 2026-07-30 | Added return metrics | Support pilot recurrence review with 7-day and 30-day session return signals |

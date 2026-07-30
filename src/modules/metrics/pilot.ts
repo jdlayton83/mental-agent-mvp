@@ -12,6 +12,7 @@ import {
   userProfiles,
   users,
 } from "@/db/schema";
+import { calculatePilotReturnMetrics } from "@/modules/metrics/return-metrics";
 import { parseSessionFeedback } from "@/modules/sessions/feedback";
 
 type SessionTypeCount = {
@@ -49,6 +50,7 @@ export async function getPilotMetrics() {
     activeUsers,
     onboardedUsers,
     usersWithConversations,
+    userSessionRanges,
     completedSessions,
     sessionCreditMetrics,
     sessionTypeCounts,
@@ -66,6 +68,7 @@ export async function getPilotMetrics() {
     getActiveUserCount(),
     getOnboardedUserCount(),
     getUsersWithConversationCount(),
+    getUserSessionRanges(),
     getCompletedSessionCount(),
     getSessionCreditMetrics(),
     getSessionTypeCounts(),
@@ -82,14 +85,23 @@ export async function getPilotMetrics() {
   ]);
 
   const feedbackMetrics = calculateFeedbackMetrics(feedbackRows);
+  const returnMetrics = calculatePilotReturnMetrics(userSessionRanges);
 
   return {
     users: {
       active: activeUsers,
       onboarded: onboardedUsers,
       withConversation: usersWithConversations,
+      activeLast7Days: returnMetrics.sevenDays.activeUsers,
+      activeLast30Days: returnMetrics.thirtyDays.activeUsers,
+      returnEligible7Days: returnMetrics.sevenDays.eligibleUsers,
+      returnEligible30Days: returnMetrics.thirtyDays.eligibleUsers,
+      returned7Days: returnMetrics.sevenDays.returnedUsers,
+      returned30Days: returnMetrics.thirtyDays.returnedUsers,
       onboardingRate: calculateRate(onboardedUsers, activeUsers),
       firstConversationRate: calculateRate(usersWithConversations, activeUsers),
+      returnRate7Days: returnMetrics.sevenDays.returnRate,
+      returnRate30Days: returnMetrics.thirtyDays.returnRate,
     },
     sessions: {
       completed: completedSessions,
@@ -171,6 +183,18 @@ async function getCompletedSessionCount() {
     .where(eq(sessions.status, "completed"));
 
   return row?.count ?? 0;
+}
+
+async function getUserSessionRanges() {
+  return db
+    .select({
+      userId: sessions.userId,
+      firstSessionAt: sql<Date>`min(${sessions.createdAt})`,
+      lastSessionAt: sql<Date>`max(${sessions.createdAt})`,
+      sessionCount: sql<number>`count(*)::int`,
+    })
+    .from(sessions)
+    .groupBy(sessions.userId);
 }
 
 async function getSafetyEventCount() {

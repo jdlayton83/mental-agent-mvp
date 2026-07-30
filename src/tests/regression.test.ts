@@ -27,6 +27,7 @@ import {
   recordPersonalDevelopmentAnswer,
 } from "../modules/guided-modes/personal-development-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
+import { calculatePilotReturnMetrics } from "../modules/metrics/return-metrics";
 import {
   buildSessionFeedbackMetadata,
   normalizePaymentIntent,
@@ -865,6 +866,44 @@ const tests: TestCase[] = [
 
       assert.equal(feedback?.paymentIntent, "maybe");
       assert.equal(normalizePaymentIntent("unknown"), null);
+    },
+  },
+  {
+    name: "pilot return metrics calculate seven and thirty day cohorts",
+    run: () => {
+      const now = new Date("2026-07-30T12:00:00.000Z");
+      const metrics = calculatePilotReturnMetrics(
+        [
+          {
+            userId: "recent-only",
+            firstSessionAt: new Date("2026-07-29T12:00:00.000Z"),
+            lastSessionAt: new Date("2026-07-29T12:00:00.000Z"),
+            sessionCount: 1,
+          },
+          {
+            userId: "returned-after-7",
+            firstSessionAt: new Date("2026-07-20T12:00:00.000Z"),
+            lastSessionAt: new Date("2026-07-29T12:00:00.000Z"),
+            sessionCount: 2,
+          },
+          {
+            userId: "returned-after-30",
+            firstSessionAt: new Date("2026-06-20T12:00:00.000Z"),
+            lastSessionAt: new Date("2026-07-29T12:00:00.000Z"),
+            sessionCount: 3,
+          },
+        ],
+        now,
+      );
+
+      assert.equal(metrics.sevenDays.activeUsers, 3);
+      assert.equal(metrics.sevenDays.eligibleUsers, 2);
+      assert.equal(metrics.sevenDays.returnedUsers, 2);
+      assert.equal(metrics.sevenDays.returnRate, 1);
+      assert.equal(metrics.thirtyDays.activeUsers, 3);
+      assert.equal(metrics.thirtyDays.eligibleUsers, 1);
+      assert.equal(metrics.thirtyDays.returnedUsers, 1);
+      assert.equal(metrics.thirtyDays.returnRate, 1);
     },
   },
   {
