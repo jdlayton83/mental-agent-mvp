@@ -51,6 +51,15 @@ const realityDistressValidationPatterns = [
   /\bit is true.*(they are watching you|they follow you|they read your thoughts)\b/i,
 ];
 
+const highImpactDirectivePatterns = [
+  /\b(debes|deber[ií]as|tienes que|hazlo|firma|demanda|renuncia|invierte|vende).*(contrato|demanda|divorcio|custodia|trabajo|empleo|ahorros|casa|hipoteca|pr[eé]stamo|inversi[oó]n)\b/i,
+  /\b(te garantizo|seguro que).*(ganar[aá]s|saldr[aá] bien|no tendr[aá]s problemas|ser[aá] rentable)\b/i,
+  /\b(no necesitas|no hace falta).*(abogado|m[eé]dico|profesional|asesor|especialista)\b/i,
+  /\byou should .*(sign|sue|divorce|quit|fire|invest|sell|take the loan)\b/i,
+  /\byou do not need .*(a lawyer|a doctor|a professional|an advisor|a specialist)\b/i,
+  /\bi guarantee .*(you will win|it will work|it is profitable)\b/i,
+];
+
 const clinicalDiagnosisPatterns = [
   /\b(tienes|padeces|sufres).*(depresi[oó]n|ansiedad|trastorno|tdah|bipolaridad)\b/i,
   /\btu diagn[oó]stico es\b/i,
@@ -92,6 +101,10 @@ export function validateAssistantOutput(
 
   if (matchesAny(content, realityDistressValidationPatterns)) {
     return replaceWith("reality_distress", 2);
+  }
+
+  if (matchesAny(content, highImpactDirectivePatterns)) {
+    return replaceWith("high_impact_decision", 2);
   }
 
   if (matchesAny(content, clinicalDiagnosisPatterns)) {

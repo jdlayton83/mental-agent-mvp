@@ -69,6 +69,17 @@ export function buildSafeResponse(assessment: SafetyAssessment) {
       .join("\n\n");
   }
 
+  if (assessment.category === "high_impact_decision") {
+    return [
+      "No debo darte una orden, garantía o sustituto de asesoramiento profesional en una decisión de alto impacto.",
+      "Sí puedo ayudarte a estructurarla: opciones, criterios, riesgos, incertidumbres, coste de esperar y qué información falta.",
+      "Para una decisión médica, legal, financiera, laboral o familiar importante, conviene contrastarla con apoyo cualificado antes de actuar.",
+      resources,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+  }
+
   if (assessment.category === "clinical") {
     return [
       "No puedo diagnosticar ni sustituir una evaluación profesional. Puedo ayudarte a describir lo que estás notando, separar hechos de interpretaciones y preparar preguntas para un profesional si lo necesitas.",

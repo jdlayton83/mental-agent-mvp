@@ -5,7 +5,8 @@ export type SafetyResourceKind =
   | "trusted_person"
   | "urgent_care"
   | "professional_care"
-  | "specialized_support";
+  | "specialized_support"
+  | "qualified_support";
 
 export type SafetyResource = {
   id: string;
@@ -154,6 +155,19 @@ export function resolveSafetyResources(input: {
         description:
           "Si hay peligro inmediato, busca ayuda presencial o contacta con los servicios oficiales de emergencia de tu ubicación actual.",
         priority: 20,
+      }),
+    ];
+  }
+
+  if (input.assessment.category === "high_impact_decision") {
+    return [
+      createResource({
+        id: "qualified-support",
+        kind: "qualified_support",
+        title: "Apoyo cualificado",
+        description:
+          "Para decisiones médicas, legales, financieras, laborales o familiares, contrasta la decisión con una persona profesional o cualificada del área correspondiente.",
+        priority: 10,
       }),
     ];
   }

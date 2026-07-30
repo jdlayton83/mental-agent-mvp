@@ -4,6 +4,7 @@ export type SafetyCategory =
   | "abuse"
   | "reality_distress"
   | "minor_safety"
+  | "high_impact_decision"
   | "clinical"
   | "medication"
   | "dependency"
@@ -72,6 +73,13 @@ const minorSafetyPatterns = [
   /\bi'm (1[0-7]|[0-9])\b/i,
   /\bi am under 18\b/i,
   /\bi am a minor\b/i,
+];
+
+const highImpactDecisionPatterns = [
+  /\b(debo|deber[ií]a|qu[eé] hago|qu[eé] decido).*(demandar|divorciarme|custodia|denunciar|renunciar|despedir|invertir|vender mi casa|hipoteca|pr[eé]stamo)\b/i,
+  /\b(tomar una decisi[oó]n|decidir).*(legal|financier|m[eé]dic|laboral|familiar|custodia|divorcio|hipoteca|inversi[oó]n)\b/i,
+  /\bshould i .*(sue|divorce|quit my job|fire|invest|sell my house|take a loan|mortgage)\b/i,
+  /\bwhat should i do .*(legal|financial|medical|employment|custody|divorce)\b/i,
 ];
 
 const clinicalPatterns = [
@@ -145,6 +153,14 @@ export function classifyUserMessageSafety(content: string): SafetyAssessment {
       level: 2,
       category: "minor_safety",
       shouldInterrupt: true,
+    };
+  }
+
+  if (matchesAny(content, highImpactDecisionPatterns)) {
+    return {
+      level: 1,
+      category: "high_impact_decision",
+      shouldInterrupt: false,
     };
   }
 

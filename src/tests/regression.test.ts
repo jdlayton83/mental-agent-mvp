@@ -129,6 +129,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "classifies high-impact decision requests without interrupting",
+    run: () => {
+      const result = classifyUserMessageSafety(
+        "¿Debería invertir mis ahorros o vender mi casa?",
+      );
+
+      assertSafetyAssessment(result, {
+        level: 1,
+        category: "high_impact_decision",
+        shouldInterrupt: false,
+      });
+    },
+  },
+  {
     name: "classifies clinical diagnosis requests as interrupting level 2",
     run: () => {
       const result = classifyUserMessageSafety(
@@ -281,6 +295,23 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "replaces directive high-impact assistant output",
+    run: () => {
+      const result = validateAssistantOutput(
+        "Deberías firmar el contrato porque seguro que saldrá bien.",
+      );
+
+      assert.deepEqual(result, {
+        status: "replace",
+        assessment: {
+          level: 2,
+          category: "high_impact_decision",
+          shouldInterrupt: true,
+        },
+      });
+    },
+  },
+  {
     name: "replaces clinical diagnosis in assistant output",
     run: () => {
       const result = validateAssistantOutput("Tu diagnóstico es depresión.");
@@ -400,6 +431,20 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "builds high-impact safe response without professional substitution",
+    run: () => {
+      const response = buildSafeResponse({
+        level: 2,
+        category: "high_impact_decision",
+        shouldInterrupt: true,
+      });
+
+      assert.match(response, /No debo darte una orden/i);
+      assert.match(response, /opciones, criterios, riesgos/i);
+      assert.match(response, /apoyo cualificado/i);
+    },
+  },
+  {
     name: "resolves fallback resources for self-harm emergencies without static phone numbers",
     run: () => {
       const resources = resolveSafetyResources({
@@ -423,6 +468,23 @@ const tests: TestCase[] = [
           /\b(112|911|024|988)\b/.test(resource.description),
         ),
         false,
+      );
+    },
+  },
+  {
+    name: "resolves fallback resources for high-impact decisions",
+    run: () => {
+      const resources = resolveSafetyResources({
+        assessment: {
+          level: 2,
+          category: "high_impact_decision",
+          shouldInterrupt: true,
+        },
+      });
+
+      assert.deepEqual(
+        resources.map((resource) => resource.kind),
+        ["qualified_support"],
       );
     },
   },
@@ -659,6 +721,32 @@ const tests: TestCase[] = [
         context.systemInstructions,
         /No uses recuerdos para inferir/i,
       );
+    },
+  },
+  {
+    name: "conversation context includes high-impact decision boundaries",
+    run: () => {
+      const context = buildConversationAIContext({
+        agent: {
+          agentName: "Nora",
+          templateName: "Nora",
+          templateDescription: "claridad y reflexión",
+          tone: "balanced",
+          responseStyle: "conversational",
+          responseLength: "medium",
+          initiativeLevel: 1,
+          mainGoal: null,
+          memoryEnabled: false,
+          privateMode: false,
+        },
+        recentMessages: [],
+        memories: [],
+        userMessage: "¿Debería vender mi casa?",
+      });
+
+      assert.match(context.systemInstructions, /decisiones médicas/i);
+      assert.match(context.systemInstructions, /evita órdenes o garantías/i);
+      assert.match(context.systemInstructions, /apoyo cualificado/i);
     },
   },
   {

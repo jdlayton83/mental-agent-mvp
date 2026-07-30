@@ -614,6 +614,10 @@ function getSafetyPolicy(assessment: SafetyAssessment) {
     return "minor_safety_boundary_v1";
   }
 
+  if (assessment.category === "high_impact_decision") {
+    return "high_impact_decision_boundary_v1";
+  }
+
   return "non_clinical_boundary_v1";
 }
 

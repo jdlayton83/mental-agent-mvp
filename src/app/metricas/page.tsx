@@ -360,6 +360,7 @@ function formatSafetyCategory(category: string) {
     abuse: "Abuso o peligro relacional",
     clinical: "Límite clínico",
     dependency: "Dependencia",
+    high_impact_decision: "Decisión de alto impacto",
     medication: "Medicación",
     minor_safety: "Menor de edad",
     prompt_injection: "Prompt injection",
