@@ -100,6 +100,26 @@ export default async function MetricasPage() {
               value={formatPercent(metrics.feedback.wouldReuseRate)}
             />
             <MetricItem
+              label="Pago respondido"
+              value={metrics.feedback.paymentIntentAnsweredCount}
+            />
+            <MetricItem
+              label="Probablemente pagaría"
+              value={metrics.feedback.paymentIntentLikelyCount}
+            />
+            <MetricItem
+              label="Quizá pagaría"
+              value={metrics.feedback.paymentIntentMaybeCount}
+            />
+            <MetricItem
+              label="No pagaría ahora"
+              value={metrics.feedback.paymentIntentNotNowCount}
+            />
+            <MetricItem
+              label="Interés de pago"
+              value={formatPercent(metrics.feedback.paymentIntentPositiveRate)}
+            />
+            <MetricItem
               label="Comentarios"
               value={metrics.feedback.withCommentCount}
             />

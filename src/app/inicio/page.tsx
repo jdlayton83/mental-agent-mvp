@@ -379,6 +379,11 @@ export default async function InicioPage({
                         {sessionSummary.feedback.wouldReuse
                           ? "Lo usaría de nuevo"
                           : "No lo usaría de nuevo"}
+                        {sessionSummary.feedback.paymentIntent
+                          ? ` · ${formatPaymentIntent(
+                              sessionSummary.feedback.paymentIntent,
+                            )}`
+                          : ""}
                       </p>
                       {sessionSummary.feedback.comment ? (
                         <p>Comentario: {sessionSummary.feedback.comment}</p>
@@ -426,6 +431,21 @@ export default async function InicioPage({
                           No
                         </label>
                       </fieldset>
+                      <label className="auth-field">
+                        Si siguiera siendo útil
+                        <select name="paymentIntent">
+                          <option value="">Prefiero no responder</option>
+                          <option value="likely">
+                            Probablemente pagaría por algo así
+                          </option>
+                          <option value="maybe">
+                            Quizá pagaría si mejora o lo uso más
+                          </option>
+                          <option value="not_now">
+                            Ahora no pagaría por esto
+                          </option>
+                        </select>
+                      </label>
                       <label className="auth-field">
                         Comentario breve opcional
                         <textarea
@@ -723,6 +743,16 @@ function formatCommitmentSource(source: string) {
   };
 
   return labels[source] ?? source;
+}
+
+function formatPaymentIntent(paymentIntent: string) {
+  const labels: Record<string, string> = {
+    likely: "Probablemente pagaría",
+    maybe: "Quizá pagaría",
+    not_now: "No pagaría ahora",
+  };
+
+  return labels[paymentIntent] ?? paymentIntent;
 }
 
 function formatAgentTone(tone: string) {

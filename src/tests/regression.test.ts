@@ -29,6 +29,7 @@ import {
 import { extractMemoryCandidates } from "../modules/memory/extractor";
 import {
   buildSessionFeedbackMetadata,
+  normalizePaymentIntent,
   normalizeSessionFeedbackComment,
   parseSessionFeedback,
 } from "../modules/sessions/feedback";
@@ -844,8 +845,26 @@ const tests: TestCase[] = [
       });
 
       assert.equal(feedback?.comment, undefined);
+      assert.equal(feedback?.paymentIntent, undefined);
       assert.equal(feedback?.satisfactionScore, 4);
       assert.equal(feedback?.wouldReuse, true);
+    },
+  },
+  {
+    name: "session feedback stores optional payment intent",
+    run: () => {
+      const metadata = buildSessionFeedbackMetadata({
+        metadata: null,
+        satisfactionScore: 4,
+        wouldReuse: true,
+        paymentIntent: "maybe",
+        comment: null,
+      });
+
+      const feedback = parseSessionFeedback(metadata);
+
+      assert.equal(feedback?.paymentIntent, "maybe");
+      assert.equal(normalizePaymentIntent("unknown"), null);
     },
   },
   {

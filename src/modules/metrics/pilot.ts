@@ -324,6 +324,11 @@ function calculateFeedbackMetrics(
       averageSatisfaction: null,
       wouldReuseCount: 0,
       wouldReuseRate: null,
+      paymentIntentLikelyCount: 0,
+      paymentIntentMaybeCount: 0,
+      paymentIntentNotNowCount: 0,
+      paymentIntentAnsweredCount: 0,
+      paymentIntentPositiveRate: null,
       withCommentCount: 0,
     };
   }
@@ -333,6 +338,19 @@ function calculateFeedbackMetrics(
     0,
   );
   const wouldReuseCount = feedback.filter((entry) => entry.wouldReuse).length;
+  const paymentIntentLikelyCount = feedback.filter(
+    (entry) => entry.paymentIntent === "likely",
+  ).length;
+  const paymentIntentMaybeCount = feedback.filter(
+    (entry) => entry.paymentIntent === "maybe",
+  ).length;
+  const paymentIntentNotNowCount = feedback.filter(
+    (entry) => entry.paymentIntent === "not_now",
+  ).length;
+  const paymentIntentAnsweredCount =
+    paymentIntentLikelyCount +
+    paymentIntentMaybeCount +
+    paymentIntentNotNowCount;
   const withCommentCount = feedback.filter((entry) => entry.comment).length;
 
   return {
@@ -340,6 +358,14 @@ function calculateFeedbackMetrics(
     averageSatisfaction: satisfactionTotal / feedback.length,
     wouldReuseCount,
     wouldReuseRate: calculateRate(wouldReuseCount, feedback.length),
+    paymentIntentLikelyCount,
+    paymentIntentMaybeCount,
+    paymentIntentNotNowCount,
+    paymentIntentAnsweredCount,
+    paymentIntentPositiveRate: calculateRate(
+      paymentIntentLikelyCount + paymentIntentMaybeCount,
+      paymentIntentAnsweredCount,
+    ),
     withCommentCount,
   };
 }

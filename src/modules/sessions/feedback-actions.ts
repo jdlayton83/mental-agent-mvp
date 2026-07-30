@@ -14,6 +14,7 @@ const feedbackSchema = z.object({
   sessionId: z.string().uuid(),
   satisfactionScore: z.coerce.number().int().min(1).max(5),
   wouldReuse: z.enum(["yes", "no"]).transform((value) => value === "yes"),
+  paymentIntent: z.enum(["not_now", "maybe", "likely", ""]).optional(),
   comment: z.string().max(280).optional(),
 });
 
@@ -28,6 +29,7 @@ export async function submitSessionFeedback(formData: FormData) {
     sessionId: formData.get("sessionId"),
     satisfactionScore: formData.get("satisfactionScore"),
     wouldReuse: formData.get("wouldReuse"),
+    paymentIntent: formData.get("paymentIntent"),
     comment: formData.get("comment"),
   });
 
@@ -54,6 +56,11 @@ export async function submitSessionFeedback(formData: FormData) {
     redirect("/inicio?feedback=not_saved");
   }
 
+  const paymentIntent =
+    parsed.data.paymentIntent === "" || parsed.data.paymentIntent === undefined
+      ? null
+      : parsed.data.paymentIntent;
+
   await db
     .update(sessions)
     .set({
@@ -61,6 +68,7 @@ export async function submitSessionFeedback(formData: FormData) {
         metadata: session.metadata,
         satisfactionScore: parsed.data.satisfactionScore,
         wouldReuse: parsed.data.wouldReuse,
+        paymentIntent,
         comment: parsed.data.comment ?? null,
       }),
       updatedAt: sql`now()`,
