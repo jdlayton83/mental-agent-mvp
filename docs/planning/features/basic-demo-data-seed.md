@@ -40,7 +40,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 - Seed one completed free-chat conversation and session with non-sensitive messages.
 - Seed one completed guided-mode session summary.
 - Seed one confirmed memory and one proposed memory.
-- Seed one session feedback record.
+- Seed one session feedback record with satisfaction, reuse, payment-intent and recommendation-intent signals.
 - Seed one usage event.
 - Seed one safety event with minimized non-content trigger summary.
 - Seed one audit event.
@@ -79,7 +79,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 - Re-running `npm run db:seed` does not create duplicate demo rows.
 - `/inicio` has representative recent activity after seeding.
 - `/memoria` shows at least one proposed and one confirmed memory.
-- `/metricas` shows non-zero counts for sessions, memory, audit, and usage.
+- `/metricas` shows non-zero counts for sessions, memory, audit, usage, feedback, payment intent and recommendation intent.
 - `npm run test` passes.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
@@ -148,6 +148,7 @@ The seed shall not call AI providers.
 - [x] Add demo guided session and summary.
 - [x] Add demo memories.
 - [x] Add demo feedback metadata.
+- [x] Keep demo feedback aligned with current pilot feedback fields.
 - [x] Add demo usage, safety, and audit events.
 - [x] Keep seed failure logging concise.
 - [x] Run checks.
@@ -169,3 +170,4 @@ None.
 | 2026-06-25 | Initial draft | Define development demo seed slice |
 | 2026-06-25 | Marked implemented | Demo data seed implemented and verified |
 | 2026-07-27 | Minimized seed failure logging | Avoid dumping raw database error objects in local tooling logs |
+| 2026-07-30 | Added newer feedback signals to demo seed | Keep seeded metrics representative after payment and recommendation feedback additions |

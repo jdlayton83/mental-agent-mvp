@@ -224,6 +224,8 @@ async function seedDemoData(userId: string) {
         version: 1,
         satisfactionScore: 4,
         wouldReuse: true,
+        paymentIntent: "maybe",
+        recommendIntent: "likely",
         submittedAt: "2026-06-25T00:00:00.000Z",
       },
     },
