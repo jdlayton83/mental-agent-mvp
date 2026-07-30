@@ -215,6 +215,7 @@ export async function sendCreateOrReviewHabitMessage(
   const assistantReply = prepared.safetyAssessment.shouldInterrupt
     ? buildSafeGuidedReply(prepared.safetyAssessment)
     : await buildGuidedAssistantReply({
+        userId: user.id,
         agentName: primaryAgent.customName ?? primaryAgent.templateName,
         userMessage: parsed.data.content,
         progress: nextProgress,
@@ -508,6 +509,7 @@ async function getCreateOrReviewHabitMessages(
 }
 
 async function buildGuidedAssistantReply(input: {
+  userId: string;
   agentName: string;
   userMessage: string;
   progress: CreateOrReviewHabitProgress;
@@ -527,6 +529,7 @@ async function buildGuidedAssistantReply(input: {
     ],
     timeoutMs: 5_000,
     correlationId,
+    rateLimitKey: input.userId,
   });
 
   if (reply.finishReason === "error") {

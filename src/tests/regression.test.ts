@@ -28,6 +28,7 @@ import {
 } from "../modules/guided-modes/personal-development-flow";
 import { extractMemoryCandidates } from "../modules/memory/extractor";
 import { calculatePilotReturnMetrics } from "../modules/metrics/return-metrics";
+import { checkAIRateLimit } from "../modules/ai/rate-limit";
 import {
   buildSessionFeedbackMetadata,
   normalizePaymentIntent,
@@ -831,6 +832,78 @@ const tests: TestCase[] = [
           safetyStatus: "checked",
         }),
         "completed",
+      );
+    },
+  },
+  {
+    name: "AI rate limit blocks repeated calls inside the same window",
+    run: () => {
+      const buckets = new Map();
+      const first = checkAIRateLimit({
+        key: "user-a",
+        nowMs: 1_000,
+        maxRequests: 2,
+        windowMs: 60_000,
+        buckets,
+      });
+      const second = checkAIRateLimit({
+        key: "user-a",
+        nowMs: 2_000,
+        maxRequests: 2,
+        windowMs: 60_000,
+        buckets,
+      });
+      const third = checkAIRateLimit({
+        key: "user-a",
+        nowMs: 3_000,
+        maxRequests: 2,
+        windowMs: 60_000,
+        buckets,
+      });
+
+      assert.equal(first.allowed, true);
+      assert.equal(second.allowed, true);
+      assert.equal(third.allowed, false);
+
+      if (!third.allowed) {
+        assert.equal(third.retryAfterSeconds, 58);
+      }
+    },
+  },
+  {
+    name: "AI rate limit separates keys and resets after the window",
+    run: () => {
+      const buckets = new Map();
+
+      assert.equal(
+        checkAIRateLimit({
+          key: "user-a",
+          nowMs: 1_000,
+          maxRequests: 1,
+          windowMs: 60_000,
+          buckets,
+        }).allowed,
+        true,
+      );
+      assert.equal(
+        checkAIRateLimit({
+          key: "user-b",
+          nowMs: 2_000,
+          maxRequests: 1,
+          windowMs: 60_000,
+          buckets,
+        }).allowed,
+        true,
+      );
+      assert.equal(
+        checkAIRateLimit({
+          key: "user-a",
+          nowMs: 61_000,
+          maxRequests: 1,
+          windowMs: 60_000,
+          buckets,
+        }).allowed,
+        true,
       );
     },
   },

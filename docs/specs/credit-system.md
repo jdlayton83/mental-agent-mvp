@@ -147,6 +147,8 @@ Cada sesión tendrá límites configurables de:
 
 Al aproximarse al límite, el sistema podrá reducir contexto, resumir, cambiar a un modelo más económico o cerrar ordenadamente. Nunca ejecutará reintentos infinitos.
 
+En el MVP local, el gateway de IA deberá aplicar una guardia básica en memoria para evitar ráfagas accidentales de llamadas de texto. Esta guardia no sustituirá rate limiting distribuido, presupuestos de proveedor ni controles antiabuso antes de beta o producción.
+
 ## 13. Experimentos de negocio
 
 La lógica comercial se representará mediante planes y reglas versionadas, no mediante constantes dispersas.

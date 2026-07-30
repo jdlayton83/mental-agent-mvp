@@ -179,6 +179,7 @@ Antes de llamar al modelo se estimará el contexto. Si supera presupuesto, se re
 ## 13. Reintentos, timeouts y circuit breaker
 
 - máximo inicial de dos reintentos para errores recuperables;
+- guardia local de rate limit antes de llamadas de texto en el MVP local;
 - espera exponencial con jitter;
 - límite total de tiempo;
 - sin reintento automático para errores de autenticación, contenido bloqueado o petición inválida;

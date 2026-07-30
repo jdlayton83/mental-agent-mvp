@@ -311,6 +311,7 @@ export async function sendConversationMessage(
     messages: conversationContext.messages,
     timeoutMs: 5_000,
     correlationId: crypto.randomUUID(),
+    rateLimitKey: user.id,
   });
   const outputValidation = validateAssistantOutput(assistantReply.content);
   const finalAssistantReply =

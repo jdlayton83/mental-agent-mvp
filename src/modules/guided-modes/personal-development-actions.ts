@@ -214,6 +214,7 @@ export async function sendPersonalDevelopmentMessage(
   const assistantReply = prepared.safetyAssessment.shouldInterrupt
     ? buildSafeGuidedReply(prepared.safetyAssessment)
     : await buildGuidedAssistantReply({
+        userId: user.id,
         agentName: primaryAgent.customName ?? primaryAgent.templateName,
         userMessage: parsed.data.content,
         progress: nextProgress,
@@ -511,6 +512,7 @@ async function getPersonalDevelopmentMessages(
 }
 
 async function buildGuidedAssistantReply(input: {
+  userId: string;
   agentName: string;
   userMessage: string;
   progress: PersonalDevelopmentProgress;
@@ -530,6 +532,7 @@ async function buildGuidedAssistantReply(input: {
     ],
     timeoutMs: 5_000,
     correlationId,
+    rateLimitKey: input.userId,
   });
 
   if (reply.finishReason === "error") {

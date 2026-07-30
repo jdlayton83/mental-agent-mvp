@@ -89,7 +89,7 @@ No incluye:
 | Logs con datos sensibles | eventos minimizados y checks de privacidad/exportación | consola local y capturas manuales siguen siendo responsabilidad operativa |
 | Borrado incompleto | borrado local de cuenta y datos derivados, export sin `password_hash`, auditoría mínima | no hay backups gestionados; proveedores externos pueden requerir proceso manual |
 | Dependencia comprometida | lockfile, `npm run ci`, secret scan y dependencia limitada | falta SCA avanzada y política formal de actualización |
-| Coste o abuso del proveedor | créditos simulados, uso técnico, errores normalizados y métricas | no hay rate limiting real ni presupuestos automáticos de proveedor |
+| Coste o abuso del proveedor | créditos simulados, uso técnico, errores normalizados, métricas y guardia local en memoria para llamadas de texto | no hay rate limiting distribuido ni presupuestos automáticos de proveedor |
 | Base local expuesta | Docker local, credenciales de desarrollo, sin comandos Docker desde Codex | el entorno local no debe exponerse a red pública |
 | Migración inconsistente | `drizzle-kit generate` desactivado en este entorno, migraciones manuales con journal y `db:check` | las migraciones manuales requieren revisión cuidadosa |
 | Fallo de CI/build en Windows | build con webpack, checks dedicados y fallback `dev:local` | `.next` puede quedar bloqueado por procesos locales |

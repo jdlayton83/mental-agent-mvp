@@ -11,6 +11,7 @@ export type AIGenerateTextInput = {
   messages: AIGenerateTextMessage[];
   timeoutMs: number;
   correlationId: string;
+  rateLimitKey?: string;
 };
 
 export type AIGenerateTextResult = {

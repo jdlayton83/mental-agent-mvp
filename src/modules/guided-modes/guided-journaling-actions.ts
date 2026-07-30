@@ -211,6 +211,7 @@ export async function sendGuidedJournalingMessage(
   const assistantReply = prepared.safetyAssessment.shouldInterrupt
     ? buildSafeGuidedReply(prepared.safetyAssessment)
     : await buildGuidedAssistantReply({
+        userId: user.id,
         agentName: primaryAgent.customName ?? primaryAgent.templateName,
         userMessage: parsed.data.content,
         progress: nextProgress,
@@ -501,6 +502,7 @@ async function getGuidedJournalingMessages(userId: string, sessionId: string) {
 }
 
 async function buildGuidedAssistantReply(input: {
+  userId: string;
   agentName: string;
   userMessage: string;
   progress: GuidedJournalingProgress;
@@ -520,6 +522,7 @@ async function buildGuidedAssistantReply(input: {
     ],
     timeoutMs: 5_000,
     correlationId,
+    rateLimitKey: input.userId,
   });
 
   if (reply.finishReason === "error") {
