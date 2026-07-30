@@ -26,7 +26,7 @@ The checklist shall make remaining operational, safety, privacy, testing, automa
 
 The backlog requires a pilot launch checklist before testing the product with users.
 
-The project now has authentication, onboarding, conversation, guided modes, credits, memory controls, privacy controls, audit events, metrics, route checks, server-action checks, provider-boundary checks, privacy-export checks, migration checks, and safety regression tests. These pieces need a single review gate.
+The project now has authentication, onboarding, conversation, guided modes, credits, memory controls, privacy controls, audit events, pilot metrics, route checks, server-action checks, provider-boundary checks, privacy-export checks, migration checks, and safety regression tests. These pieces need a single review gate.
 
 ## User Value
 
@@ -35,7 +35,7 @@ The project owner can see what is ready, what needs manual confirmation, and wha
 ## Scope
 
 - Add a pilot readiness checklist under `docs/planning/`.
-- Cover environment, database, auth, conversation, guided modes, memory, privacy, safety, audit, metrics, AI provider, secrets, route boundaries, server-action boundaries, and manual browser testing.
+- Cover environment, database, auth, conversation, guided modes, memory, privacy, safety, audit, pilot metrics, AI provider, secrets, route boundaries, server-action boundaries, and manual browser testing.
 - Keep it practical and Spanish-first.
 - Keep the automated quality-gate command list aligned with `package.json`.
 
@@ -120,3 +120,4 @@ None.
 |---|---|---|
 | 2026-06-25 | Initial implemented spec | Define and deliver the pilot checklist slice |
 | 2026-07-27 | Updated for expanded quality gates | Keep the checklist spec aligned with current CI subchecks |
+| 2026-07-30 | Added explicit pilot metric checks | Keep launch checklist aligned with return, payment-intent and recommendation-intent metrics |

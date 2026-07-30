@@ -189,6 +189,8 @@ No inventar teléfonos ni recursos específicos. Los recursos localizados deber�
 - [ ] `/metricas` carga para usuario autenticado.
 - [ ] `/metricas` no muestra contenido de conversaciones ni recuerdos.
 - [ ] `/metricas` muestra usuarios, sesiones, feedback, memoria, compromisos, seguridad, auditoría y uso técnico.
+- [ ] `/metricas` muestra actividad y retorno a 7 y 30 días.
+- [ ] `/metricas` muestra intención de pago e intención de recomendación sin exponer comentarios sensibles.
 
 ## 11. Datos de prueba
 
