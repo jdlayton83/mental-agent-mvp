@@ -384,6 +384,11 @@ export default async function InicioPage({
                               sessionSummary.feedback.paymentIntent,
                             )}`
                           : ""}
+                        {sessionSummary.feedback.recommendIntent
+                          ? ` · ${formatRecommendIntent(
+                              sessionSummary.feedback.recommendIntent,
+                            )}`
+                          : ""}
                       </p>
                       {sessionSummary.feedback.comment ? (
                         <p>Comentario: {sessionSummary.feedback.comment}</p>
@@ -443,6 +448,21 @@ export default async function InicioPage({
                           </option>
                           <option value="not_now">
                             Ahora no pagaría por esto
+                          </option>
+                        </select>
+                      </label>
+                      <label className="auth-field">
+                        A otra persona
+                        <select name="recommendIntent">
+                          <option value="">Prefiero no responder</option>
+                          <option value="likely">
+                            Probablemente lo recomendaría
+                          </option>
+                          <option value="maybe">
+                            Quizá lo recomendaría si mejora
+                          </option>
+                          <option value="not_now">
+                            Ahora no lo recomendaría
                           </option>
                         </select>
                       </label>
@@ -753,6 +773,16 @@ function formatPaymentIntent(paymentIntent: string) {
   };
 
   return labels[paymentIntent] ?? paymentIntent;
+}
+
+function formatRecommendIntent(recommendIntent: string) {
+  const labels: Record<string, string> = {
+    likely: "Probablemente lo recomendaría",
+    maybe: "Quizá lo recomendaría",
+    not_now: "No lo recomendaría ahora",
+  };
+
+  return labels[recommendIntent] ?? recommendIntent;
 }
 
 function formatAgentTone(tone: string) {

@@ -20,13 +20,13 @@ Project owner.
 
 Collect lightweight post-session feedback so the MVP can compare free chat and guided modes without adding heavy analytics infrastructure.
 
-The feature shall capture satisfaction, intent to reuse, optional willingness-to-pay signal, and a short optional product-feedback comment after completed sessions while avoiding sensitive content collection.
+The feature shall capture satisfaction, intent to reuse, optional willingness-to-pay signal, optional recommendation intent, and a short optional product-feedback comment after completed sessions while avoiding sensitive content collection.
 
 ## Problem / Context
 
 The backlog requires comparing free chat and guided modes by completion, duration, satisfaction, reuse intention, and technical cost.
 
-The app records session type, completion, duration, usage events, credits, summaries, satisfaction, reuse intent, optional payment intent, and optional product-feedback comments. This feature keeps that feedback lightweight and separate from sensitive conversation content.
+The app records session type, completion, duration, usage events, credits, summaries, satisfaction, reuse intent, optional payment intent, optional recommendation intent, and optional product-feedback comments. This feature keeps that feedback lightweight and separate from sensitive conversation content.
 
 ## User Value
 
@@ -38,6 +38,7 @@ The user can quickly indicate whether a session helped, which guides product imp
 - Capture satisfaction on a small numeric scale.
 - Capture whether the user would use that type of session again.
 - Capture optional willingness to pay using a small coarse-grained choice.
+- Capture optional recommendation intent using a small coarse-grained choice.
 - Capture a short optional product-feedback comment.
 - Store feedback in `sessions.metadata` under a versioned key.
 - Show whether feedback has already been submitted.
@@ -58,6 +59,7 @@ The user can quickly indicate whether a session helped, which guides product imp
 - The user shall be able to choose a satisfaction score from 1 to 5.
 - The user shall be able to answer whether they would use the session type again.
 - The user shall be able to optionally indicate whether they might pay for a product like this.
+- The user shall be able to optionally indicate whether they might recommend a product like this.
 - The user shall be able to add a short optional product-feedback comment.
 - The system shall store feedback only for sessions owned by the current user.
 - The system shall not allow feedback to overwrite another user's data.
@@ -76,7 +78,7 @@ The user can quickly indicate whether a session helped, which guides product imp
 ## Acceptance Criteria
 
 - Completed session summaries on `/inicio` show feedback controls when feedback is missing.
-- Submitting feedback saves satisfaction, reuse intent and optional payment intent to the matching session metadata.
+- Submitting feedback saves satisfaction, reuse intent, optional payment intent and optional recommendation intent to the matching session metadata.
 - Submitted feedback is visible on `/inicio`.
 - Feedback cannot be submitted for a session belonging to another user.
 - `npm run typecheck` passes.
@@ -93,7 +95,7 @@ The user can quickly indicate whether a session helped, which guides product imp
 
 ## Security And Privacy Considerations
 
-Feedback comments shall be optional, short, and framed as product feedback rather than intimate conversation content. Payment intent shall be optional and coarse-grained; it shall not create payment obligations or collect billing data.
+Feedback comments shall be optional, short, and framed as product feedback rather than intimate conversation content. Payment intent and recommendation intent shall be optional and coarse-grained; payment intent shall not create payment obligations or collect billing data.
 
 The action shall always filter by `user_id` and session `status = completed`.
 
@@ -103,7 +105,7 @@ No new table is planned.
 
 Feedback shall be stored in `sessions.metadata.feedback` with a versioned structure.
 
-The optional comment shall be stored in the same metadata object as `comment` and shall not be used for memory extraction. Optional payment intent shall be stored in the same metadata object as `paymentIntent`.
+The optional comment shall be stored in the same metadata object as `comment` and shall not be used for memory extraction. Optional payment intent shall be stored in the same metadata object as `paymentIntent`. Optional recommendation intent shall be stored in the same metadata object as `recommendIntent`.
 
 ## API Impact
 
@@ -138,6 +140,7 @@ No AI behavior changes are planned.
   - refresh and confirm submitted state;
   - submit an optional short comment and confirm it is shown as saved feedback;
   - submit optional payment intent and confirm it appears in metrics;
+  - submit optional recommendation intent and confirm it appears in metrics;
   - verify invalid input is rejected.
 
 ## Implementation Tasks
@@ -146,9 +149,11 @@ No AI behavior changes are planned.
 - [x] Add a server action to submit feedback.
 - [x] Support a short optional feedback comment.
 - [x] Support optional coarse payment intent.
+- [x] Support optional coarse recommendation intent.
 - [x] Select feedback metadata with recent session summaries.
 - [x] Render feedback controls on `/inicio`.
 - [x] Show payment-intent counts in `/metricas`.
+- [x] Show recommendation-intent counts in `/metricas`.
 - [x] Run typecheck, lint, and format checks.
 
 ## Documentation To Update
@@ -172,3 +177,4 @@ None.
 | 2026-07-27 | Added optional short product-feedback comment | Align with backlog feedback requirement while avoiding sensitive content collection |
 | 2026-07-27 | Added feedback status messages | Make invalid or unsaved feedback visible to the user |
 | 2026-07-30 | Added optional payment intent | Support pilot willingness-to-pay validation without adding real payments |
+| 2026-07-30 | Added optional recommendation intent | Support pilot recommendation-intent validation without sensitive feedback collection |

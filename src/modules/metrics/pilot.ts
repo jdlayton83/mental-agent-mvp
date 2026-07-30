@@ -353,6 +353,11 @@ function calculateFeedbackMetrics(
       paymentIntentNotNowCount: 0,
       paymentIntentAnsweredCount: 0,
       paymentIntentPositiveRate: null,
+      recommendIntentLikelyCount: 0,
+      recommendIntentMaybeCount: 0,
+      recommendIntentNotNowCount: 0,
+      recommendIntentAnsweredCount: 0,
+      recommendIntentPositiveRate: null,
       withCommentCount: 0,
     };
   }
@@ -375,6 +380,19 @@ function calculateFeedbackMetrics(
     paymentIntentLikelyCount +
     paymentIntentMaybeCount +
     paymentIntentNotNowCount;
+  const recommendIntentLikelyCount = feedback.filter(
+    (entry) => entry.recommendIntent === "likely",
+  ).length;
+  const recommendIntentMaybeCount = feedback.filter(
+    (entry) => entry.recommendIntent === "maybe",
+  ).length;
+  const recommendIntentNotNowCount = feedback.filter(
+    (entry) => entry.recommendIntent === "not_now",
+  ).length;
+  const recommendIntentAnsweredCount =
+    recommendIntentLikelyCount +
+    recommendIntentMaybeCount +
+    recommendIntentNotNowCount;
   const withCommentCount = feedback.filter((entry) => entry.comment).length;
 
   return {
@@ -389,6 +407,14 @@ function calculateFeedbackMetrics(
     paymentIntentPositiveRate: calculateRate(
       paymentIntentLikelyCount + paymentIntentMaybeCount,
       paymentIntentAnsweredCount,
+    ),
+    recommendIntentLikelyCount,
+    recommendIntentMaybeCount,
+    recommendIntentNotNowCount,
+    recommendIntentAnsweredCount,
+    recommendIntentPositiveRate: calculateRate(
+      recommendIntentLikelyCount + recommendIntentMaybeCount,
+      recommendIntentAnsweredCount,
     ),
     withCommentCount,
   };

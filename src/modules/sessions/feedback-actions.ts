@@ -15,6 +15,7 @@ const feedbackSchema = z.object({
   satisfactionScore: z.coerce.number().int().min(1).max(5),
   wouldReuse: z.enum(["yes", "no"]).transform((value) => value === "yes"),
   paymentIntent: z.enum(["not_now", "maybe", "likely", ""]).optional(),
+  recommendIntent: z.enum(["not_now", "maybe", "likely", ""]).optional(),
   comment: z.string().max(280).optional(),
 });
 
@@ -30,6 +31,7 @@ export async function submitSessionFeedback(formData: FormData) {
     satisfactionScore: formData.get("satisfactionScore"),
     wouldReuse: formData.get("wouldReuse"),
     paymentIntent: formData.get("paymentIntent"),
+    recommendIntent: formData.get("recommendIntent"),
     comment: formData.get("comment"),
   });
 
@@ -60,6 +62,11 @@ export async function submitSessionFeedback(formData: FormData) {
     parsed.data.paymentIntent === "" || parsed.data.paymentIntent === undefined
       ? null
       : parsed.data.paymentIntent;
+  const recommendIntent =
+    parsed.data.recommendIntent === "" ||
+    parsed.data.recommendIntent === undefined
+      ? null
+      : parsed.data.recommendIntent;
 
   await db
     .update(sessions)
@@ -69,6 +76,7 @@ export async function submitSessionFeedback(formData: FormData) {
         satisfactionScore: parsed.data.satisfactionScore,
         wouldReuse: parsed.data.wouldReuse,
         paymentIntent,
+        recommendIntent,
         comment: parsed.data.comment ?? null,
       }),
       updatedAt: sql`now()`,

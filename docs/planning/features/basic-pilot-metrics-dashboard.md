@@ -49,6 +49,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
   - average satisfaction where feedback exists;
   - reuse intent where feedback exists;
   - number of feedback entries with an optional product comment;
+  - recommendation intent where feedback exists;
   - confirmed memories;
   - deleted or archived memories;
   - commitments by status;
@@ -103,6 +104,7 @@ The project owner can quickly understand MVP health before inviting pilot users,
 - The page shows total and average simulated session credits.
 - Feedback metrics handle the case where no feedback exists.
 - Feedback comment metrics show counts only and never display comment text.
+- Recommendation intent metrics show counts only and never display comment text.
 - No sensitive content is displayed.
 - Implemented audit actions use Spanish labels.
 - `npm run typecheck` passes.
@@ -171,6 +173,7 @@ No AI behavior changes are planned.
 - [x] Add Spanish labels for known technical usage operation types.
 - [x] Add Spanish labels for implemented audit actions.
 - [x] Count feedback entries with optional product comments without displaying comment text.
+- [x] Count optional recommendation intent without displaying comment text.
 - [x] Count commitments by status without displaying commitment content.
 - [x] Count safety events by category without displaying trigger summaries or message content.
 - [x] Run typecheck, lint, and format checks.
@@ -198,3 +201,4 @@ None.
 | 2026-07-27 | Added usage status counts | Surface technical failures and replacements without exposing logs |
 | 2026-07-29 | Added safety category counts | Make guardrail activation visible without exposing sensitive content |
 | 2026-07-30 | Added return metrics | Support pilot recurrence review with 7-day and 30-day session return signals |
+| 2026-07-30 | Added recommendation intent metrics | Support pilot recommendation validation without exposing feedback comments |

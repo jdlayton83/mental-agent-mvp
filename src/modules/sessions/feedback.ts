@@ -5,6 +5,7 @@ export const sessionFeedbackSchema = z.object({
   satisfactionScore: z.number().int().min(1).max(5),
   wouldReuse: z.boolean(),
   paymentIntent: z.enum(["not_now", "maybe", "likely"]).nullable().optional(),
+  recommendIntent: z.enum(["not_now", "maybe", "likely"]).nullable().optional(),
   comment: z.string().max(280).nullable().optional(),
   submittedAt: z.string(),
 });
@@ -24,6 +25,7 @@ export function buildSessionFeedbackMetadata(input: {
   satisfactionScore: number;
   wouldReuse: boolean;
   paymentIntent?: string | null;
+  recommendIntent?: string | null;
   comment?: string | null;
 }) {
   return {
@@ -33,6 +35,7 @@ export function buildSessionFeedbackMetadata(input: {
       satisfactionScore: input.satisfactionScore,
       wouldReuse: input.wouldReuse,
       paymentIntent: normalizePaymentIntent(input.paymentIntent),
+      recommendIntent: normalizeRecommendIntent(input.recommendIntent),
       comment: normalizeSessionFeedbackComment(input.comment),
       submittedAt: new Date().toISOString(),
     },
@@ -48,6 +51,20 @@ export function normalizePaymentIntent(
     paymentIntent === "likely"
   ) {
     return paymentIntent;
+  }
+
+  return null;
+}
+
+export function normalizeRecommendIntent(
+  recommendIntent: string | null | undefined,
+) {
+  if (
+    recommendIntent === "not_now" ||
+    recommendIntent === "maybe" ||
+    recommendIntent === "likely"
+  ) {
+    return recommendIntent;
   }
 
   return null;

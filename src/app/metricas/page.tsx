@@ -152,6 +152,28 @@ export default async function MetricasPage() {
               value={formatPercent(metrics.feedback.paymentIntentPositiveRate)}
             />
             <MetricItem
+              label="Recomendación respondida"
+              value={metrics.feedback.recommendIntentAnsweredCount}
+            />
+            <MetricItem
+              label="Lo recomendaría"
+              value={metrics.feedback.recommendIntentLikelyCount}
+            />
+            <MetricItem
+              label="Quizá recomendaría"
+              value={metrics.feedback.recommendIntentMaybeCount}
+            />
+            <MetricItem
+              label="No recomendaría ahora"
+              value={metrics.feedback.recommendIntentNotNowCount}
+            />
+            <MetricItem
+              label="Interés recomendación"
+              value={formatPercent(
+                metrics.feedback.recommendIntentPositiveRate,
+              )}
+            />
+            <MetricItem
               label="Comentarios"
               value={metrics.feedback.withCommentCount}
             />

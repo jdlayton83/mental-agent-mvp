@@ -31,6 +31,7 @@ import { calculatePilotReturnMetrics } from "../modules/metrics/return-metrics";
 import {
   buildSessionFeedbackMetadata,
   normalizePaymentIntent,
+  normalizeRecommendIntent,
   normalizeSessionFeedbackComment,
   parseSessionFeedback,
 } from "../modules/sessions/feedback";
@@ -847,6 +848,7 @@ const tests: TestCase[] = [
 
       assert.equal(feedback?.comment, undefined);
       assert.equal(feedback?.paymentIntent, undefined);
+      assert.equal(feedback?.recommendIntent, undefined);
       assert.equal(feedback?.satisfactionScore, 4);
       assert.equal(feedback?.wouldReuse, true);
     },
@@ -859,13 +861,16 @@ const tests: TestCase[] = [
         satisfactionScore: 4,
         wouldReuse: true,
         paymentIntent: "maybe",
+        recommendIntent: "likely",
         comment: null,
       });
 
       const feedback = parseSessionFeedback(metadata);
 
       assert.equal(feedback?.paymentIntent, "maybe");
+      assert.equal(feedback?.recommendIntent, "likely");
       assert.equal(normalizePaymentIntent("unknown"), null);
+      assert.equal(normalizeRecommendIntent("unknown"), null);
     },
   },
   {
