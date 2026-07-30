@@ -115,7 +115,7 @@ Estos riesgos podrán aceptarse temporalmente solo para pruebas locales con dato
 - ausencia de RLS como segunda barrera;
 - ausencia de MFA administrativa;
 - ausencia de backups gestionados;
-- ausencia de rate limiting real;
+- ausencia de rate limiting distribuido real;
 - secret management basado en `.env` local;
 - dependencias revisadas por CI básico, sin SCA empresarial;
 - proveedor de IA configurado por clave local.
