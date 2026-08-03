@@ -1,7 +1,7 @@
 export type UserSessionRange = {
   userId: string;
-  firstSessionAt: Date;
-  lastSessionAt: Date;
+  firstSessionAt: Date | string;
+  lastSessionAt: Date | string;
   sessionCount: number;
 };
 
@@ -33,13 +33,18 @@ function calculateReturnWindowMetrics(
   now: Date,
 ): ReturnWindowMetrics {
   const cutoff = new Date(now.getTime() - days * millisecondsPerDay);
-  const activeUsers = ranges.filter(
+  const normalizedRanges = ranges.map((range) => ({
+    ...range,
+    firstSessionAt: normalizeSessionDate(range.firstSessionAt),
+    lastSessionAt: normalizeSessionDate(range.lastSessionAt),
+  }));
+  const activeUsers = normalizedRanges.filter(
     (range) => range.lastSessionAt >= cutoff,
   ).length;
-  const eligibleUsers = ranges.filter(
+  const eligibleUsers = normalizedRanges.filter(
     (range) => range.firstSessionAt <= cutoff,
   ).length;
-  const returnedUsers = ranges.filter(
+  const returnedUsers = normalizedRanges.filter(
     (range) =>
       range.sessionCount > 1 &&
       range.lastSessionAt >=
@@ -52,6 +57,14 @@ function calculateReturnWindowMetrics(
     returnedUsers,
     returnRate: calculateRate(returnedUsers, eligibleUsers),
   };
+}
+
+function normalizeSessionDate(value: Date | string) {
+  if (value instanceof Date) {
+    return value;
+  }
+
+  return new Date(value);
 }
 
 function calculateRate(numerator: number, denominator: number) {

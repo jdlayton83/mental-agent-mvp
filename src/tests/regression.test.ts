@@ -985,6 +985,28 @@ const tests: TestCase[] = [
     },
   },
   {
+    name: "pilot return metrics accept database timestamp strings",
+    run: () => {
+      const now = new Date("2026-07-30T12:00:00.000Z");
+      const metrics = calculatePilotReturnMetrics(
+        [
+          {
+            userId: "returned-after-7",
+            firstSessionAt: "2026-07-20T12:00:00.000Z",
+            lastSessionAt: "2026-07-29T12:00:00.000Z",
+            sessionCount: 2,
+          },
+        ],
+        now,
+      );
+
+      assert.equal(metrics.sevenDays.activeUsers, 1);
+      assert.equal(metrics.sevenDays.eligibleUsers, 1);
+      assert.equal(metrics.sevenDays.returnedUsers, 1);
+      assert.equal(metrics.sevenDays.returnRate, 1);
+    },
+  },
+  {
     name: "session feedback normalizes optional comments",
     run: () => {
       const metadata = buildSessionFeedbackMetadata({

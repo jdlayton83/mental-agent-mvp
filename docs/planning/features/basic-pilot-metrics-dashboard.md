@@ -202,3 +202,4 @@ None.
 | 2026-07-29 | Added safety category counts | Make guardrail activation visible without exposing sensitive content |
 | 2026-07-30 | Added return metrics | Support pilot recurrence review with 7-day and 30-day session return signals |
 | 2026-07-30 | Added recommendation intent metrics | Support pilot recommendation validation without exposing feedback comments |
+| 2026-08-03 | Normalized database timestamp strings in return metrics | Prevent `/metricas` from crashing when PostgreSQL aggregate timestamps are returned as strings |
