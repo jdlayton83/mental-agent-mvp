@@ -41,7 +41,7 @@ The project owner can run one command after starting PostgreSQL, applying migrat
 - Verify that critical columns exist.
 - Verify that the development user exists and is usable.
 - Verify that seeded agent templates and guided modes exist.
-- Verify that the development user has onboarding, preferences, a primary agent, and an active wallet.
+- Verify that the development user has onboarding, preferences, a primary agent, and an active wallet with non-negative balances.
 - Keep the command local-only and outside CI.
 
 ## Out Of Scope

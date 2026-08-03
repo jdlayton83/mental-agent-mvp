@@ -36,7 +36,6 @@ const expectedGuidedModeCodes = [
 
 const databaseUrl = process.env.DATABASE_URL;
 const developmentUserEmail = process.env.DEVELOPMENT_USER_EMAIL;
-const initialCreditBalance = Number(process.env.INITIAL_CREDIT_BALANCE);
 const errors = [];
 
 if (!databaseUrl) {
@@ -45,10 +44,6 @@ if (!databaseUrl) {
 
 if (!developmentUserEmail) {
   errors.push("DEVELOPMENT_USER_EMAIL is required.");
-}
-
-if (!Number.isInteger(initialCreditBalance) || initialCreditBalance < 0) {
-  errors.push("INITIAL_CREDIT_BALANCE must be a non-negative integer.");
 }
 
 if (errors.length > 0) {
@@ -204,9 +199,9 @@ async function checkSeededUserState(userId) {
     "Development user primary agent is missing.",
   );
   await expectSingleRow(
-    "select 1 from credit_wallets where user_id = $1 and available_balance >= $2 and status = $3",
-    [userId, initialCreditBalance, "active"],
-    "Development user credit wallet is missing or below the initial balance.",
+    "select 1 from credit_wallets where user_id = $1 and available_balance >= 0 and reserved_balance >= 0 and status = $2",
+    [userId, "active"],
+    "Development user active credit wallet is missing or has a negative balance.",
   );
 }
 
