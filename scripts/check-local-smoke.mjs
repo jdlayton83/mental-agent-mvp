@@ -71,6 +71,15 @@ async function checkPublicRoutes() {
 
     expectStatus(response, 200, route);
     expectNoErrorShell(route, body);
+
+    if (
+      route === "/login" &&
+      !body.includes('<form class="auth-form" method="post"')
+    ) {
+      errors.push(
+        '/login form should use method="post" as its native fallback.',
+      );
+    }
   }
 }
 

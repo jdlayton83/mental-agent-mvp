@@ -34,6 +34,7 @@ The project owner can run one command during local testing to catch obvious serv
 
 - Add a `smoke:local` package script.
 - Verify that `/login` and `/` respond.
+- Verify that the login form uses a native `post` fallback so credentials are not placed in the URL before hydration.
 - Verify that anonymous protected routes redirect to `/login`.
 - Verify that a bad password is rejected.
 - Verify that the seeded development user can authenticate.
@@ -61,6 +62,7 @@ The project owner can run one command during local testing to catch obvious serv
 - `npm run smoke:local` shall fail clearly when a main route returns an unexpected status.
 - `npm run smoke:local` shall fail clearly when a main route renders a Next.js error shell.
 - The command shall not print secrets, passwords, cookies, exported JSON, message bodies, or full page bodies.
+- The login form shall not fall back to a native `GET` submission that exposes credentials in query parameters.
 - `npm run ready:local` shall run `pilot:check`, `smoke:local`, and `ci` as a single local acceptance gate.
 
 ## Non-Functional Requirements
@@ -74,6 +76,7 @@ The project owner can run one command during local testing to catch obvious serv
 - `npm run smoke:local` exists.
 - The command passes when the database is ready, the seed has run, and the local Next.js server is running.
 - The command checks anonymous redirects, bad-password rejection, seeded-user login, authenticated routes, and `/metricas` privacy smoke checks.
+- The command checks that the login form has a native `post` fallback.
 - The command checks that the data export route does not expose password hash markers.
 - `npm run ready:local` exists and passes when the database and local app server are running.
 - `npm run ci` remains clean.
@@ -145,3 +148,4 @@ None.
 |---|---|---|
 | 2026-08-03 | Initial implementation | Add repeatable local route/auth smoke test |
 | 2026-08-03 | Added `ready:local` and export privacy smoke checks | Provide a single local acceptance gate before pilot review |
+| 2026-08-03 | Added login POST fallback check | Prevent credentials from appearing in the URL when the form submits before hydration |

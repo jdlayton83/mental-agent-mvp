@@ -34,7 +34,7 @@ export function SignInForm() {
   }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
+    <form className="auth-form" method="post" onSubmit={handleSubmit}>
       <label className="auth-field">
         <span>Correo electrónico</span>
         <input
