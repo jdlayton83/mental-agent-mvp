@@ -40,6 +40,8 @@ The project owner can run one command during local testing to catch obvious serv
 - Verify that main authenticated routes return `200`.
 - Verify that rendered pages do not contain a Next.js error shell, build error, runtime error, or server-action export error.
 - Verify that `/metricas` renders its title and does not expose selected sensitive demo snippets.
+- Verify that `/privacidad/exportar` returns JSON and does not expose password hash markers.
+- Add a `ready:local` package script that chains local database readiness, smoke testing, and CI.
 - Keep the smoke test outside CI because it requires a running local server and database.
 
 ## Out Of Scope
@@ -59,6 +61,7 @@ The project owner can run one command during local testing to catch obvious serv
 - `npm run smoke:local` shall fail clearly when a main route returns an unexpected status.
 - `npm run smoke:local` shall fail clearly when a main route renders a Next.js error shell.
 - The command shall not print secrets, passwords, cookies, exported JSON, message bodies, or full page bodies.
+- `npm run ready:local` shall run `pilot:check`, `smoke:local`, and `ci` as a single local acceptance gate.
 
 ## Non-Functional Requirements
 
@@ -71,6 +74,8 @@ The project owner can run one command during local testing to catch obvious serv
 - `npm run smoke:local` exists.
 - The command passes when the database is ready, the seed has run, and the local Next.js server is running.
 - The command checks anonymous redirects, bad-password rejection, seeded-user login, authenticated routes, and `/metricas` privacy smoke checks.
+- The command checks that the data export route does not expose password hash markers.
+- `npm run ready:local` exists and passes when the database and local app server are running.
 - `npm run ci` remains clean.
 
 ## Error Cases
@@ -113,6 +118,7 @@ No AI behavior change.
 ## Testing Plan
 
 - `npm run smoke:local`
+- `npm run ready:local`
 - `npm run pilot:check`
 - `npm run ci`
 
@@ -120,6 +126,7 @@ No AI behavior change.
 
 - [x] Add local smoke test script.
 - [x] Add `smoke:local` package script.
+- [x] Add `ready:local` package script.
 - [x] Document the command in the pilot checklist.
 - [x] Keep the command outside CI.
 - [x] Run checks.
@@ -137,3 +144,4 @@ None.
 | Date | Change | Reason |
 |---|---|---|
 | 2026-08-03 | Initial implementation | Add repeatable local route/auth smoke test |
+| 2026-08-03 | Added `ready:local` and export privacy smoke checks | Provide a single local acceptance gate before pilot review |

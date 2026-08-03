@@ -16,6 +16,7 @@ Este checklist no declara preparación para producción. Sirve para decidir si e
 - [ ] El usuario de desarrollo puede iniciar sesión.
 - [ ] La aplicación arranca en `http://localhost:3000`.
 - [ ] `npm run smoke:local` confirma rutas, autenticación y renderizado básico.
+- [ ] `npm run ready:local` pasa como puerta local integrada.
 - [ ] `docs/architecture/threat-model.md` está revisado para el alcance del piloto.
 
 Comandos de verificación:
@@ -26,6 +27,7 @@ npm run db:seed
 npm run pilot:check
 npm run dev
 npm run smoke:local
+npm run ready:local
 ```
 
 Notas:
@@ -36,6 +38,7 @@ Notas:
 - `npm run db:seed` usa el soporte nativo de Node para TypeScript y un resolver local para evitar `tsx`/`esbuild`, que en este entorno puede fallar con `spawn EPERM`.
 - Si `npm run dev` falla en este entorno con `spawn EPERM`, usar `npm run dev:local` como arranque local sin fork para pruebas internas.
 - `npm run smoke:local` requiere que la app ya esté arrancada y que la base local esté disponible; no sustituye la revisión visual manual.
+- `npm run ready:local` encadena `pilot:check`, `smoke:local` y `ci`; usarlo como última puerta local antes de revisión visual o piloto interno.
 
 ## 2. Calidad técnica mínima
 

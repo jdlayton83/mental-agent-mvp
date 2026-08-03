@@ -123,3 +123,4 @@ None.
 | 2026-07-30 | Added explicit pilot metric checks | Keep launch checklist aligned with return, payment-intent and recommendation-intent metrics |
 | 2026-07-30 | Added AI rate-limit check | Keep checklist aligned with the unified CI command |
 | 2026-08-03 | Added local smoke test command | Keep pilot checklist aligned with local route and authentication verification |
+| 2026-08-03 | Added integrated local readiness command | Make the final local acceptance gate explicit before pilot review |

@@ -141,6 +141,18 @@ async function checkAuthenticatedRoutes() {
         }
       }
     }
+
+    if (route === "/privacidad/exportar") {
+      if (!isJsonResponse(response)) {
+        errors.push("/privacidad/exportar should return JSON.");
+      }
+
+      for (const snippet of ["password_hash", "passwordHash", "scrypt:"]) {
+        if (body.includes(snippet)) {
+          errors.push(`/privacidad/exportar should not expose ${snippet}.`);
+        }
+      }
+    }
   }
 }
 
@@ -239,6 +251,12 @@ async function readTextBody(response) {
   }
 
   return response.text();
+}
+
+function isJsonResponse(response) {
+  return (response.headers.get("content-type") ?? "").includes(
+    "application/json",
+  );
 }
 
 async function readJsonBody(response) {
