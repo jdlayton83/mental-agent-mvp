@@ -36,7 +36,7 @@
     "db:seed": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env --experimental-strip-types --import ./scripts/register-ts-seed-loader.mjs src/db/seed.ts",
     "pilot:check": "node --env-file=.env scripts/check-local-pilot-state.mjs",
     "smoke:local": "node --env-file=.env scripts/check-local-smoke.mjs",
-    "ready:local": "npm run pilot:check && npm run smoke:local && npm run quality:check"
+    "ready:local": "npm run quality:check && npm run pilot:check && npm run smoke:local"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
