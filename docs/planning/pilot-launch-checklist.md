@@ -15,6 +15,7 @@ Este checklist no declara preparación para producción. Sirve para decidir si e
 - [ ] `npm run pilot:check` confirma el estado local de piloto.
 - [ ] El usuario de desarrollo puede iniciar sesión.
 - [ ] La aplicación arranca en `http://localhost:3000`.
+- [ ] `npm run smoke:local` confirma rutas, autenticación y renderizado básico.
 - [ ] `docs/architecture/threat-model.md` está revisado para el alcance del piloto.
 
 Comandos de verificación:
@@ -24,6 +25,7 @@ node --env-file=.env .\node_modules\drizzle-kit\bin.cjs migrate
 npm run db:seed
 npm run pilot:check
 npm run dev
+npm run smoke:local
 ```
 
 Notas:
@@ -33,6 +35,7 @@ Notas:
 - `npm run db:generate` está desactivado en este entorno para evitar el fallo conocido `spawn EPERM`; las migraciones deberán crearse manualmente y registrarse en el journal de Drizzle.
 - `npm run db:seed` usa el soporte nativo de Node para TypeScript y un resolver local para evitar `tsx`/`esbuild`, que en este entorno puede fallar con `spawn EPERM`.
 - Si `npm run dev` falla en este entorno con `spawn EPERM`, usar `npm run dev:local` como arranque local sin fork para pruebas internas.
+- `npm run smoke:local` requiere que la app ya esté arrancada y que la base local esté disponible; no sustituye la revisión visual manual.
 
 ## 2. Calidad técnica mínima
 
