@@ -42,6 +42,7 @@ Notas:
 - [ ] `npm run secrets:check` pasa.
 - [ ] `npm run env:check` pasa.
 - [ ] `npm run env-example:check` pasa.
+- [ ] `npm run seed-runner:check` pasa.
 - [ ] `npm run ai:check` pasa.
 - [ ] `npm run ai-rate-limit:check` pasa.
 - [ ] `npm run db:check` pasa.
@@ -71,6 +72,7 @@ npm run test
 npm run secrets:check
 npm run env:check
 npm run env-example:check
+npm run seed-runner:check
 npm run ai:check
 npm run ai-rate-limit:check
 npm run db:check

@@ -72,6 +72,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 - The seed shall not require an AI provider call.
 - The seed shall work with the existing `db:seed` command.
 - The `db:seed` command shall avoid `tsx`/`esbuild` in this Windows environment because that path can fail with `spawn EPERM`.
+- The CI quality gate shall verify that `db:seed` continues to use the Windows-safe seed runner.
 - Typecheck, lint, format check, and tests shall remain clean.
 
 ## Acceptance Criteria
@@ -82,6 +83,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 - `/memoria` shows at least one proposed and one confirmed memory.
 - `/metricas` shows non-zero counts for sessions, memory, audit, usage, feedback, payment intent and recommendation intent.
 - `npm run test` passes.
+- `npm run seed-runner:check` passes.
 - `npm run typecheck` passes.
 - `npm run lint` passes.
 - `npm run format:check` passes.
@@ -133,6 +135,7 @@ The seed shall not call AI providers.
 
 - `npm run db:seed`
 - `npm run test`
+- `npm run seed-runner:check`
 - `npm run typecheck`
 - `npm run lint`
 - `npm run format:check`
@@ -153,6 +156,7 @@ The seed shall not call AI providers.
 - [x] Add demo usage, safety, and audit events.
 - [x] Keep seed failure logging concise.
 - [x] Use a Windows-safe seed runner that avoids `tsx`/`esbuild`.
+- [x] Add a CI quality gate for the seed runner.
 - [x] Run checks.
 
 ## Documentation To Update
@@ -174,3 +178,4 @@ None.
 | 2026-07-27 | Minimized seed failure logging | Avoid dumping raw database error objects in local tooling logs |
 | 2026-07-30 | Added newer feedback signals to demo seed | Keep seeded metrics representative after payment and recommendation feedback additions |
 | 2026-08-03 | Replaced the seed runner with Node type stripping and a local TypeScript resolver | Avoid the known Windows `tsx`/`esbuild` `spawn EPERM` failure |
+| 2026-08-03 | Added `seed-runner:check` to CI | Prevent regressions back to the failing seed runner |
