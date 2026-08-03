@@ -38,11 +38,13 @@ Notas:
 - `npm run db:seed` usa el soporte nativo de Node para TypeScript y un resolver local para evitar `tsx`/`esbuild`, que en este entorno puede fallar con `spawn EPERM`.
 - Si `npm run dev` falla en este entorno con `spawn EPERM`, usar `npm run dev:local` como arranque local sin fork para pruebas internas.
 - `npm run smoke:local` requiere que la app ya esté arrancada y que la base local esté disponible; no sustituye la revisión visual manual.
-- `npm run ready:local` encadena `pilot:check`, `smoke:local` y `ci`; usarlo como última puerta local antes de revisión visual o piloto interno.
+- `npm run ready:local` encadena `pilot:check`, `smoke:local` y `quality:check`; puede ejecutarse con el servidor de desarrollo activo sin invalidar sus assets.
+- `npm run ci` incluye build de producción y no deberá ejecutarse mientras se está usando el servidor de desarrollo local; si se ejecuta, reiniciar después `npm run dev:local`.
 
 ## 2. Calidad técnica mínima
 
 - [ ] `npm run ci` pasa.
+- [ ] `npm run quality:check` pasa.
 - [ ] `npm run typecheck` pasa.
 - [ ] `npm run lint` pasa.
 - [ ] `npm run format:check` pasa.
@@ -77,6 +79,7 @@ npm run typecheck
 npm run lint
 npm run format:check
 npm run test
+npm run quality:check
 npm run secrets:check
 npm run env:check
 npm run env-example:check

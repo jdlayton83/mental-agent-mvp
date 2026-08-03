@@ -42,7 +42,7 @@ The project owner can run one command during local testing to catch obvious serv
 - Verify that rendered pages do not contain a Next.js error shell, build error, runtime error, or server-action export error.
 - Verify that `/metricas` renders its title and does not expose selected sensitive demo snippets.
 - Verify that `/privacidad/exportar` returns JSON and does not expose password hash markers.
-- Add a `ready:local` package script that chains local database readiness, smoke testing, and CI.
+- Add a `ready:local` package script that chains local database readiness, smoke testing, and the no-build quality gate.
 - Keep the smoke test outside CI because it requires a running local server and database.
 
 ## Out Of Scope
@@ -63,7 +63,7 @@ The project owner can run one command during local testing to catch obvious serv
 - `npm run smoke:local` shall fail clearly when a main route renders a Next.js error shell.
 - The command shall not print secrets, passwords, cookies, exported JSON, message bodies, or full page bodies.
 - The login form shall not fall back to a native `GET` submission that exposes credentials in query parameters.
-- `npm run ready:local` shall run `pilot:check`, `smoke:local`, and `ci` as a single local acceptance gate.
+- `npm run ready:local` shall run `pilot:check`, `smoke:local`, and `quality:check` as a single local acceptance gate that does not invalidate the running dev server assets.
 
 ## Non-Functional Requirements
 
@@ -79,6 +79,7 @@ The project owner can run one command during local testing to catch obvious serv
 - The command checks that the login form has a native `post` fallback.
 - The command checks that the data export route does not expose password hash markers.
 - `npm run ready:local` exists and passes when the database and local app server are running.
+- `npm run ready:local` shall not run the production build while the local dev server is active.
 - `npm run ci` remains clean.
 
 ## Error Cases
@@ -149,3 +150,4 @@ None.
 | 2026-08-03 | Initial implementation | Add repeatable local route/auth smoke test |
 | 2026-08-03 | Added `ready:local` and export privacy smoke checks | Provide a single local acceptance gate before pilot review |
 | 2026-08-03 | Added login POST fallback check | Prevent credentials from appearing in the URL when the form submits before hydration |
+| 2026-08-03 | Moved `ready:local` to the no-build quality gate | Avoid invalidating dev-server assets while the app is running |
