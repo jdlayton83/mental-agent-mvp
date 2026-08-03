@@ -1011,11 +1011,51 @@ seed()
     console.log("Database seed completed.");
   })
   .catch((error: unknown) => {
-    const message = error instanceof Error ? error.message : "Unknown error";
-
-    console.error(`Database seed failed: ${message}`);
+    console.error(`Database seed failed: ${getSafeSeedErrorMessage(error)}`);
     process.exitCode = 1;
   })
   .finally(async () => {
     await pool.end();
   });
+
+function getSafeSeedErrorMessage(error: unknown): string {
+  const code = getNestedErrorCode(error);
+
+  if (code === "ECONNREFUSED") {
+    return "Database connection refused. Check that PostgreSQL is running and DATABASE_URL points to the local database.";
+  }
+
+  if (code === "42703") {
+    return "Database column is missing. Check that all registered migrations have been applied.";
+  }
+
+  if (code === "42P01") {
+    return "Database table is missing. Check that all registered migrations have been applied.";
+  }
+
+  if (code) {
+    return `Database operation failed with PostgreSQL error code ${code}.`;
+  }
+
+  if (error instanceof Error) {
+    return error.name || "Unknown database seed error.";
+  }
+
+  return "Unknown database seed error.";
+}
+
+function getNestedErrorCode(error: unknown): string | null {
+  let current: unknown = error;
+
+  while (current && typeof current === "object") {
+    const maybeCode = (current as { code?: unknown }).code;
+
+    if (typeof maybeCode === "string") {
+      return maybeCode;
+    }
+
+    current = (current as { cause?: unknown }).cause;
+  }
+
+  return null;
+}

@@ -31,7 +31,7 @@
     "db:generate": "node scripts/drizzle-generate-disabled.mjs",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "node --env-file=.env --import tsx src/db/seed.ts"
+    "db:seed": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env --experimental-strip-types --import ./scripts/register-ts-seed-loader.mjs src/db/seed.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",

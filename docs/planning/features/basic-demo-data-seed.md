@@ -71,6 +71,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 - The seed shall remain readable and maintainable.
 - The seed shall not require an AI provider call.
 - The seed shall work with the existing `db:seed` command.
+- The `db:seed` command shall avoid `tsx`/`esbuild` in this Windows environment because that path can fail with `spawn EPERM`.
 - Typecheck, lint, format check, and tests shall remain clean.
 
 ## Acceptance Criteria
@@ -87,7 +88,7 @@ The project owner can open `/inicio`, `/memoria`, `/metricas`, and `/privacidad`
 
 ## Error Cases
 
-- If the database is unavailable, the seed shall fail clearly.
+- If the database is unavailable, the seed shall fail clearly with a safe connection message.
 - If the seed fails, it shall log a concise error message instead of dumping raw database error objects or payloads.
 - If the development user cannot be created, the seed shall stop.
 - If required catalog records are missing, the seed shall create or update them before demo rows.
@@ -151,6 +152,7 @@ The seed shall not call AI providers.
 - [x] Keep demo feedback aligned with current pilot feedback fields.
 - [x] Add demo usage, safety, and audit events.
 - [x] Keep seed failure logging concise.
+- [x] Use a Windows-safe seed runner that avoids `tsx`/`esbuild`.
 - [x] Run checks.
 
 ## Documentation To Update
@@ -171,3 +173,4 @@ None.
 | 2026-06-25 | Marked implemented | Demo data seed implemented and verified |
 | 2026-07-27 | Minimized seed failure logging | Avoid dumping raw database error objects in local tooling logs |
 | 2026-07-30 | Added newer feedback signals to demo seed | Keep seeded metrics representative after payment and recommendation feedback additions |
+| 2026-08-03 | Replaced the seed runner with Node type stripping and a local TypeScript resolver | Avoid the known Windows `tsx`/`esbuild` `spawn EPERM` failure |
