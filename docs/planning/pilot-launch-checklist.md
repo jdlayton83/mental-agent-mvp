@@ -12,6 +12,7 @@ Este checklist no declara preparación para producción. Sirve para decidir si e
 - [ ] La base de datos local de PostgreSQL está disponible.
 - [ ] Todas las migraciones manuales registradas han sido aplicadas.
 - [ ] El seed se ha ejecutado correctamente.
+- [ ] `npm run pilot:check` confirma el estado local de piloto.
 - [ ] El usuario de desarrollo puede iniciar sesión.
 - [ ] La aplicación arranca en `http://localhost:3000`.
 - [ ] `docs/architecture/threat-model.md` está revisado para el alcance del piloto.
@@ -21,6 +22,7 @@ Comandos de verificación:
 ```powershell
 node --env-file=.env .\node_modules\drizzle-kit\bin.cjs migrate
 npm run db:seed
+npm run pilot:check
 npm run dev
 ```
 
