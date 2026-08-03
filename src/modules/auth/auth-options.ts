@@ -1,45 +1,12 @@
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { z } from "zod";
 
 import { env } from "@/config/env";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 
-import { verifyPassword } from "./password";
-
-const credentialsSchema = z.object({
-  email: z.email().transform((value) => value.toLowerCase()),
-  password: z.string().min(1),
-});
-
-async function getActiveCredentialsUser(email: string) {
-  const [user] = await db
-    .select({
-      id: users.id,
-      email: users.emailNormalized,
-      passwordHash: users.passwordHash,
-      status: users.status,
-      sessionVersion: users.sessionVersion,
-      deletedAt: users.deletedAt,
-    })
-    .from(users)
-    .where(eq(users.emailNormalized, email))
-    .limit(1);
-
-  if (!user) {
-    return null;
-  }
-
-  const { passwordHash } = user;
-
-  if (user.status !== "active" || user.deletedAt || !passwordHash) {
-    return null;
-  }
-
-  return { ...user, passwordHash };
-}
+import { authenticateCredentials } from "./credentials";
 
 export const authOptions: NextAuthOptions = {
   secret: env.AUTH_SECRET,
@@ -57,33 +24,11 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const parsedCredentials = credentialsSchema.safeParse(credentials);
-
-        if (!parsedCredentials.success) {
-          return null;
-        }
-
-        const user = await getActiveCredentialsUser(
-          parsedCredentials.data.email,
-        );
+        const user = await authenticateCredentials(credentials);
 
         if (!user) {
           return null;
         }
-
-        const isPasswordValid = await verifyPassword(
-          parsedCredentials.data.password,
-          user.passwordHash,
-        );
-
-        if (!isPasswordValid) {
-          return null;
-        }
-
-        await db
-          .update(users)
-          .set({ lastLoginAt: sql`now()`, updatedAt: sql`now()` })
-          .where(eq(users.id, user.id));
 
         return {
           id: user.id,

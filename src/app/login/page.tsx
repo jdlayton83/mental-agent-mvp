@@ -9,6 +9,7 @@ export default async function LoginPage({
 }: {
   searchParams?: Promise<{
     deleted?: string;
+    error?: string;
   }>;
 }) {
   const user = await getCurrentUser();
@@ -22,6 +23,7 @@ export default async function LoginPage({
 
   const resolvedSearchParams = await searchParams;
   const wasDeleted = resolvedSearchParams?.deleted === "1";
+  const hasCredentialsError = resolvedSearchParams?.error === "credentials";
 
   return (
     <main className="page-shell">
@@ -37,7 +39,13 @@ export default async function LoginPage({
             revocada.
           </p>
         ) : null}
-        <SignInForm />
+        <SignInForm
+          error={
+            hasCredentialsError
+              ? "El correo o la contraseña no son correctos."
+              : undefined
+          }
+        />
       </section>
     </main>
   );

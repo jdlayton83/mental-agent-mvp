@@ -53,6 +53,7 @@ try {
   await checkPublicRoutes();
   await checkAnonymousProtection();
   await checkCredentialsAuthentication();
+  await checkNativeLoginPostFallback();
   await checkAuthenticatedRoutes();
 
   if (errors.length > 0) {
@@ -74,10 +75,10 @@ async function checkPublicRoutes() {
 
     if (
       route === "/login" &&
-      !body.includes('<form class="auth-form" method="post"')
+      !/<form\b[^>]*\baction="\/api\/login"[^>]*\bmethod="post"/.test(body)
     ) {
       errors.push(
-        '/login form should use method="post" as its native fallback.',
+        '/login form should submit with method="post" to /api/login.',
       );
     }
   }
@@ -127,6 +128,53 @@ async function checkCredentialsAuthentication() {
   if (loginBody?.url !== `${baseUrl}/inicio`) {
     errors.push("Successful login should return the /inicio callback URL.");
   }
+}
+
+async function checkNativeLoginPostFallback() {
+  cookieJar.clear();
+
+  const badLogin = await request("/api/login", {
+    body: new URLSearchParams({
+      email,
+      password: `${password}-wrong`,
+    }),
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  });
+
+  if (
+    badLogin.status !== 303 ||
+    getLocationPath(badLogin) !== "/login?error=credentials"
+  ) {
+    errors.push(
+      `/api/login native bad-password fallback should redirect to /login?error=credentials; got ${badLogin.status} ${badLogin.headers.get("location") ?? ""}`.trim(),
+    );
+  }
+
+  const goodLogin = await request("/api/login", {
+    body: new URLSearchParams({
+      email,
+      password,
+    }),
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  });
+
+  if (goodLogin.status !== 303 || getLocationPath(goodLogin) !== "/inicio") {
+    errors.push(
+      `/api/login native fallback should redirect to /inicio; got ${goodLogin.status} ${goodLogin.headers.get("location") ?? ""}`.trim(),
+    );
+  }
+
+  const inicio = await request("/inicio");
+  const body = await readTextBody(inicio);
+
+  expectStatus(inicio, 200, "/inicio after native /login POST");
+  expectNoErrorShell("/inicio after native /login POST", body);
 }
 
 async function checkAuthenticatedRoutes() {
@@ -236,6 +284,18 @@ function getCookieHeader() {
   return [...cookieJar.entries()]
     .map(([key, value]) => `${key}=${value}`)
     .join("; ");
+}
+
+function getLocationPath(response) {
+  const location = response.headers.get("location");
+
+  if (!location) {
+    return null;
+  }
+
+  return (
+    new URL(location, baseUrl).pathname + new URL(location, baseUrl).search
+  );
 }
 
 function buildLoginBody(csrfToken, inputPassword) {
